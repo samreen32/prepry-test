@@ -4,6 +4,7 @@ export const globalStyles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
+        // fontFamily: "Poppin"
     },
     heroContainer: {
         position: "relative",
@@ -49,7 +50,7 @@ export const globalStyles = StyleSheet.create({
         padding: 4
     },
     buttonText: {
-        color: 'black',
+        color: 'white',
         fontSize: 16,
     },
     logoContainer: {
@@ -79,25 +80,10 @@ export const globalStyles = StyleSheet.create({
         borderRadius: 16,
         position: 'relative',
     },
-    input: {
-        backgroundColor: 'white',
-        // paddingHorizontal: 15,
-        // paddingVertical: 12,
-        borderRadius: 5,
-        // marginBottom: 10,
-        borderTopRightRadius: 16,
-        height: 40,
-    },
-    button: {
-        backgroundColor: '#fe3c72',
-        padding: 15,
-        borderRadius: 5,
-        alignItems: 'center',
-        marginBottom: 20,
-    },
     footer: {
         flexDirection: 'row',
         justifyContent: 'center',
+        padding: 20
     },
     footerText: {
         color: 'white',
@@ -105,7 +91,12 @@ export const globalStyles = StyleSheet.create({
     },
     footerActionText: {
         fontWeight: 'bold',
-        color: '#fe3c72',
+        color: 'lightblue',
+    },
+    buttonLabel: {
+        color: 'black',
+        fontSize: 14,
+        fontWeight: "bold"
     },
     animationContainer: {
         position: 'absolute',
@@ -138,11 +129,11 @@ export const globalStyles = StyleSheet.create({
         backgroundColor: 'white',
         paddingHorizontal: 15,
         paddingVertical: 12,
-        borderRadius: 5,
+        // borderRadius: 5,
         marginBottom: 10,
     },
     button: {
-        backgroundColor: '#fe3c72',
+        backgroundColor: 'lightblue',
         padding: 15,
         borderRadius: 5,
         alignItems: 'center',
@@ -161,92 +152,34 @@ export const globalStyles = StyleSheet.create({
         alignSelf: "center",
         zIndex: -1
     },
-
-    // User profile
-    iconsContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginTop: 25,
-        padding: 20,
-        alignItems: 'center',
+   
+    scrollView: {
+        flexGrow: 1,
+        justifyContent: 'center',
+        marginTop: 50
     },
-    iconTouchable: {
-        position: 'relative',
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    badgeStyle: {
+    singupBackgroundAnimationContainer: {
         position: 'absolute',
-        right: -6,
-        top: -3,
-        zIndex: 1,
-        backgroundColor: "#fe3c72"
+        bottom: 0,
+        top: 0,
+        alignItems: 'center',
+        alignSelf: "center",
+        zIndex: -1
     },
-    rectangleBox: {
-        backgroundColor: '#F08080',
+
+   
+    loginContainer: {
+        backgroundColor: "#1C1A5E",
+        // padding: 20,
+        borderRadius: 20,
+        marginTop: 100,
+        height: "100%"
+    },
+    loginFieldsContainer: {
+        backgroundColor: "white",
         padding: 20,
-        borderRadius: 10,
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
-    },
-    topContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: 16,
-    },
-    leftContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    textContainer: {
-        marginLeft: 10,
-    },
-    userName: {
-        fontSize: 16,
-        fontWeight: 'bold',
-    },
-    greeting: {
-        fontSize: 14,
-    },
-    contentLayout: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    imageHome: {
-        width: 100,
-        height: 100,
-        marginLeft: 20,
-    },
-    servicesText: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        marginBottom: 5
-    },
-    serviceTitle: {
-        textAlign: "center",
-        fontSize: 12,
-        fontWeight: "bold",
-        marginBottom: -8
-    },
-    serviceImg: {
-        width: 110,
-        height: 100,
-        borderRadius: 10,
-        marginBottom: 8
-    },
-    seeAllServices: {
-        marginBottom: 5
-    },
-    circle: {
-        borderRadius: 30,
-        width: 70,
-        height: 70
+        borderRadius: 20,
+        height: "100%",
+        width: "100%"
     }
 });

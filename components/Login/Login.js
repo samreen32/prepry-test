@@ -1,90 +1,59 @@
-import React, { useRef, useState } from 'react';
-import { View, Text, ImageBackground, TouchableOpacity, Image } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { globalStyles } from '../../assets/styles/globalStyles';
-import LottieView from "lottie-react-native";
 import { Button, TextInput } from 'react-native-paper';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default function Login() {
   const navigation = useNavigation();
-  const animation = useRef(null);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [isPassSecure, setIsPassSecure] = useState(true);
 
   return (
     <View style={globalStyles.container}>
-      <ImageBackground source={require('../../assets/img/register-main.webp')} resizeMode="cover" style={globalStyles.image}>
-        <View style={globalStyles.form}>
-          <View style={[globalStyles.logo, { resizeMode: "cover", alignSelf: "center" }]}>
-            <LottieView
-              autoPlay
-              ref={animation}
-              style={{
-                width: 80,
-                height: 80,
-                marginTop: -20
-              }}
-              source={require('../../assets/animation/Animation - 1710132860264.json')}
-            />
-          </View>
-          <View style={globalStyles.logoContainer}>
-            <Image
-              style={[globalStyles.logo, { resizeMode: "cover", marginBottom: 20 }]}
-              source={require("../../assets/img/logo.png")}
-            />
-            <Text style={globalStyles.loginText}>Login</Text>
-          </View>
-
-          <TextInput
-            placeholder="Email"
-            type="outlined"
-            selectionColor='#fe3c72'
-            activeUnderlineColor='#fe3c72'
-            style={[globalStyles.input, {
-              height: 40, borderTopRightRadius: 30, borderTopLeftRadius: 30, borderRadius: 30
-            }]}
-            keyboardType="email-address"
-          />
-          <TextInput
-            placeholder="Password"
-            selectionColor='#fe3c72'
-            activeUnderlineColor='#fe3c72'
-            style={[globalStyles.input, {
-              height: 40, borderTopRightRadius: 30, borderTopLeftRadius: 30, borderRadius: 30
-            }]}
-            secureTextEntry={isPassSecure}
-            right={
-              <TextInput.Icon
-                icon={isPassSecure ? "eye" : "eye-off"}
-                onPress={() => {
-                  setIsPassSecure((prev) => !prev);
-                }}
-                style={{ marginTop: 30 }}
-              />
-            }
-          />
-          <Button mode="contained" style={{ backgroundColor: "#fe3c72", marginBottom: 20, marginTop: 10 }}
-            onPress={() => navigation.navigate("UserDrawer")}>
-            <Text style={globalStyles.buttonText}>Login</Text>
-          </Button>
-          <View style={globalStyles.footer}>
-            <Text style={globalStyles.footerText}>New member? </Text>
-            <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
-              <Text style={globalStyles.footerActionText}>Sign up</Text>
-            </TouchableOpacity>
-          </View>
-          {/* <View style={globalStyles.animationContainer}>
-            <LottieView
-              autoPlay
-              ref={animation}
-              style={{
-                width: 165,
-                height: 165,
-              }}
-              source={require('../../assets/animation/Animation - 1710132860264.json')}
-            />
-          </View> */}
+      <View style={globalStyles.loginContainer}>
+        <View style={{ padding: 20 }}>
+          <Text style={{ fontSize: 30, fontWeight: 'bold', color: '#fff', marginBottom: 20 }}>
+            Sign in now
+          </Text>
+          <Text style={{ fontSize: 18, color: '#fff', marginBottom: 20 }}>
+            Welcome Back!
+          </Text>
         </View>
-      </ImageBackground>
+        <ScrollView contentContainerStyle={globalStyles.loginFieldsContainer}>
+          <Text>Email</Text>
+          <TextInput
+            value={email}
+            onChangeText={setEmail}
+            style={{ marginBottom: 20, marginTop: 10 }}
+            mode="outlined"
+            placeholder="Enter your email"
+          />
+          <Text>Password</Text>
+          <TextInput
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry={isPassSecure}
+            style={{ marginBottom: 20, marginTop: 10 }}
+            mode="outlined"
+            placeholder="Enter your password"
+          />
+          <Button
+            mode="contained"
+            onPress={() => navigation.navigate("Signup")}
+            style={[globalStyles.getStartedButton, { backgroundColor: "#1C1A5E", marginBottom: 20 }]}
+          >
+            Login
+          </Button>
+          <TouchableOpacity onPress={() => navigation.navigate("Signup")}
+            style={{ textAlign: 'center', margin: "auto" }}
+          >
+            <Text>New Member? Register</Text>
+          </TouchableOpacity>
+        </ScrollView>
+      </View>
     </View>
   );
 }
