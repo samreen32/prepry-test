@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Text, Animated, Image, StyleSheet } from 'react-native';
+import { View, Text, Animated, Image } from 'react-native';
 import { Ionicons } from "@expo/vector-icons";
 import { globalStyles } from '../../../assets/styles/globalStyles';
 import profilePic from "../../../assets/img/userProfile.png"
@@ -7,7 +7,6 @@ import profilePic from "../../../assets/img/userProfile.png"
 function Section1() {
     const [greeting, setGreeting] = useState("");
     const [iconName, setIconName] = useState("sunny");
-    const [iconColor, setIconColor] = useState("yellow");
     const spinValue = useRef(new Animated.Value(0)).current;
 
     // Function to start the icon spin animation
@@ -31,49 +30,32 @@ function Section1() {
         if (hours >= 0 && hours < 12) {
             setGreeting("Good Morning");
             setIconName("sunny");
-            setIconColor("#D14009");
         } else if (hours >= 12 && hours < 18) {
             setGreeting("Good Afternoon");
             setIconName("partly-sunny");
-            setIconColor("#FFD700");
         } else {
             setGreeting("Good Evening");
             setIconName("moon");
-            setIconColor("white");
         }
 
         startSpin();
     }, [iconName]);
 
-    const spin = spinValue.interpolate({
-        inputRange: [0, 1],
-        outputRange: ['0deg', '360deg'],
-    });
-
-    const animatedStyle = iconName === "sunny"
-        ? { transform: [{ rotate: spin }] }
-        : {};
-
     return (
-        <View style={[globalStyles.topContainer, { marginTop: -10 }]}>
-            <View style={globalStyles.leftContainer}>
+        <View style={[{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }]}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Image
                     source={profilePic}
                     style={{ width: 50, height: 50, borderRadius: 25 }}
                 />
-                <View style={globalStyles.textContainer}>
-                    <Text style={globalStyles.userName}>Hello, Tinder User
-                    </Text>
+                <View style={{ marginLeft: 10 }}>
+                    <Text style={globalStyles.userName}>Hello, User</Text>
                     <Text style={globalStyles.greeting}>
                         {greeting}
-                        <Animated.View style={[styles.animatedView, animatedStyle]}>
-                            <Ionicons name={iconName} size={22} color={iconColor} />
-                        </Animated.View>
                     </Text>
-
                 </View>
             </View>
-            <View style={globalStyles.rightContainer}>
+            <View>
                 <Ionicons name="search" size={24} color="black" />
             </View>
         </View>
@@ -81,12 +63,3 @@ function Section1() {
 }
 
 export default Section1;
-
-const styles = StyleSheet.create({
-    animatedView: {
-        position: 'absolute',
-        marginLeft: 5,
-
-    },
-});
-

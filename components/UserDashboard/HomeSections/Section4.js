@@ -1,20 +1,20 @@
 import React from 'react';
 import { View, Text, ImageBackground, StyleSheet } from 'react-native';
-import more1 from '../../../assets/img/more2.jpg';
-import more2 from '../../../assets/img/banner-02.jpg';
-import more3 from '../../../assets/img/more4.jpg';
+import more1 from '../../../assets/img/trophy.png';
+import more2 from '../../../assets/img/bottle.png';
+import more3 from '../../../assets/img/rocket.png';
 
 function Section4() {
     return (
-        <View style={{ padding: 16, marginTop: -15 }}>
+        <View style={{ marginTop: 15 }}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                 <ImageOverlayWithText
                     source={more1}
                     text={
                         <>
-                            <Text>Discover</Text>
+                            <Text>Get</Text>
                             <Text>{"\n"}</Text>
-                            <Text>your Match</Text>
+                            <Text>Unlimited Questions</Text>
                         </>
                     }
                     style={{ width: 150, height: 250, borderRadius: 15 }}
@@ -26,9 +26,7 @@ function Section4() {
                         source={more2}
                         text={
                             <>
-                                <Text>Connect</Text>
-                                <Text>{"\n"}</Text>
-                                <Text>Instantly</Text>
+                                <Text>Statistics</Text>
                             </>
                         }
                         style={{ width: 190, height: 110, borderRadius: 15 }}
@@ -37,9 +35,7 @@ function Section4() {
                         source={more3}
                         text={
                             <>
-                                <Text>Plan</Text>
-                                <Text>{"\n"}</Text>
-                                <Text>your Date</Text>
+                                <Text>Notes</Text>
                             </>
                         }
                         style={{ width: 190, height: 130, borderRadius: 15, marginTop: 10 }}

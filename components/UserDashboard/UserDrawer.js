@@ -1,4 +1,4 @@
-import { React } from "react";
+import React from "react";
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Ionicons } from "@expo/vector-icons";
 import CustomDrawer from "../CustomDrawer";
@@ -10,21 +10,20 @@ const Drawer = createDrawerNavigator();
 function UserDrawer() {
     return (
         <Drawer.Navigator
-            // useLegacyImplementation
             drawerContent={(props) => <CustomDrawer {...props} />}
             screenOptions={{
                 drawerType: "slide",
                 drawerPosition: "left",
                 drawerHideStatusBarOnOpen: true,
                 drawerStyle: {
-                    backgroundColor: "linear-gradient(135deg, rgba(253, 85, 100, 1) 0%, #f67a3c 100%)",
+                    backgroundColor: "#1C1A5E",
                     flex: 1,
                     width: 300,
                 },
                 headerShown: false,
                 swipeEnabled: true,
                 gestureEnabled: true,
-                drawerActiveBackgroundColor: "white",
+                drawerActiveBackgroundColor: "lightblue",
                 drawerActiveBorderRadius: 30
             }}
         >
@@ -32,23 +31,36 @@ function UserDrawer() {
                 name="Dashboard"
                 component={UserTabs}
                 options={{
-                    title: ({ focused }) => (
-                        <Text
-                            style={{ color: "black", right: 26 }}
-                        >Dashboard
-                        </Text>
+                    drawerLabel: ({ focused }) => (
+                        <Text style={{ color: focused ? "black" : "white", right: 26 }}>Dashboard</Text>
                     ),
                     drawerIcon: ({ focused }) => (
                         <Ionicons
                             name="person"
                             size={focused ? 25 : 20}
-                            style={{ color: "black" }}
+                            style={{ color: focused ? "black" : "white" }}
+                        />
+                    ),
+                }}
+            />
+            <Drawer.Screen
+                name="Profile"
+                component={UserTabs}
+                options={{
+                    drawerLabel: ({ focused }) => (
+                        <Text style={{ color: focused ? "black" : "white", right: 26 }}>Profile</Text>
+                    ),
+                    drawerIcon: ({ focused }) => (
+                        <Ionicons
+                            name="person"
+                            size={focused ? 25 : 20}
+                            style={{ color: focused ? "black" : "white" }}
                         />
                     ),
                 }}
             />
         </Drawer.Navigator>
-    )
+    );
 }
 
-export default UserDrawer
+export default UserDrawer;

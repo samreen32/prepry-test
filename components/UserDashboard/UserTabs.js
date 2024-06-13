@@ -16,11 +16,11 @@ function UserTabs() {
                     if (route.name === "Home") {
                         iconName = "home";
                         size = focused ? 35 : 30;
-                        color = focused ? "#fe3c72" : "white";
+                        color = focused ? "lightblue" : "white";
                     } else if (route.name === "Profile") {
                         iconName = "person";
                         size = focused ? 30 : 32;
-                        color = focused ? "#fe3c72" : "white";
+                        color = focused ? "lightblue" : "white";
                     }
                     return <Ionicons name={iconName} size={size} color={color} />;
                 },
@@ -31,7 +31,7 @@ function UserTabs() {
                 component={UserStack}
                 options={{
                     tabBarLabel: ({ focused, color }) => (
-                        <Text style={{ color: focused ? "#fe3c72" : "white", top: -12 }}>
+                        <Text style={{ color: focused ? "lightblue" : "white", top: -12 }}>
                             Home
                         </Text>
                     ),
@@ -59,7 +59,7 @@ function UserTabs() {
                 component={UserStack}
                 options={{
                     tabBarLabel: ({ focused, color }) => (
-                        <Text style={{ color: focused ? "#fe3c72" : "white", top: -12 }}>
+                        <Text style={{ color: focused ? "lightblue" : "white", top: -12 }}>
                             Profile
                         </Text>
                     ),
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    backgroundColor: "black",
+    backgroundColor: "#1C1A5E",
 });
 
 export default UserTabs

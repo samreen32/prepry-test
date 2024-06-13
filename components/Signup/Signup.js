@@ -5,8 +5,6 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { globalStyles } from '../../assets/styles/globalStyles';
 import { Button, TextInput, Checkbox } from 'react-native-paper';
-import { AntDesign, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-import { FontAwesome6 } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
 
 // Enable LayoutAnimation for iOS and Android
@@ -137,7 +135,7 @@ export default function Signup() {
                             selectionColor='#fe3c72'
                             activeUnderlineColor='#fe3c72'
                             style={[globalStyles.input, {
-                                height: 40, borderTopRightRadius: 30, borderTopLeftRadius: 30, borderRadius: 30
+                                height: 40,
                             }]}
                             value={name}
                             onChangeText={setName}
@@ -151,7 +149,7 @@ export default function Signup() {
                             selectionColor='#fe3c72'
                             activeUnderlineColor='#fe3c72'
                             style={[globalStyles.input, {
-                                height: 40, borderTopRightRadius: 30, borderTopLeftRadius: 30, borderRadius: 30
+                                height: 40,
                             }]}
                             keyboardType="email-address"
                             value={email}
@@ -166,7 +164,7 @@ export default function Signup() {
                             selectionColor='#fe3c72'
                             activeUnderlineColor='#fe3c72'
                             style={[globalStyles.input, {
-                                height: 40, borderTopRightRadius: 30, borderTopLeftRadius: 30, borderRadius: 30
+                                height: 40,
                             }]}
                             secureTextEntry={isPassSecure}
                             right={
@@ -193,7 +191,7 @@ export default function Signup() {
                         )}
                         {currentField !== 'Password' && (
                             <Button mode="contained"
-                                style={{ backgroundColor: "#1C1A5E", marginBottom: 30, marginTop: 10, width: 120 }}
+                                style={{ backgroundColor: "lightblue", marginBottom: 30, marginTop: 10, width: 120 }}
                                 onPress={handleNext}>
                                 <Text style={globalStyles.buttonText}>Next</Text>
                             </Button>
@@ -204,10 +202,10 @@ export default function Signup() {
                         <Button mode="contained"
                             style={globalStyles.getStartedButton}
                             labelStyle={globalStyles.buttonLabel}
-                            onPress={() => navigation.navigate("UserDrawer")}>
-                            <Text
-                                style={[globalStyles.buttonText, { color: "black" }]}
-                            >
+                            onPress={() => navigation.navigate('UserDrawer')}
+                        > <Text
+                            style={[globalStyles.buttonText, { color: "black" }]}
+                        >
                                 Sign Up
                             </Text>
                         </Button>

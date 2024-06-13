@@ -50,7 +50,7 @@ const CustomDrawer = (props) => {
                     color: "white",
                 }}
             >
-                Hey, Tinder User
+                Hey, User
             </Text>
             <DrawerContentScrollView {...props}>
                 <DrawerItemList {...props} />

@@ -7,13 +7,13 @@ import { AntDesign } from '@expo/vector-icons';
 
 function Section6() {
     return (
-        <View style={{ padding: 16, marginTop: -15 }}>
+        <View style={{ marginTop: 15, marginBottom: 100 }}>
 
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 }}>
-                <InfoCircle backgroundColor="#F08080" icon={<Ionicons name="settings" size={24} color="white" />} text="Setting" />
-                <InfoCircle backgroundColor="#87CEEB" icon={<AntDesign name="wechat" size={24} color="white" />} text="Chat" />
-                <InfoCircle backgroundColor="#FFC0CB" icon={<Entypo name="help-with-circle" size={24} color="white" />} text="Help" />
-                <InfoCircle backgroundColor="#C8A2C8" icon={<Ionicons name="calendar" size={24} color="white" />} text="Plan" />
+                <InfoCircle backgroundColor="#1C1A5E" icon={<Ionicons name="settings" size={24} color="white" />} text="Setting" />
+                <InfoCircle backgroundColor="lightblue" icon={<AntDesign name="wechat" size={24} color="white" />} text="Notes" />
+                <InfoCircle backgroundColor="#1C1A5E" icon={<Entypo name="help-with-circle" size={24} color="white" />} text="Help" />
+                <InfoCircle backgroundColor="lightblue" icon={<Ionicons name="calendar" size={24} color="white" />} text="Plans" />
             </View>
         </View>
     );
@@ -21,10 +21,12 @@ function Section6() {
 
 // InfoCircle component
 function InfoCircle({ backgroundColor, icon, text }) {
+    const textColor = backgroundColor === "#1C1A5E" ? "white" : "black";
+
     return (
         <View style={[globalStyles.circle, { backgroundColor }]}>
             {icon}
-            <Text style={{ textAlign: "center", fontWeight: "500" }}>{text}</Text>
+            <Text style={{ textAlign: "center", fontWeight: "500", color: textColor }}>{text}</Text>
         </View>
     );
 }

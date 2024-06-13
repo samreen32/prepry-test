@@ -17,8 +17,8 @@ export default function Welcome() {
                     </View>
                 </View>
                 <View>
-                    <Text style={globalStyles.subText}>
-                        Find your match & spark a connection!
+                <Text style={globalStyles.subText}>
+                        Choose your path and start your journey to success!
                     </Text>
                     <Image
                         style={styles.centeredImage}

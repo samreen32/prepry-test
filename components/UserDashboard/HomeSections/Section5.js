@@ -1,35 +1,36 @@
 import React from 'react';
-import { View, Text, Image, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { globalStyles } from '../../../assets/styles/globalStyles';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 function Section5() {
     const services = [
         {
-            title: 'Dating',
-            image: require('../../../assets/img/more1.jpg'),
-            color: '#C8A2C8'
+            title: 'Questions List',
+            icon: <AntDesign name="menu-unfold" size={24} color="black" />,
+            color: 'lightblue'
         },
         {
-            title: 'Lets be Friends',
-            image: require('../../../assets/img/more5.jpg'),
-            color: '#F08080'
+            title: 'Quick 10',
+            icon: <AntDesign name="rocket1" size={24} color="white" />,
+            color: '#1C1A5E'
         },
         {
-            title: 'Life Partner',
-            image: require('../../../assets/img/banner-03.jpg'),
-            color: '#87CEEB'
+            title: 'Tests Reports',
+            icon: <AntDesign name="filetext1" size={24} color="black" />,
+            color: 'lightblue'
         },
         {
-            title: 'Get Engaged',
-            image: require('../../../assets/img/service.jpg'),
-            color: '#FFC0CB'
+            title: 'Top Questions',
+            icon: <AntDesign name="staro" size={24} color="white" />,
+            color: '#1C1A5E'
         },
     ];
 
     return (
-        <View style={{ padding: 16, marginTop: -15 }}>
+        <View style={{ marginTop: 15 }}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={globalStyles.servicesText}>Discover Top Services</Text>
+                <Text style={globalStyles.servicesText}>Top Categories</Text>
                 <TouchableOpacity style={globalStyles.seeAllButton}>
                     <Text style={globalStyles.seeAllServices}>See All</Text>
                 </TouchableOpacity>
@@ -50,10 +51,17 @@ function Section5() {
                             width: 150,
                             backgroundColor: service.color,
                             marginRight: 10,
+                            height: 160,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            padding: 10,
                         }
                     ]}>
-                        <Image source={service.image} style={globalStyles.serviceImg} />
-                        <Text style={globalStyles.serviceTitle}>{service.title}</Text>
+                        {service.icon}
+                        <Text style={[
+                            globalStyles.serviceTitle,
+                            { color: service.color === '#1C1A5E' ? 'white' : 'black' }
+                        ]}>{service.title}</Text>
                     </View>
                 ))}
             </ScrollView>

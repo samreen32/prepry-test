@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "prepry-test",
-    "slug": "prepry-test",
+    "name": "prepry",
+    "slug": "prepry",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
