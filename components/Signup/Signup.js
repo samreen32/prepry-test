@@ -116,7 +116,7 @@ export default function Signup() {
                     {currentField === 'Occupation' && (
                         <>
                             <Text style={{ color: 'white', marginBottom: 6 }}>Select Your Occupation</Text>
-                            {['Occupation 1', 'Occupation 2', 'Occupation 3'].map((occupation, index) => (
+                            {['Sonologist', 'Sonographer', 'Student'].map((occupation, index) => (
                                 <Checkbox.Item
                                     key={index}
                                     label={occupation}

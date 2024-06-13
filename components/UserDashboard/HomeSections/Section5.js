@@ -51,7 +51,7 @@ function Section5() {
                             width: 150,
                             backgroundColor: service.color,
                             marginRight: 10,
-                            height: 160,
+                            height: 120,
                             justifyContent: 'center',
                             alignItems: 'center',
                             padding: 10,

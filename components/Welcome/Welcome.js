@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Image, Text, View, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { globalStyles } from '../../assets/styles/globalStyles';
 import { Button } from 'react-native-paper';
+import LottieView from 'lottie-react-native';
 
 export default function Welcome() {
     const navigation = useNavigation();
+    const animation = useRef(null);
 
     return (
         <View style={globalStyles.heroContainer}>
@@ -17,12 +19,15 @@ export default function Welcome() {
                     </View>
                 </View>
                 <View>
-                <Text style={globalStyles.subText}>
+                    <Text style={globalStyles.subText}>
                         Choose your path and start your journey to success!
                     </Text>
-                    <Image
+
+                    <LottieView
+                        source={require('../../assets/animation/arrow.json')}
                         style={styles.centeredImage}
-                        source={require("../../assets/img/welcome.png")}
+                        autoPlay
+                        ref={animation}
                     />
                 </View>
                 <View style={globalStyles.buttonContainer}>

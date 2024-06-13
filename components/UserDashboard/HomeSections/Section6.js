@@ -7,7 +7,7 @@ import { AntDesign } from '@expo/vector-icons';
 
 function Section6() {
     return (
-        <View style={{ marginTop: 15, marginBottom: 100 }}>
+        <View style={{ marginTop: 15, marginBottom: 85 }}>
 
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 }}>
                 <InfoCircle backgroundColor="#1C1A5E" icon={<Ionicons name="settings" size={24} color="white" />} text="Setting" />
