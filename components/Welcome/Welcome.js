@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Image, Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { globalStyles } from '../../assets/styles/globalStyles';
 import { Button } from 'react-native-paper';
@@ -33,7 +33,7 @@ export default function Welcome() {
                 <View style={globalStyles.buttonContainer}>
                     <Button
                         mode="contained"
-                        onPress={() => navigation.navigate("Login")}
+                        onPress={() => navigation.navigate("ChooseView")}
                         style={globalStyles.getStartedButton}
                         labelStyle={styles.buttonLabel}
                     >
