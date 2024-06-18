@@ -33,7 +33,7 @@ export default function Welcome() {
                 <View style={globalStyles.buttonContainer}>
                     <Button
                         mode="contained"
-                        onPress={() => navigation.navigate("ChooseView")}
+                        onPress={() => navigation.navigate("UserDrawer")}
                         style={globalStyles.getStartedButton}
                         labelStyle={styles.buttonLabel}
                     >

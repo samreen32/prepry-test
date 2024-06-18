@@ -1,19 +1,17 @@
 import React from 'react';
 import { Pressable, TouchableOpacity, View, ScrollView, Image } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from "@expo/vector-icons";
 import { Badge } from 'react-native-paper';
 import { globalStyles } from '../../assets/styles/globalStyles';
 import Section1 from './HomeSections/Section1';
 import Section2 from './HomeSections/Section2';
 import Section4 from './HomeSections/Section4';
-import Section6 from './HomeSections/Section6';
 import Section5 from './HomeSections/Section5';
 import menuIcon from "../../assets/img/MenuIcon.png";
 import placesIcon from "../../assets/img/places_icon.png";
+import Section7 from './HomeSections/Section7';
 
 function HomeScreen() {
-    const navigation = useNavigation();
 
     return (
         <View style={{ flex: 1, backgroundColor: "lightgray" }}>
@@ -52,10 +50,7 @@ function HomeScreen() {
                 <Section2 />
                 <Section5 />
                 <Section4 />
-                <Section6 />
-                {/* 
-                <Section3 />
-                <Section7 /> */}
+                <Section7 />
             </ScrollView>
 
         </View>

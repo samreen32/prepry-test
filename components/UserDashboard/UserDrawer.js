@@ -60,6 +60,22 @@ function UserDrawer() {
                 }}
             />
             <Drawer.Screen
+                name="Analytics"
+                component={UserTabs}
+                options={{
+                    drawerLabel: ({ focused }) => (
+                        <Text style={{ color: focused ? "black" : "white", right: 26 }}>Analytics</Text>
+                    ),
+                    drawerIcon: ({ focused }) => (
+                        <Ionicons
+                            name="person"
+                            size={focused ? 25 : 20}
+                            style={{ color: focused ? "black" : "white" }}
+                        />
+                    ),
+                }}
+            />
+            <Drawer.Screen
                 name="Subscription"
                 component={UserTabs}
                 options={{

@@ -1,9 +1,8 @@
-import { React } from "react";
+import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Text } from "react-native";
 import UserStack from "./UserStack";
-import { Text } from "react-native";
 
 const Tab = createBottomTabNavigator();
 
@@ -15,13 +14,15 @@ function UserTabs() {
                     let iconName;
                     if (route.name === "Home") {
                         iconName = "home";
-                        size = focused ? 35 : 30;
-                        color = focused ? "lightblue" : "white";
                     } else if (route.name === "Profile") {
                         iconName = "person";
-                        size = focused ? 30 : 32;
-                        color = focused ? "lightblue" : "white";
+                    } else if (route.name === "Settings") {
+                        iconName = "settings";
+                    } else if (route.name === "Help") {
+                        iconName = "help-circle";
                     }
+                    size = focused ? 30 : 25;
+                    color = focused ? "lightblue" : "white";
                     return <Ionicons name={iconName} size={size} color={color} />;
                 },
             })}
@@ -30,13 +31,12 @@ function UserTabs() {
                 name="Home"
                 component={UserStack}
                 options={{
-                    tabBarLabel: ({ focused, color }) => (
+                    tabBarLabel: ({ focused }) => (
                         <Text style={{ color: focused ? "lightblue" : "white", top: -12 }}>
                             Home
                         </Text>
                     ),
                     tabBarStyle: {
-                        // display: getRouteName(route),
                         position: "absolute",
                         marginBottom: 2,
                         bottom: 5,
@@ -58,13 +58,12 @@ function UserTabs() {
                 name="Profile"
                 component={UserStack}
                 options={{
-                    tabBarLabel: ({ focused, color }) => (
+                    tabBarLabel: ({ focused }) => (
                         <Text style={{ color: focused ? "lightblue" : "white", top: -12 }}>
                             Profile
                         </Text>
                     ),
                     tabBarStyle: {
-                        // display: getRouteName(route),
                         position: "absolute",
                         marginBottom: 2,
                         bottom: 5,
@@ -82,6 +81,59 @@ function UserTabs() {
                 }}
             />
 
+            <Tab.Screen
+                name="Settings"
+                component={UserStack}
+                options={{
+                    tabBarLabel: ({ focused }) => (
+                        <Text style={{ color: focused ? "lightblue" : "white", top: -12 }}>
+                            Settings
+                        </Text>
+                    ),
+                    tabBarStyle: {
+                        position: "absolute",
+                        marginBottom: 2,
+                        bottom: 5,
+                        left: 15,
+                        right: 15,
+                        borderBottomLeftRadius: 60,
+                        borderTopLeftRadius: 60,
+                        borderBottomRightRadius: 60,
+                        borderTopRightRadius: 60,
+                        elevation: 0,
+                        height: 80,
+                        ...styles,
+                    },
+                    headerShown: false,
+                }}
+            />
+
+            <Tab.Screen
+                name="Help"
+                component={UserStack}
+                options={{
+                    tabBarLabel: ({ focused }) => (
+                        <Text style={{ color: focused ? "lightblue" : "white", top: -12 }}>
+                            Help
+                        </Text>
+                    ),
+                    tabBarStyle: {
+                        position: "absolute",
+                        marginBottom: 2,
+                        bottom: 5,
+                        left: 15,
+                        right: 15,
+                        borderBottomLeftRadius: 60,
+                        borderTopLeftRadius: 60,
+                        borderBottomRightRadius: 60,
+                        borderTopRightRadius: 60,
+                        elevation: 0,
+                        height: 80,
+                        ...styles,
+                    },
+                    headerShown: false,
+                }}
+            />
         </Tab.Navigator>
     );
 }
@@ -98,4 +150,4 @@ const styles = StyleSheet.create({
     backgroundColor: "#1C1A5E",
 });
 
-export default UserTabs
+export default UserTabs;

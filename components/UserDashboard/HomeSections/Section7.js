@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { View, Text, Image } from 'react-native';
 import { globalStyles } from '../../../assets/styles/globalStyles';
-import tinderLogo from '../../../assets/img/crown.gif';
+import tinderLogo from '../../../assets/img/bottle.png';
 import { Button } from 'react-native-paper';
 import LottieView from 'lottie-react-native';
 
@@ -9,7 +9,7 @@ function Section7() {
     const animation = useRef(null);
 
     return (
-        <View style={{ padding: 16, marginTop: -30, marginBottom: 180 }}>
+        <View style={{ marginBottom: 100, marginTop: 0 }}>
             <View style={[globalStyles.rectangleBox, globalStyles.contentLayout]}>
                 <View style={{ flex: 1 }}>
                     <Text style={{
@@ -20,10 +20,10 @@ function Section7() {
                     </Text>
                     <Button mode="contained"
                         style={{
-                            backgroundColor: "black", width: 150, marginTop: 12, marginLeft: -5
+                            backgroundColor: "lightblue", width: 150, marginTop: 12, marginLeft: -5
                         }}
                     >
-                        <Text>Premium</Text>
+                        <Text style={{color: "black"}}>Go Premium</Text>
                     </Button>
                 </View>
                 <Image
