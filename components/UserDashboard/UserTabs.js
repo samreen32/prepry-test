@@ -3,6 +3,8 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { StyleSheet, Text } from "react-native";
 import UserStack from "./UserStack";
+import Profile from "../UserProfile/Profile";
+import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 
 const Tab = createBottomTabNavigator();
 
@@ -14,7 +16,7 @@ function UserTabs() {
                     let iconName;
                     if (route.name === "Home") {
                         iconName = "home";
-                    } else if (route.name === "Profile") {
+                    } else if (route.name === "UserProfile") {
                         iconName = "person";
                     } else if (route.name === "Settings") {
                         iconName = "settings";
@@ -30,13 +32,14 @@ function UserTabs() {
             <Tab.Screen
                 name="Home"
                 component={UserStack}
-                options={{
+                options={({ route }) => ({
                     tabBarLabel: ({ focused }) => (
                         <Text style={{ color: focused ? "lightblue" : "white", top: -12 }}>
                             Home
                         </Text>
                     ),
                     tabBarStyle: {
+                        display: getRouteName(route),
                         position: "absolute",
                         marginBottom: 2,
                         bottom: 5,
@@ -51,12 +54,12 @@ function UserTabs() {
                         ...styles,
                     },
                     headerShown: false,
-                }}
+                })}
             />
 
             <Tab.Screen
-                name="Profile"
-                component={UserStack}
+                name="UserProfile"
+                component={Profile}
                 options={{
                     tabBarLabel: ({ focused }) => (
                         <Text style={{ color: focused ? "lightblue" : "white", top: -12 }}>
@@ -149,5 +152,18 @@ const styles = StyleSheet.create({
     elevation: 5,
     backgroundColor: "#1C1A5E",
 });
+
+
+const getRouteName = (route) => {
+    const routeName = getFocusedRouteNameFromRoute(route);
+    if (
+        routeName?.includes("EditUserProfile") ||
+        routeName?.includes("UserProfile") || 
+        routeName?.includes("Settings")
+    ) {
+        return "none";
+    }
+    return "flex";
+};
 
 export default UserTabs;

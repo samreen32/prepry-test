@@ -4,6 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 import CustomDrawer from "../CustomDrawer";
 import UserTabs from "./UserTabs";
 import { Text } from "react-native";
+import Profile from "../Profile/UserProfile/Profile";
 
 const Drawer = createDrawerNavigator();
 
@@ -44,8 +45,8 @@ function UserDrawer() {
                 }}
             />
             <Drawer.Screen
-                name="Profile"
-                component={UserTabs}
+                name="UserProfile"
+                component={Profile}
                 options={{
                     drawerLabel: ({ focused }) => (
                         <Text style={{ color: focused ? "black" : "white", right: 26 }}>Profile</Text>

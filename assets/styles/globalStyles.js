@@ -337,5 +337,5 @@ export const globalStyles = StyleSheet.create({
         borderRadius: 30,
         width: 70,
         height: 70
-    }
+    },
 });
