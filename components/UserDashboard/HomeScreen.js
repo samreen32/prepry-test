@@ -10,15 +10,17 @@ import Section5 from './HomeSections/Section5';
 import menuIcon from "../../assets/img/MenuIcon.png";
 import placesIcon from "../../assets/img/places_icon.png";
 import Section7 from './HomeSections/Section7';
+import { useNavigation } from '@react-navigation/native';
 
 function HomeScreen() {
+    const navigation = useNavigation();
 
     return (
-        <View style={{ flex: 1, backgroundColor: "lightgray" }}>
+        <View style={{ flex: 1, backgroundColor: "#f0f0f0" }}>
             <View style={globalStyles.iconsContainer}>
                 {/* Drawer icon */}
                 <Pressable
-                    // onPress={() => navigation.openDrawer()}
+                    onPress={() => navigation.openDrawer()}
                     style={globalStyles.iconPressable}
                 >
                     <Image source={menuIcon} style={{
@@ -36,7 +38,9 @@ function HomeScreen() {
                 </Pressable>
 
                 {/* Notifications */}
-                <TouchableOpacity style={globalStyles.iconTouchable}>
+                <TouchableOpacity style={globalStyles.iconTouchable}
+                    onPress={() => { navigation.navigate("UserNotification") }}
+                >
                     <Badge style={globalStyles.badgeStyle}>3</Badge>
                     <Ionicons name="notifications" size={33} color="#1C1A5E" />
                 </TouchableOpacity>

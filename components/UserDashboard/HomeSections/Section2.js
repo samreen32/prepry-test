@@ -10,7 +10,7 @@ function Section2() {
     const [progress, setProgress] = useState(0.45); 
 
     return (
-        <View>
+        <>
             <View style={[globalStyles.rectangleBox, globalStyles.contentLayout]}>
                 <View style={{ flex: 1 }}>
                     <Text style={{
@@ -33,18 +33,7 @@ function Section2() {
                     style={[globalStyles.imageHome]}
                 />
             </View>
-            <View style={globalStyles.animationContainer}>
-                <LottieView
-                    autoPlay
-                    ref={animation}
-                    style={{
-                        width: 200,
-                        height: 200,
-                    }}
-                    source={require('../../../assets/animation/Animation - 1710858887710.json')}
-                />
-            </View>
-        </View>
+        </>
     );
 }
 

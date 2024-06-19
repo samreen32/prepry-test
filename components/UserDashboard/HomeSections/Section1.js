@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Text, Animated, Image } from 'react-native';
+import { View, Text, Animated, Image, TouchableOpacity } from 'react-native';
 import { Ionicons } from "@expo/vector-icons";
 import { globalStyles } from '../../../assets/styles/globalStyles';
 import profilePic from "../../../assets/img/userProfile.png"
+import { useNavigation } from '@react-navigation/native';
 
 function Section1() {
+    const navigation = useNavigation();
     const [greeting, setGreeting] = useState("");
     const [iconName, setIconName] = useState("sunny");
     const spinValue = useRef(new Animated.Value(0)).current;
@@ -55,9 +57,9 @@ function Section1() {
                     </Text>
                 </View>
             </View>
-            <View>
-                <Ionicons name="search" size={24} color="black" />
-            </View>
+            <TouchableOpacity onPress={() => navigation.navigate("UserSearch")}>
+                <Ionicons name="search" size={30} color="black" />
+            </TouchableOpacity>
         </View>
     );
 }

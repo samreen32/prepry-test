@@ -3,7 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Welcome from '../components/Welcome/Welcome';
 import Login from '../components/Login/Login';
 import Signup from "../components/Signup/Signup";
-import UserDrawer from "../components/UserDashboard/UserDrawer";
+import UserDrawer from "../routes/UserDrawer";
 import ChooseView from "../components/ChooseView/ChooseView";
 import AdminLogin from "../components/AdminLogin/AdminLogin";
 

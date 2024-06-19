@@ -1,10 +1,10 @@
 import React from "react";
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { Ionicons } from "@expo/vector-icons";
-import CustomDrawer from "../CustomDrawer";
+import { Ionicons, AntDesign, Entypo, Foundation, MaterialIcons } from "@expo/vector-icons";
+import CustomDrawer from "./CustomDrawer";
 import UserTabs from "./UserTabs";
 import { Text } from "react-native";
-import Profile from "../Profile/UserProfile/Profile";
+import Profile from "../components/Profile/UserProfile/Profile";
 
 const Drawer = createDrawerNavigator();
 
@@ -37,7 +37,7 @@ function UserDrawer() {
                     ),
                     drawerIcon: ({ focused }) => (
                         <Ionicons
-                            name="person"
+                            name="home"
                             size={focused ? 25 : 20}
                             style={{ color: focused ? "black" : "white" }}
                         />
@@ -68,8 +68,7 @@ function UserDrawer() {
                         <Text style={{ color: focused ? "black" : "white", right: 26 }}>Analytics</Text>
                     ),
                     drawerIcon: ({ focused }) => (
-                        <Ionicons
-                            name="person"
+                        <Ionicons name="analytics-sharp"
                             size={focused ? 25 : 20}
                             style={{ color: focused ? "black" : "white" }}
                         />
@@ -81,11 +80,11 @@ function UserDrawer() {
                 component={UserTabs}
                 options={{
                     drawerLabel: ({ focused }) => (
-                        <Text style={{ color: focused ? "black" : "white", right: 26 }}>Get Subscription</Text>
+                        <Text style={{ color: focused ? "black" : "white", right: 26 }}>Go Pro</Text>
                     ),
                     drawerIcon: ({ focused }) => (
-                        <Ionicons
-                            name="person"
+                        <Entypo
+                            name="trophy"
                             size={focused ? 25 : 20}
                             style={{ color: focused ? "black" : "white" }}
                         />
@@ -101,8 +100,7 @@ function UserDrawer() {
                         <Text style={{ color: focused ? "black" : "white", right: 26 }}>Questions List</Text>
                     ),
                     drawerIcon: ({ focused }) => (
-                        <Ionicons
-                            name="person"
+                        <MaterialIcons name="checklist"
                             size={focused ? 25 : 20}
                             style={{ color: focused ? "black" : "white" }}
                         />
@@ -117,8 +115,7 @@ function UserDrawer() {
                         <Text style={{ color: focused ? "black" : "white", right: 26 }}>Notes</Text>
                     ),
                     drawerIcon: ({ focused }) => (
-                        <Ionicons
-                            name="person"
+                        <Foundation name="clipboard-notes"
                             size={focused ? 25 : 20}
                             style={{ color: focused ? "black" : "white" }}
                         />
@@ -133,8 +130,7 @@ function UserDrawer() {
                         <Text style={{ color: focused ? "black" : "white", right: 26 }}>Logout</Text>
                     ),
                     drawerIcon: ({ focused }) => (
-                        <Ionicons
-                            name="person"
+                        <AntDesign name="logout"
                             size={focused ? 25 : 20}
                             style={{ color: focused ? "black" : "white" }}
                         />

@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { StyleSheet, Text } from "react-native";
 import UserStack from "./UserStack";
-import Profile from "../UserProfile/Profile";
+import Profile from "../components/Profile/UserProfile/Profile";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 
 const Tab = createBottomTabNavigator();
@@ -159,7 +159,9 @@ const getRouteName = (route) => {
     if (
         routeName?.includes("EditUserProfile") ||
         routeName?.includes("UserProfile") || 
-        routeName?.includes("Settings")
+        routeName?.includes("Settings") ||
+        routeName?.includes("UserSearch") ||
+        routeName?.includes("UserNotification")
     ) {
         return "none";
     }
