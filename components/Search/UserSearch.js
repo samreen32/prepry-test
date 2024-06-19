@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 20,
     },
     headerText: {
-        fontSize: 18,
+        fontSize: 20,
         fontWeight: 'bold',
         textAlign: 'center',
         flex: 1,

@@ -5,6 +5,7 @@ import CustomDrawer from "./CustomDrawer";
 import UserTabs from "./UserTabs";
 import { Text } from "react-native";
 import Profile from "../components/Profile/UserProfile/Profile";
+import UserSubscription from "../components/Subscription/UserSubscription";
 
 const Drawer = createDrawerNavigator();
 
@@ -76,8 +77,8 @@ function UserDrawer() {
                 }}
             />
             <Drawer.Screen
-                name="Subscription"
-                component={UserTabs}
+                name="UserSubscription"
+                component={UserSubscription}
                 options={{
                     drawerLabel: ({ focused }) => (
                         <Text style={{ color: focused ? "black" : "white", right: 26 }}>Go Pro</Text>

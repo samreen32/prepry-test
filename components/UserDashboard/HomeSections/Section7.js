@@ -4,8 +4,10 @@ import { globalStyles } from '../../../assets/styles/globalStyles';
 import tinderLogo from '../../../assets/img/bottle.png';
 import { Button } from 'react-native-paper';
 import LottieView from 'lottie-react-native';
+import { useNavigation } from '@react-navigation/native';
 
 function Section7() {
+    const navigation = useNavigation();
     const animation = useRef(null);
 
     return (
@@ -22,6 +24,7 @@ function Section7() {
                         style={{
                             backgroundColor: "lightblue", width: 150, marginTop: 12, marginLeft: -5
                         }}
+                        onPress={()=> navigation.navigate("UserSubscription")}
                     >
                         <Text style={{color: "black"}}>Go Premium</Text>
                     </Button>

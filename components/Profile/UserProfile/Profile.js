@@ -32,19 +32,27 @@ export default function Profile() {
                 </TouchableOpacity>
             </View>
             <View style={styles.menu}>
-                <MenuItem icon={require('../../../assets/img/MenuIcon.png')} title="Dashboard" />
+                <MenuItem icon={require('../../../assets/img/MenuIcon.png')}
+                    title="Dashboard"
+                    onPress={() => {
+                        navigation.navigate("HomeScreen")
+                    }}
+                />
                 <MenuItem icon={help} title="Questions List" />
                 <MenuItem icon={statistics} title="My Analytics" />
-                <MenuItem icon={rocket} title="Upgrade" />
+                <MenuItem icon={rocket} title="Upgrade" onPress={() => {
+                    navigation.navigate("UserSubscription")
+                }}
+                />
                 <MenuItem icon={logout} title="Logout" />
             </View>
         </View>
     );
 }
 
-function MenuItem({ icon, title }) {
+function MenuItem({ icon, title, onPress }) {
     return (
-        <TouchableOpacity style={styles.menuItem}>
+        <TouchableOpacity style={styles.menuItem} onPress={onPress}>
             <Image source={icon} style={styles.menuIcon} />
             <Text style={styles.menuText}>{title}</Text>
         </TouchableOpacity>

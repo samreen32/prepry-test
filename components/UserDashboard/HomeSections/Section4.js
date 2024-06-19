@@ -8,19 +8,6 @@ function Section4() {
     return (
         <View style={{ marginTop: 15 }}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <ImageOverlayWithText
-                    source={more1}
-                    text={
-                        <>
-                            <Text>Get</Text>
-                            <Text>{"\n"}</Text>
-                            <Text>Unlimited Questions</Text>
-                        </>
-                    }
-                    style={{ width: 150, height: 250, borderRadius: 15 }}
-                />
-
-
                 <View>
                     <ImageOverlayWithText
                         source={more2}
@@ -41,6 +28,17 @@ function Section4() {
                         style={{ width: 190, height: 130, borderRadius: 15, marginTop: 10 }}
                     />
                 </View>
+                <ImageOverlayWithText
+                    source={more1}
+                    text={
+                        <>
+                            <Text>Get</Text>
+                            <Text>{"\n"}</Text>
+                            <Text>Unlimited Questions</Text>
+                        </>
+                    }
+                    style={{ width: 150, height: 250, borderRadius: 15 }}
+                />
             </View>
         </View>
     );
