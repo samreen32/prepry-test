@@ -24,7 +24,7 @@ function Section5() {
             title: 'Tests Reports',
             icon: <AntDesign name="filetext1" size={24} color="black" />,
             color: 'lightblue',
-            navigateTo: ''
+            navigateTo: 'TestReports'
         },
         {
             title: 'Top Questions',
