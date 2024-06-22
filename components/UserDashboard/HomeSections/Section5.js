@@ -1,29 +1,36 @@
 import React from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { globalStyles } from '../../../assets/styles/globalStyles';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
 function Section5() {
+    const navigation = useNavigation();
+
     const services = [
         {
             title: 'Questions List',
             icon: <AntDesign name="menu-unfold" size={24} color="black" />,
-            color: 'lightblue'
+            color: 'lightblue',
+            navigateTo: 'QuestionsList'
         },
         {
             title: 'Quick 10',
             icon: <AntDesign name="rocket1" size={24} color="white" />,
-            color: '#1C1A5E'
+            color: '#1C1A5E',
+            navigateTo: ''
         },
         {
             title: 'Tests Reports',
             icon: <AntDesign name="filetext1" size={24} color="black" />,
-            color: 'lightblue'
+            color: 'lightblue',
+            navigateTo: ''
         },
         {
             title: 'Top Questions',
             icon: <AntDesign name="staro" size={24} color="white" />,
-            color: '#1C1A5E'
+            color: '#1C1A5E',
+            navigateTo: ''
         },
     ];
 
@@ -45,24 +52,28 @@ function Section5() {
                 }}
             >
                 {services.map((service, index) => (
-                    <View key={index} style={[
-                        globalStyles.rectangleBox,
-                        {
-                            width: 150,
-                            backgroundColor: service.color,
-                            marginRight: 10,
-                            height: 120,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            padding: 10,
-                        }
-                    ]}>
+                    <TouchableOpacity
+                        key={index}
+                        style={[
+                            globalStyles.rectangleBox,
+                            {
+                                width: 150,
+                                backgroundColor: service.color,
+                                marginRight: 10,
+                                height: 120,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                padding: 10,
+                            }
+                        ]}
+                        onPress={() => service.navigateTo && navigation.navigate(service.navigateTo)}
+                    >
                         {service.icon}
                         <Text style={[
                             globalStyles.serviceTitle,
                             { color: service.color === '#1C1A5E' ? 'white' : 'black' }
                         ]}>{service.title}</Text>
-                    </View>
+                    </TouchableOpacity>
                 ))}
             </ScrollView>
         </View>

@@ -6,6 +6,7 @@ import UserTabs from "./UserTabs";
 import { Text } from "react-native";
 import Profile from "../components/Profile/UserProfile/Profile";
 import UserSubscription from "../components/Subscription/UserSubscription";
+import QuestionsList from "../components/QuestionsList/QuestionsList";
 
 const Drawer = createDrawerNavigator();
 
@@ -62,6 +63,36 @@ function UserDrawer() {
                 }}
             />
             <Drawer.Screen
+                name="QuestionsList"
+                component={QuestionsList}
+                options={{
+                    drawerLabel: ({ focused }) => (
+                        <Text style={{ color: focused ? "black" : "white", right: 26 }}>Questions List</Text>
+                    ),
+                    drawerIcon: ({ focused }) => (
+                        <MaterialIcons name="checklist"
+                            size={focused ? 25 : 20}
+                            style={{ color: focused ? "black" : "white" }}
+                        />
+                    ),
+                }}
+            />
+            <Drawer.Screen
+                name="Notes"
+                component={UserTabs}
+                options={{
+                    drawerLabel: ({ focused }) => (
+                        <Text style={{ color: focused ? "black" : "white", right: 26 }}>Notes</Text>
+                    ),
+                    drawerIcon: ({ focused }) => (
+                        <Foundation name="clipboard-notes"
+                            size={focused ? 25 : 20}
+                            style={{ color: focused ? "black" : "white" }}
+                        />
+                    ),
+                }}
+            />
+            <Drawer.Screen
                 name="Analytics"
                 component={UserTabs}
                 options={{
@@ -86,37 +117,6 @@ function UserDrawer() {
                     drawerIcon: ({ focused }) => (
                         <Entypo
                             name="trophy"
-                            size={focused ? 25 : 20}
-                            style={{ color: focused ? "black" : "white" }}
-                        />
-                    ),
-                }}
-            />
-
-            <Drawer.Screen
-                name="Questions"
-                component={UserTabs}
-                options={{
-                    drawerLabel: ({ focused }) => (
-                        <Text style={{ color: focused ? "black" : "white", right: 26 }}>Questions List</Text>
-                    ),
-                    drawerIcon: ({ focused }) => (
-                        <MaterialIcons name="checklist"
-                            size={focused ? 25 : 20}
-                            style={{ color: focused ? "black" : "white" }}
-                        />
-                    ),
-                }}
-            />
-            <Drawer.Screen
-                name="Notes"
-                component={UserTabs}
-                options={{
-                    drawerLabel: ({ focused }) => (
-                        <Text style={{ color: focused ? "black" : "white", right: 26 }}>Notes</Text>
-                    ),
-                    drawerIcon: ({ focused }) => (
-                        <Foundation name="clipboard-notes"
                             size={focused ? 25 : 20}
                             style={{ color: focused ? "black" : "white" }}
                         />

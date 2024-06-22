@@ -6,6 +6,7 @@ import EditProfile from '../components/Profile/UserProfile/EditProfile';
 import UserNotification from '../components/Notifications/UserNotification';
 import UserSearch from '../components/Search/UserSearch';
 import UserSubscription from '../components/Subscription/UserSubscription';
+import QuestionsList from '../components/QuestionsList/QuestionsList';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,6 +25,7 @@ function UserStack() {
                 <Stack.Screen name="UserNotification" component={UserNotification} />
                 <Stack.Screen name="UserSearch" component={UserSearch} />
                 <Stack.Screen name="UserSubscription" component={UserSubscription} />
+                <Stack.Screen name="QuestionsList" component={QuestionsList} />
             </Stack.Navigator>
         </>
     )
