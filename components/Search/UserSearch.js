@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, TextInput, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { AntDesign } from '@expo/vector-icons';
+
+const { width, height } = Dimensions.get('window');
 
 export default function UserSearch() {
     const navigation = useNavigation();
@@ -26,10 +28,10 @@ export default function UserSearch() {
             <View style={styles.container}>
                 <View style={styles.header}>
                     <TouchableOpacity onPress={() => navigation.navigate("HomeScreen")}>
-                        <AntDesign name="arrowleft" size={30} color="black" style={{ marginLeft: 10 }} />
+                        <AntDesign name="arrowleft" size={30} color="black" style={{ marginLeft: width * 0.03 }} />
                     </TouchableOpacity>
                     <Text style={styles.headerText}>Search</Text>
-                    <View style={{ width: 24 }} />
+                    <View style={{ width: 30 }} />
                 </View>
                 <View style={styles.searchContainer}>
                     <TextInput
@@ -59,6 +61,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
+        backgroundColor: '#F3F3F3',
     },
     header: {
         flexDirection: 'row',
@@ -66,37 +69,39 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         backgroundColor: 'lightblue',
         width: '100%',
-        paddingVertical: 50,
-        paddingHorizontal: 10,
+        paddingVertical: height * 0.08,
+        paddingHorizontal: width * 0.05,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
     },
     headerText: {
-        fontSize: 20,
+        fontSize: width * 0.05,
         fontWeight: 'bold',
         textAlign: 'center',
         flex: 1,
-        marginLeft: -24,
+        marginLeft: -width * 0.1,
     },
     searchContainer: {
         width: '90%',
-        marginTop: 20,
+        marginTop: height * 0.02,
     },
     searchInput: {
         backgroundColor: 'white',
-        padding: 10,
+        padding: height * 0.02,
         borderRadius: 10,
         borderWidth: 1,
         borderColor: 'gray',
+        fontSize: width * 0.04,
     },
     notificationsContainer: {
         width: '90%',
-        marginTop: 20,
+        marginTop: height * 0.02,
     },
     notificationBox: {
         backgroundColor: 'lightgray',
-        padding: 20,
+        padding: height * 0.025,
         borderRadius: 10,
-        marginTop: 10,
+        marginTop: height * 0.01,
     },
 });
+

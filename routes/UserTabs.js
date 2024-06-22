@@ -163,6 +163,7 @@ const getRouteName = (route) => {
         routeName?.includes("UserSearch") ||
         routeName?.includes("UserSubscription") ||
         routeName?.includes("QuestionsList") ||
+        routeName?.includes("PracticeQuickQs") ||
         routeName?.includes("UserNotification")
     ) {
         return "none";

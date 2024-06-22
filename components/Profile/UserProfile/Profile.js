@@ -1,11 +1,13 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import logout from "../../../assets/img/logout (1).png";
 import statistics from "../../../assets/img/statistics.png";
 import help from "../../../assets/img/Help.png";
 import rocket from "../../../assets/img/rocket1.png";
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+
+const { width, height } = Dimensions.get('window');
 
 export default function Profile() {
     const navigation = useNavigation();
@@ -38,7 +40,9 @@ export default function Profile() {
                         navigation.navigate("HomeScreen")
                     }}
                 />
-                <MenuItem icon={help} title="Questions List" />
+                <MenuItem icon={help} title="Questions List" onPress={() => {
+                    navigation.navigate("QuestionsList")
+                }} />
                 <MenuItem icon={statistics} title="My Analytics" />
                 <MenuItem icon={rocket} title="Upgrade" onPress={() => {
                     navigation.navigate("UserSubscription")
@@ -70,25 +74,26 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         backgroundColor: 'lightblue',
         width: '100%',
-        paddingVertical: 80,
-        paddingHorizontal: 10,
+        paddingVertical: height * 0.10,
+        paddingHorizontal: width * 0.05,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
     },
     headerText: {
-        fontSize: 25,
+        fontSize: width * 0.06,
         color: '#FFFFFF',
         fontWeight: 'bold',
         textAlign: 'center',
         flex: 1,
+        marginLeft: -width * 0.1,
     },
     profileSection: {
         backgroundColor: '#FFFFFF',
         alignItems: 'center',
-        paddingVertical: 30,
-        paddingHorizontal: 20,
-        marginHorizontal: 20,
-        marginTop: -40,
+        paddingVertical: height * 0.04,
+        paddingHorizontal: width * 0.05,
+        marginHorizontal: width * 0.05,
+        marginTop: -height * 0.05,
         borderRadius: 10,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
@@ -97,36 +102,37 @@ const styles = StyleSheet.create({
         elevation: 4,
     },
     profileIcon: {
-        width: 80,
-        height: 80,
-        borderRadius: 40,
-        marginBottom: 10,
+        width: width * 0.2,
+        height: width * 0.2,
+        borderRadius: width * 0.1,
+        marginBottom: height * 0.01,
     },
     profileName: {
-        fontSize: 18,
+        fontSize: width * 0.045,
         fontWeight: 'bold',
-        marginBottom: 5,
+        marginBottom: height * 0.005,
     },
     editProfileButton: {
         backgroundColor: '#1C1A5E',
-        paddingVertical: 5,
-        paddingHorizontal: 15,
+        paddingVertical: height * 0.01,
+        paddingHorizontal: width * 0.04,
         borderRadius: 20,
     },
     editProfileButtonText: {
         color: '#FFFFFF',
+        fontSize: width * 0.04,
     },
     menu: {
-        marginTop: 20,
+        marginTop: height * 0.02,
     },
     menuItem: {
         flexDirection: 'row',
         alignItems: 'center',
-        paddingVertical: 15,
-        paddingHorizontal: 20,
+        paddingVertical: height * 0.02,
+        paddingHorizontal: width * 0.05,
         backgroundColor: '#FFFFFF',
-        marginHorizontal: 20,
-        marginVertical: 5,
+        marginHorizontal: width * 0.05,
+        marginVertical: height * 0.01,
         borderRadius: 10,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
@@ -135,12 +141,12 @@ const styles = StyleSheet.create({
         elevation: 4,
     },
     menuIcon: {
-        width: 24,
-        height: 24,
-        marginRight: 15,
+        width: width * 0.06,
+        height: width * 0.06,
+        marginRight: width * 0.04,
     },
     menuText: {
-        fontSize: 16,
+        fontSize: width * 0.045,
         fontWeight: "bold"
     },
 });

@@ -7,6 +7,7 @@ import UserNotification from '../components/Notifications/UserNotification';
 import UserSearch from '../components/Search/UserSearch';
 import UserSubscription from '../components/Subscription/UserSubscription';
 import QuestionsList from '../components/QuestionsList/QuestionsList';
+import PracticeQuickQs from '../components/PracticeQuickQs/PracticeQuickQs';
 
 const Stack = createNativeStackNavigator();
 
@@ -26,6 +27,7 @@ function UserStack() {
                 <Stack.Screen name="UserSearch" component={UserSearch} />
                 <Stack.Screen name="UserSubscription" component={UserSubscription} />
                 <Stack.Screen name="QuestionsList" component={QuestionsList} />
+                <Stack.Screen name="PracticeQuickQs" component={PracticeQuickQs} />
             </Stack.Navigator>
         </>
     )

@@ -45,7 +45,11 @@ function Section1() {
 
     return (
         <View style={[{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }]}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}
+                onPress={() => {
+                    navigation.navigate("Profile")
+                }}
+            >
                 <Image
                     source={profilePic}
                     style={{ width: 50, height: 50, borderRadius: 25 }}

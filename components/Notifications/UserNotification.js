@@ -1,7 +1,10 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { AntDesign, MaterialIcons } from '@expo/vector-icons';
+
+// Get screen dimensions
+const { width, height } = Dimensions.get('window');
 
 export default function UserNotification() {
     const navigation = useNavigation();
@@ -52,7 +55,7 @@ export default function UserNotification() {
                         <AntDesign name="arrowleft" size={30} color="black" style={{ marginLeft: 10 }} />
                     </TouchableOpacity>
                     <Text style={styles.headerText}>Notifications</Text>
-                    <View style={{ width: 24 }} />
+                    <View style={{ width: 30 }} />
                 </View>
                 <View style={styles.notificationsContainer}>
                     {dummyNotifications.map((notification, index) => (
@@ -81,7 +84,6 @@ export default function UserNotification() {
 const styles = StyleSheet.create({
     scrollContainer: {
         flexGrow: 1,
-        justifyContent: 'center',
     },
     container: {
         flex: 1,
@@ -94,27 +96,27 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         backgroundColor: 'lightblue',
         width: '100%',
-        paddingVertical: 50,
-        paddingHorizontal: 10,
+        paddingVertical: height * 0.08, // 3% of screen height
+        paddingHorizontal: width * 0.05, // 5% of screen width
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
     },
     headerText: {
-        fontSize: 18,
+        fontSize: width * 0.05, // 5% of screen width
         fontWeight: 'bold',
         textAlign: 'center',
         flex: 1,
-        marginLeft: -24,
+        marginLeft: width * -0, // Center the text
     },
     notificationsContainer: {
         width: '90%',
-        marginTop: 20,
+        marginTop: height * 0.02, // 2% of screen height
     },
     notificationBox: {
         backgroundColor: 'lightgray',
-        padding: 20,
+        padding: width * 0.05, // 5% of screen width
         borderRadius: 10,
-        marginTop: 10,
+        marginTop: height * 0.02, // 1% of screen height
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -124,20 +126,21 @@ const styles = StyleSheet.create({
     },
     notificationName: {
         fontWeight: 'bold',
+        fontSize: width * 0.045, // 4.5% of screen width
     },
     notificationDescription: {
-        marginTop: 5,
+        marginTop: height * 0.005, // 0.5% of screen height
+        fontSize: width * 0.04, // 4% of screen width
     },
     notificationDateTime: {
-        marginTop: 5,
-        fontSize: 12,
+        marginTop: height * 0.005, // 0.5% of screen height
+        fontSize: width * 0.035, // 3.5% of screen width
         color: 'gray',
     },
     notificationIcons: {
         flexDirection: 'row',
     },
     iconButton: {
-        marginLeft: 10,
+        marginLeft: width * 0.02, // 2% of screen width
     },
 });
-

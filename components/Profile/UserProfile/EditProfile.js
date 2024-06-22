@@ -1,7 +1,9 @@
 import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ScrollView, Dimensions } from 'react-native';
 import { AntDesign } from '@expo/vector-icons'; 
 import { useNavigation } from '@react-navigation/native';
+
+const { width, height } = Dimensions.get('window');
 
 export default function EditProfile() {
     const navigation = useNavigation();
@@ -27,8 +29,8 @@ export default function EditProfile() {
                     <View style={styles.inputContainer}>
                         <TextInput placeholder="Full Name" style={styles.input} />
                         <TextInput placeholder="Email" style={styles.input} />
-                        <TextInput placeholder="License No" style={styles.input} />
-                        <TextInput placeholder="Mobile No" style={styles.input} />
+                        <TextInput placeholder="Password" style={styles.input} />
+                        <TextInput placeholder="New Password" style={styles.input} />
                     </View>
                     <TouchableOpacity style={styles.saveButton}>
                         <Text style={styles.saveButtonText}>Save</Text>
@@ -58,60 +60,63 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         backgroundColor: 'lightblue',
         width: '100%',
-        paddingVertical: 80,
-        paddingHorizontal: 10,
+        paddingVertical: height * 0.10,
+        paddingHorizontal: width * 0.05,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
     },
     headerText: {
-        fontSize: 25,
+        fontSize: width * 0.06,
         color: '#FFFFFF',
         fontWeight: 'bold',
         textAlign: 'center',
         flex: 1,
+        marginLeft: -width * 0,
     },
     profileContainer: {
         alignItems: 'center',
-        marginTop: -50,
+        marginTop: -height * 0.05,
     },
     profileImage: {
-        width: 100,
-        height: 100,
-        borderRadius: 50,
+        width: width * 0.25,
+        height: width * 0.25,
+        borderRadius: width * 0.125,
         backgroundColor: '#D3D3D3',
     },
     changeImageButton: {
         backgroundColor: '#1C1A5E',
-        paddingVertical: 10,
-        paddingHorizontal: 20,
+        paddingVertical: height * 0.015,
+        paddingHorizontal: width * 0.05,
         borderRadius: 10,
-        marginTop: 10,
+        marginTop: height * 0.01,
     },
     changeImageText: {
         color: 'white',
         fontWeight: 'bold',
+        fontSize: width * 0.04,
     },
     inputContainer: {
-        width: '80%',
-        marginTop: 20,
+        width: '90%',
+        marginTop: height * 0.02,
     },
     input: {
         backgroundColor: '#E0E0E0',
-        padding: 15,
+        padding: height * 0.02,
         borderRadius: 10,
-        marginTop: 10,
+        marginTop: height * 0.01,
+        fontSize: width * 0.04,
     },
     saveButton: {
         backgroundColor: '#1C1A5E',
-        paddingVertical: 15,
-        paddingHorizontal: 40,
+        paddingVertical: height * 0.02,
+        paddingHorizontal: width * 0.1,
         borderRadius: 10,
-        marginTop: 20,
-        marginBottom: 40, // added for spacing at the bottom
+        marginTop: height * 0.03,
+        marginBottom: height * 0.05,
     },
     saveButtonText: {
         color: '#FFFFFF',
         fontWeight: 'bold',
-        fontSize: 16,
+        fontSize: width * 0.045,
     },
 });

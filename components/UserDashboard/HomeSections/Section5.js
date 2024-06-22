@@ -18,7 +18,7 @@ function Section5() {
             title: 'Quick 10',
             icon: <AntDesign name="rocket1" size={24} color="white" />,
             color: '#1C1A5E',
-            navigateTo: ''
+            navigateTo: 'PracticeQuickQs'
         },
         {
             title: 'Tests Reports',

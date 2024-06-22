@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import { globalStyles } from '../../assets/styles/globalStyles';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
 import { AntDesign, FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+
+const { width, height } = Dimensions.get('window');
 
 const questionsData = [
     { id: 1, question: 'What is React Native?', answer: 'React Native is a framework for building native apps using React.' },
@@ -67,8 +68,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         backgroundColor: 'lightblue',
         width: '100%',
-        paddingVertical: 50,
-        paddingHorizontal: 10,
+        paddingVertical: height * 0.08,
+        paddingHorizontal: width * 0.05,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
         position: 'absolute',
@@ -76,21 +77,21 @@ const styles = StyleSheet.create({
         zIndex: 1,
     },
     headerText: {
-        fontSize: 18,
+        fontSize: width * 0.05,
         fontWeight: 'bold',
         textAlign: 'center',
         flex: 1,
-        marginLeft: -24,
+        marginLeft: -width * 0,
     },
     scrollContainer: {
-        paddingTop: 80,
-        paddingHorizontal: 10,
+        paddingTop: height * 0.12,
+        paddingHorizontal: width * 0.05,
     },
     questionItem: {
-        marginBottom: 15,
-        padding: 10,
+        marginBottom: height * 0.02,
+        padding: width * 0.04,
         backgroundColor: '#f9f9f9',
-        borderRadius: 5,
+        borderRadius: 12,
         borderWidth: 1,
         borderColor: '#ddd',
     },
@@ -100,12 +101,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     questionText: {
-        fontSize: 16,
+        fontSize: width * 0.04,
         fontWeight: 'bold',
     },
     answerText: {
-        marginTop: 10,
-        fontSize: 14,
+        marginTop: height * 0.01,
+        fontSize: width * 0.04,
         color: '#555',
     },
 });
