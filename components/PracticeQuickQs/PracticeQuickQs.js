@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
-import { globalStyles } from '../../assets/styles/globalStyles';
 import { AntDesign, FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import LottieView from 'lottie-react-native';
 
-// Get screen dimensions
 const { width, height } = Dimensions.get('window');
 
 const questionsData = [
@@ -34,32 +33,42 @@ const questionsData = [
     },
 ];
 
-const QuestionItem = ({ question, options, correctOption, selectedOption, setSelectedOption, index }) => (
-    <View style={[styles.questionItem, index === 0 && styles.firstQuestionItem]}>
-        <Text style={styles.questionText}>{question}</Text>
-        {options.map((option, idx) => (
-            <TouchableOpacity
-                key={idx}
-                style={styles.optionRow}
-                onPress={() => setSelectedOption(option)}
-            >
-                <FontAwesome
-                    name={selectedOption === option ? 'dot-circle-o' : 'circle-o'}
-                    size={24}
-                    color={selectedOption === option ? 'lightblue' : 'black'}
+const QuestionItem = ({ question, options, correctOption, selectedOption, setSelectedOption, index }) => {
+    return (
+        <View style={[styles.questionItem, index === 0 && styles.firstQuestionItem]}>
+            <Text style={styles.questionText}>{question}</Text>
+            {options.map((option, idx) => (
+                <TouchableOpacity
+                    key={idx}
+                    style={styles.optionRow}
+                    onPress={() => setSelectedOption(option)}
+                >
+                    <FontAwesome
+                        name={selectedOption === option ? 'dot-circle-o' : 'circle-o'}
+                        size={24}
+                        color={selectedOption === option ? 'lightblue' : 'black'}
+                    />
+                    <Text style={styles.optionText}>{option}</Text>
+                </TouchableOpacity>
+            ))}
+            {selectedOption && (
+                <Text style={[styles.feedbackText, { color: selectedOption === correctOption ? 'green' : 'red' }]}>
+                    {selectedOption === correctOption
+                        ? 'Hurray! You got it right.'
+                        : `The correct option was: ${correctOption}`}
+                </Text>
+            )}
+            {selectedOption === correctOption && (
+                <LottieView
+                    source={require('../../assets/animation/party.json')}
+                    autoPlay
+                    loop={false}
+                    style={styles.animation}
                 />
-                <Text style={styles.optionText}>{option}</Text>
-            </TouchableOpacity>
-        ))}
-        {selectedOption && (
-            <Text style={[styles.feedbackText, { color: selectedOption === correctOption ? 'green' : 'red' }]}>
-                {selectedOption === correctOption
-                    ? 'Hurray! You got it right.'
-                    : `The correct option was: ${correctOption}`}
-            </Text>
-        )}
-    </View>
-);
+            )}
+        </View>
+    );
+};
 
 export default function PracticeQuickQs() {
     const navigation = useNavigation();
@@ -138,7 +147,8 @@ const styles = StyleSheet.create({
         borderRadius: 12,
         borderWidth: 1,
         borderColor: '#ddd',
-        marginBottom: 15
+        marginBottom: 15,
+        position: 'relative',
     },
     firstQuestionItem: {
         marginTop: 90,
@@ -159,5 +169,12 @@ const styles = StyleSheet.create({
     feedbackText: {
         marginTop: 10,
         fontSize: width * 0.035,
+    },
+    animation: {
+        width: 250,
+        height: 250,
+        position: 'absolute',
+        top: 0,
+        right: 0,
     },
 });
