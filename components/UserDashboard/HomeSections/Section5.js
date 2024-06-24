@@ -30,7 +30,7 @@ function Section5() {
             title: 'Top Questions',
             icon: <AntDesign name="staro" size={24} color="white" />,
             color: '#1C1A5E',
-            navigateTo: ''
+            navigateTo: 'PracticeQuickQs'
         },
     ];
 

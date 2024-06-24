@@ -48,7 +48,11 @@ export default function TestReports() {
                             <Text style={styles.testName}>{item.name}</Text>
                             <Text style={styles.testDate}>{item.date}</Text>
                         </View>
-                        <FontAwesome name="chevron-right" size={20} color="black" />
+                        <FontAwesome name="chevron-right" size={20} color="black"
+                            onPress={() => {
+                                navigation.navigate("SpecificReportMain")
+                            }}
+                        />
                     </View>
                 ))}
             </ScrollView>
