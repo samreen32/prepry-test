@@ -54,7 +54,7 @@ export default function AdminLogin() {
                     />
                     <Button
                         mode="contained"
-                        onPress={() => navigation.navigate("Signup")}
+                        onPress={() => navigation.navigate("AdminDrawer")}
                         style={[globalStyles.getStartedButton, { backgroundColor: "#1C1A5E", marginBottom: 20 }]}
                     >
                         Login

@@ -6,6 +6,7 @@ import Signup from "../components/Signup/Signup";
 import UserDrawer from "../routes/UserDrawer";
 import ChooseView from "../components/ChooseView/ChooseView";
 import AdminLogin from "../components/AdminLogin/AdminLogin";
+import AdminDrawer from "../routes/AdminDrawer";
 
 const Stack = createNativeStackNavigator();
 
@@ -23,6 +24,7 @@ export default function AppStack() {
 
             <Stack.Screen name="AdminLogin" component={AdminLogin} />
             <Stack.Screen name="UserDrawer" component={UserDrawer} />
+            <Stack.Screen name="AdminDrawer" component={AdminDrawer} />
         </Stack.Navigator>
     );
 }
