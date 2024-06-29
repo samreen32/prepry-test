@@ -1,13 +1,13 @@
 import React from 'react';
-import { Pressable, TouchableOpacity, View, ScrollView } from 'react-native';
+import Section1 from './AdminHome/Section1';
+import Section2 from './AdminHome/Section2';
+import Section3 from './AdminHome/Section3';
 import { Ionicons } from "@expo/vector-icons";
 import { Badge } from 'react-native-paper';
 import { globalStyles } from '../../assets/styles/globalStyles';
 import { useNavigation } from '@react-navigation/native';
-import Section1 from './AdminHome/Section1';
-import Section2 from './AdminHome/Section2';
+import { Pressable, TouchableOpacity, View, ScrollView } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import Section3 from './AdminHome/Section3';
 
 function AdminHomeMain() {
     const navigation = useNavigation();
@@ -25,7 +25,7 @@ function AdminHomeMain() {
 
                 {/* Notifications */}
                 <TouchableOpacity style={globalStyles.iconTouchable}
-                    onPress={() => { navigation.navigate("UserNotification") }}
+                    onPress={() => { navigation.navigate("AdminNotification") }}
                 >
                     <Badge style={globalStyles.badgeStyle}>3</Badge>
                     <Ionicons name="notifications" size={33} color="#3b5998" />

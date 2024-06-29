@@ -22,7 +22,7 @@ function Section7() {
                     </Text>
                     <Button mode="contained"
                         style={{
-                            backgroundColor: "lightblue", width: 150, marginTop: 12, marginLeft: -5
+                            backgroundColor: "#D8BFD8", width: 150, marginTop: 12, marginLeft: -5
                         }}
                         onPress={()=> navigation.navigate("UserSubscription")}
                     >

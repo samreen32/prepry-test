@@ -25,7 +25,7 @@ export const globalStyles = StyleSheet.create({
         color: "white",
         paddingVertical: 120,
         paddingHorizontal: 20,
-        backgroundColor: "#1C1A5E",
+        backgroundColor: "#3b5998",
     },
     topTextContainer: {
         alignItems: 'center'
@@ -46,8 +46,8 @@ export const globalStyles = StyleSheet.create({
         marginTop: 220,
     },
     getStartedButton: {
-        backgroundColor: "lightblue",
-        padding: 4
+        backgroundColor: "#D8BFD8",
+        padding: 4,
     },
     buttonText: {
         color: 'white',
@@ -91,7 +91,7 @@ export const globalStyles = StyleSheet.create({
     },
     footerActionText: {
         fontWeight: 'bold',
-        color: 'lightblue',
+        color: '#D8BFD8',
     },
     buttonLabel: {
         color: 'black',
@@ -166,11 +166,8 @@ export const globalStyles = StyleSheet.create({
         alignSelf: "center",
         zIndex: -1
     },
-
-
     loginContainer: {
-        backgroundColor: "#1C1A5E",
-        // padding: 20,
+        backgroundColor: "#3b5998",
         borderRadius: 20,
         marginTop: 100,
         height: "100%"
@@ -271,7 +268,7 @@ export const globalStyles = StyleSheet.create({
         backgroundColor: "red"
     },
     rectangleBox: {
-        backgroundColor: '#1C1A5E',
+        backgroundColor: '#3b5998',
         padding: 20,
         borderRadius: 10,
         shadowColor: '#000',

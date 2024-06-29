@@ -33,7 +33,7 @@ function AdminTabs() {
                 component={AdminStack}
                 options={({ route }) => ({
                     tabBarLabel: ({ focused }) => (
-                        <Text style={{ color: focused ? "#D8BFD8" : "white", top: -12 }}>
+                        <Text style={{ color: focused ? "#f39c12" : "white", top: -12 }}>
                             Home
                         </Text>
                     ),
@@ -61,7 +61,7 @@ function AdminTabs() {
                 component={AdminStack}
                 options={{
                     tabBarLabel: ({ focused }) => (
-                        <Text style={{ color: focused ? "#D8BFD8" : "white", top: -12 }}>
+                        <Text style={{ color: focused ? "#f39c12" : "white", top: -12 }}>
                             Profile
                         </Text>
                     ),
@@ -87,7 +87,7 @@ function AdminTabs() {
                 component={AdminStack}
                 options={{
                     tabBarLabel: ({ focused }) => (
-                        <Text style={{ color: focused ? "#D8BFD8" : "white", top: -12 }}>
+                        <Text style={{ color: focused ? "#f39c12" : "white", top: -12 }}>
                             Settings
                         </Text>
                     ),
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    backgroundColor: "#9370DB",
+    backgroundColor: "#3b5998",
 });
 
 
@@ -130,7 +130,7 @@ const getRouteName = (route) => {
     const routeName = getFocusedRouteNameFromRoute(route);
     if (
         routeName?.includes("EditUserProfile") ||
-        routeName?.includes("UserNotification")
+        routeName?.includes("AdminNotification")
     ) {
         return "none";
     }

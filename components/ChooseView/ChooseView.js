@@ -41,12 +41,12 @@ export default function ChooseView() {
     };
 
     return (
-        <View style={[globalStyles.container, { padding: 20, backgroundColor: "#1C1A5E" }]}>
+        <View style={[globalStyles.container, { padding: 20, backgroundColor: "#3b5998" }]}>
             <View>
-                <Text style={[styles.headerText, { color: "lightblue" }]}>Choose</Text>
+                <Text style={[styles.headerText, { color: "#D8BFD8" }]}>Choose</Text>
             </View>
             <View style={{ marginTop: -15 }}>
-                <Text style={styles.headerText}>your <Text style={{ color: "lightblue" }}>View</Text>
+                <Text style={styles.headerText}>your <Text style={{ color: "#D8BFD8" }}>View</Text>
                 </Text>
             </View>
             <Animated.View style={[styles.card, { transform: [{ translateX: adminPosition }] }]}>

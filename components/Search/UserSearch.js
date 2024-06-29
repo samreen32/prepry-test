@@ -28,7 +28,7 @@ export default function UserSearch() {
             <View style={styles.container}>
                 <View style={styles.header}>
                     <TouchableOpacity onPress={() => navigation.navigate("HomeScreen")}>
-                        <AntDesign name="arrowleft" size={30} color="black" style={{ marginLeft: width * 0.03 }} />
+                        <AntDesign name="arrowleft" size={30} color="white" style={{ marginLeft: width * 0.03 }} />
                     </TouchableOpacity>
                     <Text style={styles.headerText}>Search</Text>
                     <View style={{ width: 30 }} />
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        backgroundColor: 'lightblue',
+        backgroundColor: '#3b5998',
         width: '100%',
         paddingVertical: height * 0.08,
         paddingHorizontal: width * 0.05,
@@ -80,6 +80,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         flex: 1,
         marginLeft: -width * 0.1,
+        color: "white"
     },
     searchContainer: {
         width: '90%',

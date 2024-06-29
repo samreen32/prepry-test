@@ -22,7 +22,7 @@ function Section2() {
                     <ProgressBar progress={progress} color="gray" style={{ marginTop: 10, marginBottom: 10 }} />
                     <Button mode="contained"
                         style={{
-                            backgroundColor: "lightblue", width: 150, marginTop: 12, marginLeft: -5
+                            backgroundColor: "#D8BFD8", width: 150, marginTop: 12, marginLeft: -5
                         }}
                     >
                         <Text style={{ color: "black" }}>Get Started</Text>

@@ -74,7 +74,7 @@ export default function Signup() {
     return (
         <Animated.View style={[globalStyles.container, { opacity: formOpacity }]}>
             <ImageBackground
-                source={require('../../assets/img/wave (2).png')} resizeMode="cover"
+                source={require('../../assets/img/wave.png')} resizeMode="cover"
                 style={globalStyles.image}
             >
                 <View style={globalStyles.form}>
@@ -191,7 +191,7 @@ export default function Signup() {
                         )}
                         {currentField !== 'Password' && (
                             <Button mode="contained"
-                                style={{ backgroundColor: "lightblue", marginBottom: 30, marginTop: 10, width: 120 }}
+                                style={{ backgroundColor: "#f39c12", marginBottom: 30, marginTop: 10, width: 120 }}
                                 onPress={handleNext}>
                                 <Text style={globalStyles.buttonText}>Next</Text>
                             </Button>

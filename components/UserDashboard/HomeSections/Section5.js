@@ -11,25 +11,25 @@ function Section5() {
         {
             title: 'Questions List',
             icon: <AntDesign name="menu-unfold" size={24} color="black" />,
-            color: 'lightblue',
+            color: '#f39c12',
             navigateTo: 'QuestionsList'
         },
         {
             title: 'Quick 10',
             icon: <AntDesign name="rocket1" size={24} color="white" />,
-            color: '#1C1A5E',
+            color: '#3b5998',
             navigateTo: 'PracticeQuickQs'
         },
         {
             title: 'Tests Reports',
             icon: <AntDesign name="filetext1" size={24} color="black" />,
-            color: 'lightblue',
+            color: '#f39c12',
             navigateTo: 'TestReports'
         },
         {
             title: 'Top Questions',
             icon: <AntDesign name="staro" size={24} color="white" />,
-            color: '#1C1A5E',
+            color: '#3b5998',
             navigateTo: 'PracticeQuickQs'
         },
     ];
@@ -71,7 +71,7 @@ function Section5() {
                         {service.icon}
                         <Text style={[
                             globalStyles.serviceTitle,
-                            { color: service.color === '#1C1A5E' ? 'white' : 'black' }
+                            { color: service.color === '#3b5998' ? 'white' : 'black' }
                         ]}>{service.title}</Text>
                     </TouchableOpacity>
                 ))}

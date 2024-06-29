@@ -16,7 +16,7 @@ function AdminDrawer() {
                 drawerPosition: "left",
                 drawerHideStatusBarOnOpen: true,
                 drawerStyle: {
-                    backgroundColor: "#8A2BE2",
+                    backgroundColor: "#3b5998",
                     flex: 1,
                     width: 300,
                 },

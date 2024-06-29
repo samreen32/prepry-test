@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        backgroundColor: 'lightblue',
+        backgroundColor: '#3b5998',
         width: '100%',
         paddingVertical: height * 0.10,
         paddingHorizontal: width * 0.05,
@@ -113,13 +113,13 @@ const styles = StyleSheet.create({
         marginBottom: height * 0.005,
     },
     editProfileButton: {
-        backgroundColor: '#1C1A5E',
+        backgroundColor: '#D8BFD8',
         paddingVertical: height * 0.01,
         paddingHorizontal: width * 0.04,
         borderRadius: 20,
     },
     editProfileButtonText: {
-        color: '#FFFFFF',
+        color: '#000',
         fontSize: width * 0.04,
     },
     menu: {

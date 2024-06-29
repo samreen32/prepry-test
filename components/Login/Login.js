@@ -43,7 +43,7 @@ export default function Login() {
           <Button
             mode="contained"
             onPress={() => navigation.navigate("Signup")}
-            style={[globalStyles.getStartedButton, { backgroundColor: "#1C1A5E", marginBottom: 20 }]}
+            style={[globalStyles.getStartedButton, { backgroundColor: "#f39c12", marginBottom: 20 }]}
           >
             Login
           </Button>

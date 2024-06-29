@@ -6,7 +6,7 @@ import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 // Get screen dimensions
 const { width, height } = Dimensions.get('window');
 
-export default function UserNotification() {
+export default function AdminNotification() {
     const navigation = useNavigation();
 
     const dummyNotifications = [
@@ -96,17 +96,17 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         backgroundColor: '#3b5998',
         width: '100%',
-        paddingVertical: height * 0.08, // 3% of screen height
-        paddingHorizontal: width * 0.05, // 5% of screen width
+        paddingVertical: height * 0.08, 
+        paddingHorizontal: width * 0.05, 
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
     },
     headerText: {
-        fontSize: width * 0.05, // 5% of screen width
+        fontSize: width * 0.05, 
         fontWeight: 'bold',
         textAlign: 'center',
         flex: 1,
-        marginLeft: width * -0,
+        marginLeft: width * -0, 
         color: "white"
     },
     notificationsContainer: {

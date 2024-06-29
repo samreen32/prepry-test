@@ -24,7 +24,7 @@ function UserTabs() {
                         iconName = "help-circle";
                     }
                     size = focused ? 30 : 25;
-                    color = focused ? "lightblue" : "white";
+                    color = focused ? "#D8BFD8" : "white";
                     return <Ionicons name={iconName} size={size} color={color} />;
                 },
             })}
@@ -34,7 +34,7 @@ function UserTabs() {
                 component={UserStack}
                 options={({ route }) => ({
                     tabBarLabel: ({ focused }) => (
-                        <Text style={{ color: focused ? "lightblue" : "white", top: -12 }}>
+                        <Text style={{ color: focused ? "#f39c12" : "white", top: -12 }}>
                             Home
                         </Text>
                     ),
@@ -62,7 +62,7 @@ function UserTabs() {
                 component={Profile}
                 options={{
                     tabBarLabel: ({ focused }) => (
-                        <Text style={{ color: focused ? "lightblue" : "white", top: -12 }}>
+                        <Text style={{ color: focused ? "#f39c12" : "white", top: -12 }}>
                             Profile
                         </Text>
                     ),
@@ -89,7 +89,7 @@ function UserTabs() {
                 component={UserStack}
                 options={{
                     tabBarLabel: ({ focused }) => (
-                        <Text style={{ color: focused ? "lightblue" : "white", top: -12 }}>
+                        <Text style={{ color: focused ? "#f39c12" : "white", top: -12 }}>
                             Settings
                         </Text>
                     ),
@@ -116,7 +116,7 @@ function UserTabs() {
                 component={UserStack}
                 options={{
                     tabBarLabel: ({ focused }) => (
-                        <Text style={{ color: focused ? "lightblue" : "white", top: -12 }}>
+                        <Text style={{ color: focused ? "#f39c12" : "white", top: -12 }}>
                             Help
                         </Text>
                     ),
@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    backgroundColor: "#1C1A5E",
+    backgroundColor: "#3b5998",
 });
 
 
@@ -158,7 +158,7 @@ const getRouteName = (route) => {
     const routeName = getFocusedRouteNameFromRoute(route);
     if (
         routeName?.includes("EditUserProfile") ||
-        routeName?.includes("UserProfile") || 
+        routeName?.includes("UserProfile") ||
         routeName?.includes("Settings") ||
         routeName?.includes("UserSearch") ||
         routeName?.includes("UserSubscription") ||

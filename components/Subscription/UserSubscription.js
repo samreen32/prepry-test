@@ -57,7 +57,7 @@ export default function UserSubscription() {
             <View style={globalStyles.container}>
                 <View style={styles.topHeader}>
                     <TouchableOpacity onPress={() => navigation.navigate("HomeScreen")}>
-                        <AntDesign name="arrowleft" size={30} color="black" style={{ marginLeft: 10 }} />
+                        <AntDesign name="arrowleft" size={30} color="white" style={{ marginLeft: 10 }} />
                     </TouchableOpacity>
                     <Text style={styles.topHeaderText}>Subscription</Text>
                     <View style={{ width: 24 }} />
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        backgroundColor: 'lightblue',
+        backgroundColor: '#3b5998',
         width: '100%',
         paddingVertical: 50,
         paddingHorizontal: 10,
@@ -112,6 +112,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         flex: 1,
         marginLeft: -24,
+        color: "white"
     },
     header: {
         flexDirection: 'row',

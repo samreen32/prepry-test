@@ -19,14 +19,14 @@ function UserDrawer() {
                 drawerPosition: "left",
                 drawerHideStatusBarOnOpen: true,
                 drawerStyle: {
-                    backgroundColor: "#1C1A5E",
+                    backgroundColor: "#3b5998",
                     flex: 1,
                     width: 300,
                 },
                 headerShown: false,
                 swipeEnabled: true,
                 gestureEnabled: true,
-                drawerActiveBackgroundColor: "lightblue",
+                drawerActiveBackgroundColor: "#D8BFD8",
                 drawerActiveBorderRadius: 30
             }}
         >

@@ -42,7 +42,7 @@ function HomeScreen() {
                     onPress={() => { navigation.navigate("UserNotification") }}
                 >
                     <Badge style={globalStyles.badgeStyle}>3</Badge>
-                    <Ionicons name="notifications" size={33} color="#1C1A5E" />
+                    <Ionicons name="notifications" size={33} color="#3b5998" />
                 </TouchableOpacity>
             </View>
 
