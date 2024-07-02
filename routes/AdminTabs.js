@@ -130,6 +130,11 @@ const getRouteName = (route) => {
     const routeName = getFocusedRouteNameFromRoute(route);
     if (
         routeName?.includes("EditUserProfile") ||
+        routeName?.includes("ViewQuestions") ||
+        routeName?.includes("ViewTests") ||
+        routeName?.includes("ViewReports") ||
+        routeName?.includes("ViewDetailedReport") ||
+        routeName?.includes("ViewPracticeQs") ||
         routeName?.includes("AdminNotification")
     ) {
         return "none";
