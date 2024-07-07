@@ -5,6 +5,9 @@ import { StyleSheet, Text } from "react-native";
 import UserStack from "./UserStack";
 import Profile from "../components/Profile/UserProfile/Profile";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
+import UserSettings from "../components/Settings/UserSettings";
+import ComingSoon from "../components/ComingSoon/ComingSoon";
+import UserHelp from "../components/Help/UserHelp";
 
 const Tab = createBottomTabNavigator();
 
@@ -86,7 +89,7 @@ function UserTabs() {
 
             <Tab.Screen
                 name="Settings"
-                component={UserStack}
+                component={UserSettings}
                 options={{
                     tabBarLabel: ({ focused }) => (
                         <Text style={{ color: focused ? "#f39c12" : "white", top: -12 }}>
@@ -113,7 +116,7 @@ function UserTabs() {
 
             <Tab.Screen
                 name="Help"
-                component={UserStack}
+                component={UserHelp}
                 options={{
                     tabBarLabel: ({ focused }) => (
                         <Text style={{ color: focused ? "#f39c12" : "white", top: -12 }}>
@@ -166,6 +169,11 @@ const getRouteName = (route) => {
         routeName?.includes("PracticeQuickQs") ||
         routeName?.includes("TestReports") ||
         routeName?.includes("SpecificReportMain") ||
+        routeName?.includes("UserNotes") ||
+        routeName?.includes("UserStatistics") ||
+        routeName?.includes("UserSettings") ||
+        routeName?.includes("UserHelp") ||
+        routeName?.includes("ComingSoon") ||
         routeName?.includes("UserNotification")
     ) {
         return "none";

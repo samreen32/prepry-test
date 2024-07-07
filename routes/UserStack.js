@@ -10,6 +10,11 @@ import QuestionsList from '../components/QuestionsList/QuestionsList';
 import PracticeQuickQs from '../components/PracticeQuickQs/PracticeQuickQs';
 import TestReports from '../components/UserReport/TestReports';
 import SpecificReportMain from '../components/UserReport/SpecificReport/SpecificReportMain';
+import UserNotes from '../components/Notes/UserNotes';
+import UserStatistics from '../components/UserStatistics/UserStatistics';
+import UserSettings from '../components/Settings/UserSettings';
+import ComingSoon from '../components/ComingSoon/ComingSoon';
+import UserHelp from '../components/Help/UserHelp';
 
 const Stack = createNativeStackNavigator();
 
@@ -32,6 +37,11 @@ function UserStack() {
                 <Stack.Screen name="PracticeQuickQs" component={PracticeQuickQs} />
                 <Stack.Screen name="TestReports" component={TestReports} />
                 <Stack.Screen name="SpecificReportMain" component={SpecificReportMain} />
+                <Stack.Screen name="UserNotes" component={UserNotes} />
+                <Stack.Screen name="UserStatistics" component={UserStatistics} />
+                <Stack.Screen name="UserSettings" component={UserSettings} />
+                <Stack.Screen name="UserHelp" component={UserHelp} />
+                <Stack.Screen name="ComingSoon" component={ComingSoon} />
             </Stack.Navigator>
         </>
     )

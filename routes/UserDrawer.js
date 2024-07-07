@@ -7,6 +7,8 @@ import { Text } from "react-native";
 import Profile from "../components/Profile/UserProfile/Profile";
 import UserSubscription from "../components/Subscription/UserSubscription";
 import QuestionsList from "../components/QuestionsList/QuestionsList";
+import UserStatistics from "../components/UserStatistics/UserStatistics";
+import UserNotes from "../components/Notes/UserNotes";
 
 const Drawer = createDrawerNavigator();
 
@@ -79,7 +81,7 @@ function UserDrawer() {
             />
             <Drawer.Screen
                 name="Notes"
-                component={UserTabs}
+                component={UserNotes}
                 options={{
                     drawerLabel: ({ focused }) => (
                         <Text style={{ color: focused ? "black" : "white", right: 26 }}>Notes</Text>
@@ -94,7 +96,7 @@ function UserDrawer() {
             />
             <Drawer.Screen
                 name="Analytics"
-                component={UserTabs}
+                component={UserStatistics}
                 options={{
                     drawerLabel: ({ focused }) => (
                         <Text style={{ color: focused ? "black" : "white", right: 26 }}>Analytics</Text>
