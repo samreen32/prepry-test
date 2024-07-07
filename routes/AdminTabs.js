@@ -4,6 +4,8 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { StyleSheet, Text } from "react-native";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import AdminStack from "./AdminStack";
+import AdminProfile from "../components/Profile/AdminProfile/AdminProfile";
+import AdminSettings from "../components/Settings/AdminSettings";
 
 const Tab = createBottomTabNavigator();
 
@@ -17,10 +19,8 @@ function AdminTabs() {
                         iconName = "home";
                     } else if (route.name === "AdminProfile") {
                         iconName = "person";
-                    } else if (route.name === "Settings") {
+                    } else if (route.name === "AdminSettings") {
                         iconName = "settings";
-                    } else if (route.name === "Help") {
-                        iconName = "help-circle";
                     }
                     size = focused ? 30 : 25;
                     color = focused ? "#D8BFD8" : "white";
@@ -58,7 +58,7 @@ function AdminTabs() {
 
             <Tab.Screen
                 name="AdminProfile"
-                component={AdminStack}
+                component={AdminProfile}
                 options={{
                     tabBarLabel: ({ focused }) => (
                         <Text style={{ color: focused ? "#f39c12" : "white", top: -12 }}>
@@ -83,8 +83,8 @@ function AdminTabs() {
                 }}
             />
             <Tab.Screen
-                name="Settings"
-                component={AdminStack}
+                name="AdminSettings"
+                component={AdminSettings}
                 options={{
                     tabBarLabel: ({ focused }) => (
                         <Text style={{ color: focused ? "#f39c12" : "white", top: -12 }}>
@@ -135,6 +135,9 @@ const getRouteName = (route) => {
         routeName?.includes("ViewReports") ||
         routeName?.includes("ViewDetailedReport") ||
         routeName?.includes("ViewPracticeQs") ||
+        routeName?.includes("AdminProfile") ||
+        routeName?.includes("AdminEditProfile") ||
+        routeName?.includes("AdminSettings") ||
         routeName?.includes("AdminNotification")
     ) {
         return "none";

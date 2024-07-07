@@ -29,13 +29,13 @@ const Section3 = () => {
                 <ColoredBoxWithText
                     backgroundColor='#3b5998'
                     text="Manage Questions"
-                    style={{ width: boxWidth, height: boxWidth + 25, borderRadius: 15 }}
+                    style={{ width: boxWidth, height: boxWidth + 20, borderRadius: 15 }}
                     onPress={navigateToViewQuestions}
                 />
                 <ColoredBoxWithText
                     backgroundColor='#f39c12'
                     text="Manage Tests"
-                    style={{ width: boxWidth, height: boxWidth + 25, borderRadius: 15 }}
+                    style={{ width: boxWidth, height: boxWidth + 20, borderRadius: 15 }}
                     onPress={navigateToViewTests}
                 />
             </View>
@@ -43,13 +43,13 @@ const Section3 = () => {
                 <ColoredBoxWithText
                     backgroundColor='#f39c12'
                     text="Manage Reports"
-                    style={{ width: boxWidth, height: boxWidth + 25, borderRadius: 15 }}
+                    style={{ width: boxWidth, height: boxWidth + 20, borderRadius: 15 }}
                     onPress={navigateReportSection}
                 />
                 <ColoredBoxWithText
                     backgroundColor='#3b5998'
                     text="Manage Practice Questions"
-                    style={{ width: boxWidth, height: boxWidth + 25, borderRadius: 15 }}
+                    style={{ width: boxWidth, height: boxWidth + 20, borderRadius: 15 }}
                     onPress={navigatePracticeSection}
                 />
             </View>

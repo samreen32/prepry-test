@@ -1,9 +1,11 @@
 import React from "react";
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { Ionicons, AntDesign } from "@expo/vector-icons";
+import { Ionicons, AntDesign, MaterialIcons } from "@expo/vector-icons";
 import CustomDrawer from "./CustomDrawer";
 import { Text } from "react-native";
 import AdminTabs from "./AdminTabs";
+import AdminProfile from "../components/Profile/AdminProfile/AdminProfile";
+import AdminSettings from "../components/Settings/AdminSettings";
 
 const Drawer = createDrawerNavigator();
 
@@ -43,9 +45,9 @@ function AdminDrawer() {
                     ),
                 }}
             />
-            {/* <Drawer.Screen
-                name="UserProfile"
-                component={Profile}
+            <Drawer.Screen
+                name="AdminProfile"
+                component={AdminProfile}
                 options={{
                     drawerLabel: ({ focused }) => (
                         <Text style={{ color: focused ? "black" : "white", right: 26 }}>Profile</Text>
@@ -58,13 +60,13 @@ function AdminDrawer() {
                         />
                     ),
                 }}
-            /> */}
-            {/* <Drawer.Screen
-                name="QuestionsList"
-                component={QuestionsList}
+            />
+            <Drawer.Screen
+                name="AdminSettings"
+                component={AdminSettings}
                 options={{
                     drawerLabel: ({ focused }) => (
-                        <Text style={{ color: focused ? "black" : "white", right: 26 }}>Questions List</Text>
+                        <Text style={{ color: focused ? "black" : "white", right: 26 }}>Settings</Text>
                     ),
                     drawerIcon: ({ focused }) => (
                         <MaterialIcons name="checklist"
@@ -73,7 +75,7 @@ function AdminDrawer() {
                         />
                     ),
                 }}
-            /> */}
+            />
 
 
             <Drawer.Screen
