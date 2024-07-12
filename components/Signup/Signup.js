@@ -1,11 +1,10 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     View, Text, ImageBackground, TouchableOpacity, LayoutAnimation, Animated, Platform, UIManager
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { globalStyles } from '../../assets/styles/globalStyles';
 import { Button, TextInput, Checkbox } from 'react-native-paper';
-import { Picker } from '@react-native-picker/picker';
 
 // Enable LayoutAnimation for iOS and Android
 if (Platform.OS === 'android' || Platform.OS === 'ios') {
@@ -14,12 +13,9 @@ if (Platform.OS === 'android' || Platform.OS === 'ios') {
 
 export default function Signup() {
     const navigation = useNavigation();
-    const animation = useRef(null);
     const [isPassSecure, setIsPassSecure] = useState(true);
     const [currentField, setCurrentField] = useState('Learning Path');
     const [formOpacity] = useState(new Animated.Value(1));
-
-    const [learningPath, setLearningPath] = useState('');
     const [selectedExams, setSelectedExams] = useState({});
     const [selectedOccupations, setSelectedOccupations] = useState({});
     const [name, setName] = useState('');
@@ -37,12 +33,6 @@ export default function Signup() {
     const handleNext = () => {
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
         switch (currentField) {
-            case 'Learning Path':
-                setCurrentField('Exam');
-                break;
-            case 'Exam':
-                setCurrentField('Occupation');
-                break;
             case 'Occupation':
                 setCurrentField('Name');
                 break;
@@ -58,12 +48,7 @@ export default function Signup() {
     };
 
     const handleCheckboxChange = (type, value) => {
-        if (type === 'exam') {
-            setSelectedExams({
-                ...selectedExams,
-                [value]: !selectedExams[value],
-            });
-        } else if (type === 'occupation') {
+        if (type === 'occupation') {
             setSelectedOccupations({
                 ...selectedOccupations,
                 [value]: !selectedOccupations[value],
@@ -82,37 +67,6 @@ export default function Signup() {
                         <Text style={globalStyles.loginText}>Sign Up</Text>
                     </View>
 
-                    {currentField === 'Learning Path' && (
-                        <>
-                            <Text style={{ color: 'white', marginBottom: 10 }}>Choose Your Learning Path</Text>
-                            <Picker
-                                selectedValue={learningPath}
-                                style={globalStyles.input}
-                                onValueChange={(itemValue) => setLearningPath(itemValue)}
-                            >
-                                <Picker.Item label="Select Learning Path" value="" />
-                                <Picker.Item label="Path 1" value="path1" />
-                                <Picker.Item label="Path 2" value="path2" />
-                                <Picker.Item label="Path 3" value="path3" />
-                            </Picker>
-                        </>
-                    )}
-
-                    {currentField === 'Exam' && (
-                        <>
-                            <Text style={{ color: 'white', marginBottom: 6 }}>Select Your Exam</Text>
-                            {['Exam 1', 'Exam 2', 'Exam 3'].map((exam, index) => (
-                                <Checkbox.Item
-                                    key={index}
-                                    label={exam}
-                                    labelStyle={{ color: 'white' }}  // Set label color to white
-                                    status={selectedExams[exam] ? 'checked' : 'unchecked'}
-                                    onPress={() => handleCheckboxChange('exam', exam)}
-                                />
-                            ))}
-                        </>
-                    )}
-
                     {currentField === 'Occupation' && (
                         <>
                             <Text style={{ color: 'white', marginBottom: 6 }}>Select Your Occupation</Text>
@@ -120,7 +74,7 @@ export default function Signup() {
                                 <Checkbox.Item
                                     key={index}
                                     label={occupation}
-                                    labelStyle={{ color: 'white' }}  // Set label color to white
+                                    labelStyle={{ color: 'white' }}
                                     status={selectedOccupations[occupation] ? 'checked' : 'unchecked'}
                                     onPress={() => handleCheckboxChange('occupation', occupation)}
                                 />
