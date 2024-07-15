@@ -1,18 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, Modal, TextInput } from 'react-native';
 import { AntDesign, FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
+import config from '../../frontend/config';
+import { useAuth } from '../../frontend/context/AuthContext';
 
 const { width, height } = Dimensions.get('window');
-
-const questionsData = [
-    { id: 1, testName: 'Sample Test 1', question: 'What is React Native?', options: ['Option 1', 'Option 2', 'Option 3', 'Option 4'], correctAnswerIndex: 0, date: '2023-05-12', user: 'John Doe' },
-    { id: 2, testName: 'Sample Test 2', question: 'How does React Native work?', options: ['Option A', 'Option B', 'Option C', 'Option D'], correctAnswerIndex: 1, date: '2023-05-13', user: 'Jane Smith' },
-    { id: 3, testName: 'Sample Test 1', question: 'What is React Native?', options: ['Answer A', 'Answer B', 'Answer C', 'Answer D'], correctAnswerIndex: 2, date: '2023-05-12', user: 'John Doe' },
-    { id: 4, testName: 'Sample Test 2', question: 'How does React Native work?', options: ['Choice 1', 'Choice 2', 'Choice 3', 'Choice 4'], correctAnswerIndex: 3, date: '2023-05-13', user: 'Jane Smith' },
-    { id: 5, testName: 'Sample Test 1', question: 'What is React Native?', options: ['Option X', 'Option Y', 'Option Z', 'Option W'], correctAnswerIndex: 0, date: '2023-05-12', user: 'John Doe' },
-    { id: 6, testName: 'Sample Test 2', question: 'How does React Native work?', options: ['Option Alpha', 'Option Beta', 'Option Gamma', 'Option Delta'], correctAnswerIndex: 1, date: '2023-05-13', user: 'Jane Smith' },
-];
 
 const QuestionItem = ({ id, testName, question, options, correctAnswerIndex, date, user, isExpanded, onPressEdit, onPressDelete }) => (
     <View style={styles.questionItem}>
@@ -48,70 +42,94 @@ const QuestionItem = ({ id, testName, question, options, correctAnswerIndex, dat
 );
 
 export default function ViewPracticeQs() {
+    const { adminToken } = useAuth();
     const navigation = useNavigation();
     const [expandedQuestion, setExpandedQuestion] = useState(null);
     const [editQuestionId, setEditQuestionId] = useState(null);
-
-    // State for modal
+    const [questionsData, setQuestionsData] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [questionText, setQuestionText] = useState('');
     const [options, setOptions] = useState(['', '', '', '']);
-    const [correctAnswerIndex, setCorrectAnswerIndex] = useState(-1); // -1 means no correct answer selected
+    const [correctAnswerIndex, setCorrectAnswerIndex] = useState(-1);
+
+    useEffect(() => {
+        fetchQuestions();
+    }, []);
+
+    const fetchQuestions = async () => {
+        try {
+            const response = await axios.get(`${config.urls.PRACTICE_QUESTIONS_API}/fetchPracticeQs`, {
+                headers: {
+                    "token": adminToken
+                }
+            });
+            if (response.data.success) {
+                setQuestionsData(response.data.practiceQuestions);
+            } else {
+                console.error('Failed to fetch questions:', response.data.message);
+            }
+        } catch (error) {
+            console.error('Error fetching questions:', error);
+        }
+    };
 
     const handlePressEdit = (id) => {
         setEditQuestionId(id);
         setIsModalVisible(true);
-        // Find the question to edit
-        const questionToEdit = questionsData.find(question => question.id === id);
+        const questionToEdit = questionsData.find(question => question._id === id);
         if (questionToEdit) {
-            setQuestionText(questionToEdit.question);
-            setOptions([...questionToEdit.options]);
-            setCorrectAnswerIndex(questionToEdit.correctAnswerIndex);
+            setQuestionText(questionToEdit?.practiceTitle);
+            setOptions([...questionToEdit.practiceOptions]);
+            setCorrectAnswerIndex(questionToEdit.correctPracticeAnswerIndex);
         }
     };
 
-    const handlePressDelete = (id) => {
-        // Implement delete logic here
-        console.log('Deleting question with ID:', id);
-        // Example of updating questionsData to remove the deleted question
-        const updatedQuestionsData = questionsData.filter(question => question.id !== id);
-        console.log('Updated questionsData:', updatedQuestionsData);
-        // Update state or perform other operations as needed
+    const handlePressDelete = async (id) => {
+        try {
+            await axios.delete(`${config.urls.PRACTICE_QUESTIONS_API}/deletePracticeQs/${id}`, {
+                headers: {
+                    "token": adminToken
+                }
+            });
+            fetchQuestions();
+        } catch (error) {
+            console.error('Error deleting question:', error);
+        }
     };
 
     const handleModalClose = () => {
         setIsModalVisible(false);
         setEditQuestionId(null);
-        // Reset modal state
         setQuestionText('');
         setOptions(['', '', '', '']);
         setCorrectAnswerIndex(-1);
     };
 
-    const handleSaveQuestion = () => {
-        // Save question and answers logic here
-        console.log('Question:', questionText);
-        console.log('Options:', options);
-        console.log('Correct Answer Index:', correctAnswerIndex);
-
-        // Update the edited question in questionsData
-        const updatedQuestionsData = questionsData.map(question => {
-            if (question.id === editQuestionId) {
-                return {
-                    ...question,
-                    question: questionText,
-                    options: [...options],
-                    correctAnswerIndex,
-                };
+    const handleSaveQuestion = async () => {
+        try {
+            const payload = {
+                practiceTitle: questionText,
+                practiceOptions: options,
+                correctPracticeAnswerIndex: correctAnswerIndex,
+            };
+            if (editQuestionId) {
+                await axios.put(`${config.urls.PRACTICE_QUESTIONS_API}/updatePracticeQs/${editQuestionId}`, payload, {
+                    headers: {
+                        "token": adminToken
+                    }
+                });
+            } else {
+                await axios.post(`${config.urls.PRACTICE_QUESTIONS_API}/createPracticeQs`, payload, {
+                    headers: {
+                        "token": adminToken
+                    }
+                });
             }
-            return question;
-        });
-
-        // Update questionsData state (if using it as state)
-        // setQuestionsData(updatedQuestionsData);
-
-        // Close the modal after saving
-        handleModalClose();
+            fetchQuestions(); // Refresh the questions list
+            handleModalClose();
+        } catch (error) {
+            console.error('Error saving question:', error);
+        }
     };
 
     const handleAnswerChange = (index, text) => {
@@ -139,22 +157,21 @@ export default function ViewPracticeQs() {
             <ScrollView contentContainerStyle={styles.scrollContainer}>
                 {questionsData.map((item) => (
                     <QuestionItem
-                        key={item.id}
-                        id={item.id}
-                        testName={item.testName}
-                        question={item.question}
-                        options={item.options}
-                        correctAnswerIndex={item.correctAnswerIndex}
-                        date={item.date}
+                        key={item._id}
+                        id={item._id}
+                        testName={item?.test?.title}
+                        question={item.practiceTitle}
+                        options={item.practiceOptions}
+                        correctAnswerIndex={item.correctPracticeAnswerIndex}
+                        date={item.createdAt}
                         user={item.user}
-                        isExpanded={expandedQuestion === item.id}
+                        isExpanded={expandedQuestion === item._id}
                         onPressEdit={handlePressEdit}
                         onPressDelete={handlePressDelete}
                     />
                 ))}
             </ScrollView>
 
-            {/* Modal for adding/editing a question */}
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -163,37 +180,40 @@ export default function ViewPracticeQs() {
             >
                 <View style={styles.modalContainer}>
                     <View style={styles.modalContent}>
-                        <Text style={styles.modalTitle}>{editQuestionId ? 'Edit Question' : 'Add Question'}</Text>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Enter your question"
-                            value={questionText}
-                            onChangeText={setQuestionText}
-                        />
-                        {options.map((option, index) => (
-                            <View key={index} style={styles.answerContainer}>
-                                <TextInput
-                                    style={styles.input}
-                                    placeholder={`Option ${index + 1}`}
-                                    value={options[index]}
-                                    onChangeText={(text) => handleAnswerChange(index, text)}
-                                />
-                                <TouchableOpacity
-                                    style={[styles.radioButton, correctAnswerIndex === index && styles.radioButtonSelected]}
-                                    onPress={() => handleSelectCorrectAnswer(index)}
-                                >
-                                    <Text style={correctAnswerIndex === index ? styles.radioButtonTextSelected : styles.radioButtonText}>
-                                        {correctAnswerIndex === index ? 'Correct' : 'Select as Correct'}
-                                    </Text>
-                                </TouchableOpacity>
-                            </View>
-                        ))}
-                        <TouchableOpacity style={styles.saveButton} onPress={handleSaveQuestion}>
-                            <Text style={styles.saveButtonText}>Save Question</Text>
-                        </TouchableOpacity>
+                        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+                            <Text style={styles.modalTitle}>{editQuestionId ? 'Edit Question' : 'Add Question'}</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Enter your question"
+                                value={questionText}
+                                onChangeText={setQuestionText}
+                            />
+                            {options.map((option, index) => (
+                                <View key={index} style={styles.answerContainer}>
+                                    <TextInput
+                                        style={styles.input}
+                                        placeholder={`Option ${index + 1}`}
+                                        value={options[index]}
+                                        onChangeText={(text) => handleAnswerChange(index, text)}
+                                    />
+                                    <TouchableOpacity
+                                        style={[styles.radioButton, correctAnswerIndex === index && styles.radioButtonSelected]}
+                                        onPress={() => handleSelectCorrectAnswer(index)}
+                                    >
+                                        <Text style={correctAnswerIndex === index ? styles.radioButtonTextSelected : styles.radioButtonText}>
+                                            {correctAnswerIndex === index ? 'Correct' : 'Select as Correct'}
+                                        </Text>
+                                    </TouchableOpacity>
+                                </View>
+                            ))}
+                            <TouchableOpacity style={styles.saveButton} onPress={handleSaveQuestion}>
+                                <Text style={styles.saveButtonText}>Save Question</Text>
+                            </TouchableOpacity>
+                        </ScrollView>
                     </View>
                 </View>
             </Modal>
+
         </View>
     );
 }
