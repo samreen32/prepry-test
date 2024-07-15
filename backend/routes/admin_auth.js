@@ -3,17 +3,16 @@ const router = express.Router();
 const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const Users = require("../models/UserAuth");
+const Admins = require("../models/Admin");
 const JWT_SECRET = "Samreenisagoodgir@l";
 
-// Register User Route
+// Register Admin Route
 router.post(
-  "/userRegister",
+  "/adminRegister",
   [
     body("fullName").not().isEmpty().withMessage("Full Name is required"),
     body("email").isEmail().withMessage("Please include a valid email"),
     body("password").isLength({ min: 6 }).withMessage("Password must be at least 6 characters long"),
-    body("occupation").optional({ checkFalsy: true }).isString().withMessage("Occupation must be a string"),
   ],
   async (req, res) => {
     try {
@@ -23,28 +22,27 @@ router.post(
         return res.status(400).json({ errors: errors.array() });
       }
 
-      const { fullName, email, password, occupation } = req.body;
+      const { fullName, email, password } = req.body;
 
-      let user = await Users.findOne({ email });
-      if (user) {
-        return res.status(400).json({ success: false, message: "User already exists" });
+      let admin = await Admins.findOne({ email });
+      if (admin) {
+        return res.status(400).json({ success: false, message: "Admin already exists" });
       }
 
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
 
-      user = new Users({
+      admin = new Admins({
         fullName,
         email,
         password: hashedPassword,
-        occupation: occupation || null,
       });
 
-      const savedUser = await user.save();
+      const savedAdmin = await admin.save();
 
       const payload = {
-        user: {
-          id: savedUser.id,
+        admin: {
+          id: savedAdmin.id,
         },
       };
 
@@ -52,9 +50,9 @@ router.post(
 
       res.status(200).json({
         success: true,
-        message: "User registered successfully",
+        message: "Admin registered successfully",
         token: token,
-        user: savedUser,
+        admin: savedAdmin,
       });
     } catch (error) {
       console.error(error.message);
@@ -63,7 +61,7 @@ router.post(
   }
 );
 
-// Login User Route
+// Login Admin Route
 router.post(
   "/login",
   [
@@ -79,19 +77,19 @@ router.post(
       }
 
       const { email, password } = req.body;
-      let user = await Users.findOne({ email });
-      if (!user) {
+      let admin = await Admins.findOne({ email });
+      if (!admin) {
         return res.status(400).json({ success: false, message: "Invalid Credentials" });
       }
 
-      const isMatch = await bcrypt.compare(password, user.password);
+      const isMatch = await bcrypt.compare(password, admin.password);
       if (!isMatch) {
         return res.status(400).json({ success: false, message: "Invalid Credentials" });
       }
 
       const payload = {
-        user: {
-          id: user.id,
+        admin: {
+          id: admin.id,
         },
       };
 
@@ -101,12 +99,11 @@ router.post(
         success: true,
         message: "Logged in successfully",
         token: token,
-        user: {
-          id: user.id,
-          fullName: user.fullName,
-          email: user.email,
-          role: user.role,
-          profileImage: user.profileImage,
+        admin: {
+          id: admin.id,
+          fullName: admin.fullName,
+          email: admin.email,
+          profileImage: admin.profileImage,
         },
       });
     } catch (error) {
@@ -116,22 +113,22 @@ router.post(
   }
 );
 
-// Get All Users Route
-router.get("/fetchUsers", async (req, res) => {
+// Get All Admins Route
+router.get("/fetchAdmins", async (req, res) => {
   try {
-    const users = await Users.find();
-    res.status(200).json(users);
+    const admins = await Admins.find();
+    res.status(200).json(admins);
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 });
 
-// Delete All Users Route
-router.delete("/deleteUsers", async (req, res) => {
+// Delete All Admins Route
+router.delete("/deleteAdmins", async (req, res) => {
   try {
-    await Users.deleteMany({});
-    res.status(200).json({ success: true, message: "All users deleted successfully" });
+    await Admins.deleteMany({});
+    res.status(200).json({ success: true, message: "All Admins deleted successfully" });
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ success: false, message: "Internal Server Error" });
