@@ -4,21 +4,32 @@ import {
 } from "@react-navigation/drawer";
 import React from "react";
 import { Text, View, TouchableOpacity } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, AntDesign } from "@expo/vector-icons";
 import Animated from "react-native-reanimated";
-import profilePic from "../assets/img/userProfile.png"
+import profilePic from "../assets/img/userProfile.png";
+import { useAuth } from "../frontend/context/AuthContext";
+import { useNavigation } from "@react-navigation/native";
 
 const CustomDrawer = (props) => {
+    const { user, adminInfo, token, adminToken, logout, adminLogout, showToast } = useAuth();
+    let navigation = useNavigation();
+
+    const handleLogout = async () => {
+        if (adminToken) {
+            await adminLogout();
+            showToast("Admin logged out successfully");
+            navigation.replace('ChooseView');
+        } else if (token) {
+            await logout();
+            showToast("User logged out successfully");
+            navigation.replace('ChooseView');
+        }
+    };
 
     return (
         <>
             <View style={{ marginBottom: 20 }}>
                 <Animated.Image
-                    // source={{
-                    //   uri:
-                    //     profile.avatar ||
-                    //     "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
-                    // }}
                     source={profilePic}
                     style={{
                         width: 100,
@@ -50,7 +61,7 @@ const CustomDrawer = (props) => {
                     color: "white",
                 }}
             >
-                Hey, User
+                Hey, {user?.fullName || adminInfo?.fullName}
             </Text>
             <DrawerContentScrollView {...props}>
                 <DrawerItemList {...props} />
@@ -65,8 +76,25 @@ const CustomDrawer = (props) => {
                         marginTop: 15,
                     }}
                 ></View>
+                <TouchableOpacity
+                    onPress={handleLogout}
+                    style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        padding: 15,
+                        marginVertical: 5,
+                        marginLeft: 10,
+                        marginRight: 10,
+                        borderRadius: 5,
+                        // backgroundColor: '#f39c12',
+                    }}
+                >
+                    <AntDesign name="logout" size={20} color="white" />
+                    <Text style={{ marginLeft: 20, color: 'white', fontWeight: 'bold' }}>Logout</Text>
+                </TouchableOpacity>
             </DrawerContentScrollView>
         </>
     );
 };
+
 export default CustomDrawer;

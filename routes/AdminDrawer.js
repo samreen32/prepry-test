@@ -1,6 +1,6 @@
 import React from "react";
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { Ionicons, AntDesign, MaterialIcons } from "@expo/vector-icons";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import CustomDrawer from "./CustomDrawer";
 import { Text } from "react-native";
 import AdminTabs from "./AdminTabs";
@@ -70,23 +70,6 @@ function AdminDrawer() {
                     ),
                     drawerIcon: ({ focused }) => (
                         <MaterialIcons name="checklist"
-                            size={focused ? 25 : 20}
-                            style={{ color: focused ? "black" : "white" }}
-                        />
-                    ),
-                }}
-            />
-
-
-            <Drawer.Screen
-                name="Logout"
-                component={AdminTabs}
-                options={{
-                    drawerLabel: ({ focused }) => (
-                        <Text style={{ color: focused ? "black" : "white", right: 26 }}>Logout</Text>
-                    ),
-                    drawerIcon: ({ focused }) => (
-                        <AntDesign name="logout"
                             size={focused ? 25 : 20}
                             style={{ color: focused ? "black" : "white" }}
                         />

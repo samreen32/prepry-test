@@ -20,7 +20,6 @@ export default function Login() {
     setLoading(true);
     try {
       const response = await axios.post(`${config.urls.AUTH_API}/login`, { email, password });
-      console.log(response.data, "dfhdjf");
       const { success, message, token, user } = response.data;
 
       if (success) {

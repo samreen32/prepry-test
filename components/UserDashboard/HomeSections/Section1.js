@@ -4,8 +4,10 @@ import { Ionicons } from "@expo/vector-icons";
 import { globalStyles } from '../../../assets/styles/globalStyles';
 import profilePic from "../../../assets/img/userProfile.png"
 import { useNavigation } from '@react-navigation/native';
+import { useAuth } from '../../../frontend/context/AuthContext';
 
 function Section1() {
+    const { user } = useAuth();
     const navigation = useNavigation();
     const [greeting, setGreeting] = useState("");
     const [iconName, setIconName] = useState("sunny");
@@ -55,7 +57,7 @@ function Section1() {
                     style={{ width: 50, height: 50, borderRadius: 25 }}
                 />
                 <View style={{ marginLeft: 10 }}>
-                    <Text style={globalStyles.userName}>Hello, User</Text>
+                    <Text style={globalStyles.userName}>Hello, {user?.fullName}</Text>
                     <Text style={globalStyles.greeting}>
                         {greeting}
                     </Text>

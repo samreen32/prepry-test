@@ -7,6 +7,8 @@ const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
   const [user, setUser] = useState(null);
+  const [adminToken, setAdminToken] = useState(null);
+  const [adminInfo, setAdminInfo] = useState(null);
 
   const showToast = (message) => {
     if (Platform.OS === 'android') {
@@ -30,14 +32,32 @@ const AuthProvider = ({ children }) => {
     await AsyncStorage.removeItem('user');
   };
 
+  const adminLogin = async (adminToken, adminInfo) => {
+    setAdminToken(adminToken);
+    setAdminInfo(adminInfo);
+    await AsyncStorage.setItem('adminToken', adminToken);
+    await AsyncStorage.setItem('admin', JSON.stringify(adminInfo));
+  };
+
+  const adminLogout = async () => {
+    setAdminToken(null);
+    setAdminInfo(null);
+    await AsyncStorage.removeItem('adminToken');
+    await AsyncStorage.removeItem('admin');
+  };
+
   return (
     <AuthContext.Provider
       value={{
         token,
         user,
+        adminToken,
+        adminInfo,
         showToast,
         login,
-        logout
+        logout,
+        adminLogin,
+        adminLogout
       }}
     >
       {children}

@@ -3,8 +3,10 @@ import { View, Text, Animated, Image } from 'react-native';
 import { globalStyles } from '../../../assets/styles/globalStyles';
 import profilePic from "../../../assets/img/userProfile.png"
 import { useNavigation } from '@react-navigation/native';
+import { useAuth } from '../../../frontend/context/AuthContext';
 
 function Section1() {
+    const { adminInfo } = useAuth();
     const navigation = useNavigation();
     const [greeting, setGreeting] = useState("");
     const [iconName, setIconName] = useState("sunny");
@@ -54,7 +56,7 @@ function Section1() {
                     style={{ width: 50, height: 50, borderRadius: 25 }}
                 />
                 <View style={{ marginLeft: 10 }}>
-                    <Text style={globalStyles.userName}>Hello, Admin</Text>
+                    <Text style={globalStyles.userName}>Hello, {adminInfo?.fullName}</Text>
                     <Text style={globalStyles.greeting}>
                         {greeting}
                     </Text>

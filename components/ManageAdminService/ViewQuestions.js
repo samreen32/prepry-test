@@ -1,24 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, Modal, TextInput } from 'react-native';
 import { AntDesign, FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
+import config from '../../frontend/config';
+import { useAuth } from '../../frontend/context/AuthContext';
+import { Picker } from '@react-native-picker/picker';
 
 const { width, height } = Dimensions.get('window');
-
-const questionsData = [
-    { id: 1, testName: 'Sample Test 1', question: 'What is React Native?', options: ['Option 1', 'Option 2', 'Option 3', 'Option 4'], correctAnswerIndex: 0, date: '2023-05-12', user: 'John Doe' },
-    { id: 2, testName: 'Sample Test 2', question: 'How does React Native work?', options: ['Option A', 'Option B', 'Option C', 'Option D'], correctAnswerIndex: 1, date: '2023-05-13', user: 'Jane Smith' },
-    { id: 3, testName: 'Sample Test 1', question: 'What is React Native?', options: ['Answer A', 'Answer B', 'Answer C', 'Answer D'], correctAnswerIndex: 2, date: '2023-05-12', user: 'John Doe' },
-    { id: 4, testName: 'Sample Test 2', question: 'How does React Native work?', options: ['Choice 1', 'Choice 2', 'Choice 3', 'Choice 4'], correctAnswerIndex: 3, date: '2023-05-13', user: 'Jane Smith' },
-    { id: 5, testName: 'Sample Test 1', question: 'What is React Native?', options: ['Option X', 'Option Y', 'Option Z', 'Option W'], correctAnswerIndex: 0, date: '2023-05-12', user: 'John Doe' },
-    { id: 6, testName: 'Sample Test 2', question: 'How does React Native work?', options: ['Option Alpha', 'Option Beta', 'Option Gamma', 'Option Delta'], correctAnswerIndex: 1, date: '2023-05-13', user: 'Jane Smith' },
-];
 
 const QuestionItem = ({ id, testName, question, options, correctAnswerIndex, date, user, isExpanded, onPressEdit, onPressDelete }) => (
     <View style={styles.questionItem}>
         <TouchableOpacity onPress={() => onPressEdit(id)} style={styles.questionRow}>
             <View style={{ flex: 1 }}>
-                <Text style={styles.testName}>{testName}</Text>
+                <Text style={styles.testName}>Test: {testName}</Text>
                 <Text style={styles.questionText}>{question}</Text>
                 <View style={styles.optionsContainer}>
                     {options.map((option, index) => (
@@ -48,70 +43,119 @@ const QuestionItem = ({ id, testName, question, options, correctAnswerIndex, dat
 );
 
 export default function ViewQuestions() {
+    const { adminToken } = useAuth();
     const navigation = useNavigation();
     const [expandedQuestion, setExpandedQuestion] = useState(null);
     const [editQuestionId, setEditQuestionId] = useState(null);
-
-    // State for modal
+    const [questionsData, setQuestionsData] = useState([]);
+    const [testsData, setTestsData] = useState([]);
+    const [selectedTestId, setSelectedTestId] = useState('');
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [questionText, setQuestionText] = useState('');
     const [options, setOptions] = useState(['', '', '', '']);
-    const [correctAnswerIndex, setCorrectAnswerIndex] = useState(-1); // -1 means no correct answer selected
+    const [correctAnswerIndex, setCorrectAnswerIndex] = useState(-1);
+
+    useEffect(() => {
+        fetchQuestions();
+        fetchTests();
+    }, []);
+
+    const fetchQuestions = async () => {
+        try {
+            const response = await axios.get(`${config.urls.QUESTIONS_API}/fetchQs`, {
+                headers: {
+                    "token": adminToken
+                }
+            });
+            if (response.data.success) {
+                setQuestionsData(response.data.questions);
+            } else {
+                console.error('Failed to fetch questions:', response.data.message);
+            }
+        } catch (error) {
+            console.error('Error fetching questions:', error);
+        }
+    };
+
+    const fetchTests = async () => {
+        try {
+            const response = await axios.get(`${config.urls.TESTS_API}/fetchTests`, {
+                headers: {
+                    "token": adminToken
+                }
+            });
+            if (response.data.success) {
+                setTestsData(response.data.tests);
+            } else {
+                console.error('Failed to fetch tests:', response.data.message);
+            }
+        } catch (error) {
+            console.error('Error fetching tests:', error);
+        }
+    };
 
     const handlePressEdit = (id) => {
         setEditQuestionId(id);
         setIsModalVisible(true);
-        // Find the question to edit
-        const questionToEdit = questionsData.find(question => question.id === id);
+        const questionToEdit = questionsData.find(question => question._id === id);
         if (questionToEdit) {
-            setQuestionText(questionToEdit.question);
+            setQuestionText(questionToEdit?.title);
             setOptions([...questionToEdit.options]);
             setCorrectAnswerIndex(questionToEdit.correctAnswerIndex);
+            setSelectedTestId(questionToEdit.test);
         }
     };
 
-    const handlePressDelete = (id) => {
-        // Implement delete logic here
-        console.log('Deleting question with ID:', id);
-        // Example of updating questionsData to remove the deleted question
-        const updatedQuestionsData = questionsData.filter(question => question.id !== id);
-        console.log('Updated questionsData:', updatedQuestionsData);
-        // Update state or perform other operations as needed
+    const handlePressDelete = async (id) => {
+        try {
+            await axios.delete(`${config.urls.QUESTIONS_API}/deleteQs/${id}`, {
+                headers: {
+                    "token": adminToken
+                }
+            });
+            fetchQuestions();
+        } catch (error) {
+            console.error('Error deleting question:', error);
+        }
     };
 
     const handleModalClose = () => {
         setIsModalVisible(false);
         setEditQuestionId(null);
-        // Reset modal state
         setQuestionText('');
         setOptions(['', '', '', '']);
         setCorrectAnswerIndex(-1);
+        setSelectedTestId('');
     };
 
-    const handleSaveQuestion = () => {
-        // Save question and answers logic here
-        console.log('Question:', questionText);
-        console.log('Options:', options);
-        console.log('Correct Answer Index:', correctAnswerIndex);
-
-        // Update the edited question in questionsData
-        const updatedQuestionsData = questionsData.map(question => {
-            if (question.id === editQuestionId) {
-                return {
-                    ...question,
-                    question: questionText,
-                    options: [...options],
-                    correctAnswerIndex,
-                };
+    const handleSaveQuestion = async () => {
+        try {
+            const payload = {
+                title: questionText,
+                options,
+                correctAnswerIndex,
+                test: selectedTestId
+            };
+            if (editQuestionId) {
+                await axios.put(`${config.urls.QUESTIONS_API}/updateQs/${editQuestionId}`, payload,
+                    {
+                        headers: {
+                            "token": adminToken
+                        }
+                    }
+                );
+            } else {
+                await axios.post(`${config.urls.QUESTIONS_API}/createQs`, payload, {
+                    headers: {
+                        "token": adminToken
+                    }
+                });
             }
-            return question;
-        });
-
-        // Update questionsData state (if using it as state)
-        // setQuestionsData(updatedQuestionsData);
-
-        // Close the modal after saving
-        handleModalClose();
+            fetchQuestions();
+            handleModalClose();
+        } catch (error) {
+            console.error('Error saving question:', error);
+        }
     };
 
     const handleAnswerChange = (index, text) => {
@@ -139,22 +183,21 @@ export default function ViewQuestions() {
             <ScrollView contentContainerStyle={styles.scrollContainer}>
                 {questionsData.map((item) => (
                     <QuestionItem
-                        key={item.id}
-                        id={item.id}
-                        testName={item.testName}
-                        question={item.question}
+                        key={item._id}
+                        id={item._id}
+                        testName={item?.test?.title}
+                        question={item.title}
                         options={item.options}
                         correctAnswerIndex={item.correctAnswerIndex}
                         date={item.date}
                         user={item.user}
-                        isExpanded={expandedQuestion === item.id}
+                        isExpanded={expandedQuestion === item._id}
                         onPressEdit={handlePressEdit}
                         onPressDelete={handlePressDelete}
                     />
                 ))}
             </ScrollView>
 
-            {/* Modal for adding/editing a question */}
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -163,37 +206,51 @@ export default function ViewQuestions() {
             >
                 <View style={styles.modalContainer}>
                     <View style={styles.modalContent}>
-                        <Text style={styles.modalTitle}>{editQuestionId ? 'Edit Question' : 'Add Question'}</Text>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Enter your question"
-                            value={questionText}
-                            onChangeText={setQuestionText}
-                        />
-                        {options.map((option, index) => (
-                            <View key={index} style={styles.answerContainer}>
-                                <TextInput
-                                    style={styles.input}
-                                    placeholder={`Option ${index + 1}`}
-                                    value={options[index]}
-                                    onChangeText={(text) => handleAnswerChange(index, text)}
-                                />
-                                <TouchableOpacity
-                                    style={[styles.radioButton, correctAnswerIndex === index && styles.radioButtonSelected]}
-                                    onPress={() => handleSelectCorrectAnswer(index)}
-                                >
-                                    <Text style={correctAnswerIndex === index ? styles.radioButtonTextSelected : styles.radioButtonText}>
-                                        {correctAnswerIndex === index ? 'Correct' : 'Select as Correct'}
-                                    </Text>
-                                </TouchableOpacity>
-                            </View>
-                        ))}
-                        <TouchableOpacity style={styles.saveButton} onPress={handleSaveQuestion}>
-                            <Text style={styles.saveButtonText}>Save Question</Text>
-                        </TouchableOpacity>
+                        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+                            <Text style={styles.modalTitle}>{editQuestionId ? 'Edit Question' : 'Add Question'}</Text>
+                            <Picker
+                                selectedValue={selectedTestId}
+                                style={styles.picker}
+                                onValueChange={(itemValue) => setSelectedTestId(itemValue)}
+                            >
+                                <Picker.Item label="Select Test" value="" />
+                                {testsData.map((test) => (
+                                    <Picker.Item key={test._id} label={test.title} value={test._id} />
+                                ))}
+                            </Picker>
+
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Enter your question"
+                                value={questionText}
+                                onChangeText={setQuestionText}
+                            />
+                            {options.map((option, index) => (
+                                <View key={index} style={styles.answerContainer}>
+                                    <TextInput
+                                        style={styles.input}
+                                        placeholder={`Option ${index + 1}`}
+                                        value={options[index]}
+                                        onChangeText={(text) => handleAnswerChange(index, text)}
+                                    />
+                                    <TouchableOpacity
+                                        style={[styles.radioButton, correctAnswerIndex === index && styles.radioButtonSelected]}
+                                        onPress={() => handleSelectCorrectAnswer(index)}
+                                    >
+                                        <Text style={correctAnswerIndex === index ? styles.radioButtonTextSelected : styles.radioButtonText}>
+                                            {correctAnswerIndex === index ? 'Correct' : 'Select as Correct'}
+                                        </Text>
+                                    </TouchableOpacity>
+                                </View>
+                            ))}
+                            <TouchableOpacity style={styles.saveButton} onPress={handleSaveQuestion}>
+                                <Text style={styles.saveButtonText}>Save Question</Text>
+                            </TouchableOpacity>
+                        </ScrollView>
                     </View>
                 </View>
             </Modal>
+
         </View>
     );
 }
@@ -244,6 +301,7 @@ const styles = StyleSheet.create({
         fontSize: width * 0.04,
         fontWeight: 'bold',
         marginBottom: height * 0.01,
+        textTransform: "capitalize"
     },
     questionText: {
         fontSize: width * 0.04,
@@ -319,6 +377,11 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         borderRadius: 5,
         fontSize: 16,
+    },
+    picker: {
+        height: 50,
+        width: '100%',
+        marginBottom: 15,
     },
     radioButton: {
         borderWidth: 1,

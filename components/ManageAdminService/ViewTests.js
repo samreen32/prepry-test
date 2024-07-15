@@ -1,73 +1,106 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, Modal, TextInput } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import {
+    View, Text, StyleSheet, ScrollView,
+    TouchableOpacity, Dimensions, Modal, TextInput
+} from 'react-native';
 import { AntDesign, FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
+import config from '../../frontend/config';
+import { useAuth } from '../../frontend/context/AuthContext';
 
 const { width, height } = Dimensions.get('window');
 
-const initialTestsData = [
-    { id: 1, testName: 'Physics', date: '2023-06-15' }
-];
-
 const ViewTests = () => {
+    const { adminToken } = useAuth();
     const navigation = useNavigation();
-    const [testsData, setTestsData] = useState(initialTestsData);
+    const [testsData, setTestsData] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [editTestId, setEditTestId] = useState(null);
     const [testName, setTestName] = useState('');
-    const [testDate, setTestDate] = useState('');
+    const [testDescription, setTestDescription] = useState('');
+
+    useEffect(() => {
+        fetchTests();
+    }, []);
+
+    const fetchTests = async () => {
+        try {
+            const response = await axios.get(`${config.urls.TESTS_API}/fetchTests`, {
+                headers: {
+                    "token": adminToken
+                }
+            });
+            if (response.data.success) {
+                setTestsData(response.data.tests);
+            } else {
+                console.error('Failed to fetch tests:', response.data.message);
+            }
+        } catch (error) {
+            console.error('Error fetching tests:', error);
+        }
+    };
 
     const handlePressEdit = (id) => {
         setEditTestId(id);
         setIsModalVisible(true);
-        const testToEdit = testsData.find(test => test.id === id);
+        const testToEdit = testsData.find(test => test._id === id);
         if (testToEdit) {
-            setTestName(testToEdit.testName);
-            setTestDate(testToEdit.date);
+            setTestName(testToEdit.title);
+            setTestDescription(testToEdit.description);
         }
     };
 
-    const handlePressDelete = (id) => {
-        const updatedTestsData = testsData.filter(test => test.id !== id);
-        setTestsData(updatedTestsData);
+    const handlePressDelete = async (id) => {
+        try {
+            await axios.delete(`${config.urls.TESTS_API}/deleteTest/${id}`, {
+                headers: {
+                    "token": adminToken
+                }
+            });
+            fetchTests();
+        } catch (error) {
+            console.error('Error deleting test:', error);
+        }
     };
 
     const handleModalClose = () => {
         setIsModalVisible(false);
         setEditTestId(null);
         setTestName('');
-        setTestDate('');
+        setTestDescription('');
     };
 
-    const handleSaveTest = () => {
-        if (editTestId) {
-            const updatedTestsData = testsData.map(test => {
-                if (test.id === editTestId) {
-                    return {
-                        ...test,
-                        testName,
-                        date: testDate
-                    };
-                }
-                return test;
-            });
-            setTestsData(updatedTestsData);
-        } else {
-            const newTestId = testsData.length + 1;
-            const newTest = {
-                id: newTestId,
-                testName,
-                date: testDate
-            };
-            setTestsData([...testsData, newTest]);
+    const handleSaveTest = async () => {
+        const payload = {
+            title: testName,
+            description: testDescription,
+        };
+        try {
+            if (editTestId) {
+                await axios.put(`${config.urls.TESTS_API}/updateTest/${editTestId}`, payload, {
+                    headers: {
+                        "token": adminToken
+                    }
+                });
+            } else {
+                await axios.post(`${config.urls.TESTS_API}/createTest`, payload, {
+                    headers: {
+                        "token": adminToken
+                    }
+                });
+            }
+            fetchTests();
+            handleModalClose();
+        } catch (error) {
+            console.error('Error saving test:', error);
         }
-        handleModalClose();
     };
 
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.navigate("HomeScreen")}>
+                <TouchableOpacity onPress={() => navigation.navigate("AdminHomeMain")}>
                     <AntDesign name="arrowleft" size={30} color="black" style={{ marginLeft: 10 }} />
                 </TouchableOpacity>
                 <Text style={styles.headerText}>Manage Tests</Text>
@@ -81,21 +114,23 @@ const ViewTests = () => {
                     <View style={styles.tableHeader}>
                         <Text style={[styles.headerCell, styles.headerID]}>ID</Text>
                         <Text style={[styles.headerCell, styles.headerTestName]}>Name</Text>
-                        <Text style={[styles.headerCell, styles.headerDate]}>Date</Text>
+                        <Text style={[styles.headerCell, styles.headerDate]}>Description</Text>
                         <Text style={[styles.headerCell, styles.headerEdit]}>Action</Text>
-                        {/* <Text style={[styles.headerCell, styles.headerRemove]}>Remove</Text> */}
                     </View>
-                    {testsData.map((item) => (
-                        <View key={item.id} style={styles.tableRow}>
-                            <Text style={[styles.tableCell, styles.cellID]}>{item.id}</Text>
-                            <Text style={[styles.tableCell, styles.cellTestName]}>{item.testName}</Text>
-                            <Text style={[styles.tableCell, styles.cellDate]}>{item.date}</Text>
-                            <TouchableOpacity onPress={() => handlePressEdit(item.id)}>
-                                <FontAwesome name="edit" size={20} style={styles.editIcon} />
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={() => handlePressDelete(item.id)}>
-                                <FontAwesome name="trash" size={20} style={styles.deleteIcon} />
-                            </TouchableOpacity>
+                    {testsData.map((item, index) => (
+                        <View key={item._id} style={styles.tableRow}>
+                            <Text style={[styles.tableCell, styles.cellID]}>{index + 1}</Text>
+                            <Text style={[styles.tableCell, styles.cellTestName]}>{item.title}</Text>
+                            <Text style={[styles.tableCell, styles.cellDate]}>{item.description}</Text>
+                            <View style={{ padding: 10 }}>
+                                <TouchableOpacity onPress={() => handlePressEdit(item._id)}>
+                                    <FontAwesome name="edit" size={20} style={styles.editIcon} />
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => handlePressDelete(item._id)}
+                                    style={{ marginTop: 10 }}>
+                                    <FontAwesome name="trash" size={20} style={styles.deleteIcon} />
+                                </TouchableOpacity>
+                            </View>
                         </View>
                     ))}
                 </View>
@@ -118,9 +153,9 @@ const ViewTests = () => {
                         />
                         <TextInput
                             style={styles.input}
-                            placeholder="Enter test date"
-                            value={testDate}
-                            onChangeText={setTestDate}
+                            placeholder="Enter test description"
+                            value={testDescription}
+                            onChangeText={setTestDescription}
                         />
                         <TouchableOpacity style={styles.saveButton} onPress={handleSaveTest}>
                             <Text style={styles.saveButtonText}>{editTestId ? 'Save Test' : 'Add Test'}</Text>
@@ -178,7 +213,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#ccc',
         borderRadius: 10,
-        marginBottom: 10,
+        marginBottom: 20,
         overflow: 'hidden',
     },
     tableHeader: {

@@ -63,7 +63,7 @@ router.post(
 
 // Login Admin Route
 router.post(
-  "/login",
+  "/adminLogin",
   [
     body("email").isEmail().withMessage("Please include a valid email"),
     body("password").exists().withMessage("Password is required"),

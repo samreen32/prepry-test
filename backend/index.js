@@ -12,6 +12,8 @@ app.use(express.json());
 // Available Routes
 app.use("/api/auth", require("./routes/user_auth"));
 app.use("/api/auth", require("./routes/admin_auth"));
+app.use("/api/tests", require("./routes/admin_tests"));
+app.use("/api/questions", require("./routes/admin_questions"));
 
 app.listen(port, () => {
   console.log(`React Project backend listening on port ${port}`);

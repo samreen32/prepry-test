@@ -13,6 +13,7 @@ import UserNotes from "../components/Notes/UserNotes";
 const Drawer = createDrawerNavigator();
 
 function UserDrawer() {
+
     return (
         <Drawer.Navigator
             drawerContent={(props) => <CustomDrawer {...props} />}
@@ -125,21 +126,7 @@ function UserDrawer() {
                     ),
                 }}
             />
-            <Drawer.Screen
-                name="Logout"
-                component={UserTabs}
-                options={{
-                    drawerLabel: ({ focused }) => (
-                        <Text style={{ color: focused ? "black" : "white", right: 26 }}>Logout</Text>
-                    ),
-                    drawerIcon: ({ focused }) => (
-                        <AntDesign name="logout"
-                            size={focused ? 25 : 20}
-                            style={{ color: focused ? "black" : "white" }}
-                        />
-                    ),
-                }}
-            />
+
         </Drawer.Navigator>
     );
 }
