@@ -1,38 +1,70 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, ActivityIndicator } from 'react-native';
 import { AntDesign, FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import config from '../../frontend/config';
 
 const { width, height } = Dimensions.get('window');
 
-const questionsData = [
-    { id: 1, question: 'What is React Native?', answer: 'React Native is a framework for building native apps using React.' },
-    { id: 2, question: 'How does React Native work?', answer: 'React Native uses JavaScript to compile to native components.' },
-    { id: 3, question: 'What is React Native?', answer: 'React Native is a framework for building native apps using React.' },
-    { id: 4, question: 'How does React Native work?', answer: 'React Native uses JavaScript to compile to native components.' },
-    { id: 5, question: 'What is React Native?', answer: 'React Native is a framework for building native apps using React.' },
-    { id: 6, question: 'How does React Native work?', answer: 'React Native uses JavaScript to compile to native components.' },
-    { id: 7, question: 'What is React Native?', answer: 'React Native is a framework for building native apps using React.' },
-    { id: 8, question: 'How does React Native work?', answer: 'React Native uses JavaScript to compile to native components.' },
-];
-
-const QuestionItem = ({ question, answer, isExpanded, onPress }) => (
+const QuestionItem = ({ question, options, correctAnswerIndex, isExpanded, onPress }) => (
     <View style={styles.questionItem}>
         <TouchableOpacity onPress={onPress} style={styles.questionRow}>
             <Text style={styles.questionText}>{question}</Text>
             <FontAwesome name={isExpanded ? 'chevron-up' : 'chevron-down'} size={20} />
         </TouchableOpacity>
-        {isExpanded && <Text style={styles.answerText}>{answer}</Text>}
+        {isExpanded && (
+            <View>
+                {options.map((option, index) => (
+                    <Text
+                        key={index}
+                        style={[
+                            styles.optionText,
+                            index === correctAnswerIndex && styles.correctAnswerText,
+                        ]}
+                    >
+                        {option}
+                    </Text>
+                ))}
+            </View>
+        )}
     </View>
 );
 
 export default function QuestionsList() {
     const navigation = useNavigation();
     const [expandedQuestion, setExpandedQuestion] = useState(null);
+    const [questionsData, setQuestionsData] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchQuestions = async () => {
+            try {
+                const response = await fetch(`${config.urls.QUESTIONS_API}/fetchQs`); 
+                const data = await response.json();
+                if (data.success) {
+                    setQuestionsData(data.questions);
+                }
+            } catch (error) {
+                console.error('Error fetching questions:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchQuestions();
+    }, []);
 
     const handlePress = (id) => {
         setExpandedQuestion(expandedQuestion === id ? null : id);
     };
+
+    if (loading) {
+        return (
+            <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color="#0000ff" />
+            </View>
+        );
+    }
 
     return (
         <View style={styles.container}>
@@ -46,11 +78,12 @@ export default function QuestionsList() {
             <ScrollView contentContainerStyle={styles.scrollContainer}>
                 {questionsData.map((item) => (
                     <QuestionItem
-                        key={item.id}
-                        question={item.question}
-                        answer={item.answer}
-                        isExpanded={expandedQuestion === item.id}
-                        onPress={() => handlePress(item.id)}
+                        key={item._id}
+                        question={item.title}
+                        options={item.options}
+                        correctAnswerIndex={item.correctAnswerIndex}
+                        isExpanded={expandedQuestion === item._id}
+                        onPress={() => handlePress(item._id)}
                     />
                 ))}
             </ScrollView>
@@ -104,9 +137,18 @@ const styles = StyleSheet.create({
         fontSize: width * 0.04,
         fontWeight: 'bold',
     },
-    answerText: {
+    optionText: {
         marginTop: height * 0.01,
         fontSize: width * 0.04,
         color: '#555',
+    },
+    correctAnswerText: {
+        color: 'green',
+        fontWeight: 'bold',
+    },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 });

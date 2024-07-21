@@ -1,24 +1,91 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Dimensions, TextInput, Modal } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import {
+    View, Text, TouchableOpacity, StyleSheet,
+    ScrollView, Dimensions, TextInput, Modal,
+    ActivityIndicator
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { AntDesign } from '@expo/vector-icons';
+import config from '../../frontend/config';
+import { useAuth } from '../../frontend/context/AuthContext';
 
-// Get screen dimensions
 const { width, height } = Dimensions.get('window');
 
 export default function UserNotes() {
+    const { user, token } = useAuth();
     const navigation = useNavigation();
     const [notes, setNotes] = useState([]);
-    const [newNote, setNewNote] = useState('');
+    const [newNoteTitle, setNewNoteTitle] = useState('');
+    const [newNoteDescription, setNewNoteDescription] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
+    const [loading, setLoading] = useState(false);
 
-    const addNote = () => {
-        if (newNote.trim()) {
-            setNotes([...notes, newNote]);
-            setNewNote('');
-            setModalVisible(false);
+    const fetchNotes = async () => {
+        try {
+            setLoading(true);
+            const response = await fetch(`${config.urls.NOTES_API}/fetchNotes`);
+            const data = await response.json();
+            if (data.success) {
+                setNotes(data.notes);
+            }
+        } catch (error) {
+            console.error('Error fetching notes:', error);
+        } finally {
+            setLoading(false);
         }
     };
+
+    const addNote = async () => {
+        if (newNoteTitle.trim() && newNoteDescription.trim()) {
+            try {
+                const response = await fetch(`${config.urls.NOTES_API}/createNotes`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        "token": token
+                    },
+                    body: JSON.stringify({
+                        user: user.id, 
+                        noteTitle: newNoteTitle,
+                        noteDescription: newNoteDescription,
+                    }),
+                });
+                const data = await response.json();
+                if (data.success) {
+                    setNotes([...notes, data.note]);
+                    setNewNoteTitle('');
+                    setNewNoteDescription('');
+                    setModalVisible(false);
+                }
+            } catch (error) {
+                console.error('Error adding note:', error);
+            }
+        }
+    };
+
+    const deleteNote = async (id) => {
+        try {
+            const response = await fetch(`${config.urls.NOTES_API}/deleteNote/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    "token" : token
+                },
+            });
+            const data = await response.json();
+            console.log(data,id, "gdshdgajs")
+            if (data.success) {
+                setNotes(notes.filter((note) => note._id !== id));
+            }
+        } catch (error) {
+            console.error('Error deleting note:', error);
+        }
+    };
+    
+
+    useEffect(() => {
+        fetchNotes();
+    }, []);
 
     return (
         <View style={styles.container}>
@@ -30,12 +97,20 @@ export default function UserNotes() {
                 <View style={{ width: 30 }} />
             </View>
             <ScrollView contentContainerStyle={styles.scrollContainer}>
-                {notes.length === 0 ? (
+                {loading ? (
+                    <ActivityIndicator size="large" color="#0000ff" />
+                ) : notes.length === 0 ? (
                     <Text style={styles.noNotesText}>No notes available.</Text>
                 ) : (
-                    notes.map((note, index) => (
-                        <View key={index} style={styles.noteItem}>
-                            <Text style={styles.noteText}>{note}</Text>
+                    notes.map((note) => (
+                        <View key={note._id} style={styles.noteItem}>
+                            <View style={styles.noteTextContainer}>
+                                <Text style={styles.noteTitle}>{note.noteTitle}</Text>
+                                <Text style={styles.noteDescription}>{note.noteDescription}</Text>
+                            </View>
+                            <TouchableOpacity onPress={() => deleteNote(note._id)}>
+                                <AntDesign name="delete" size={24} color="red" />
+                            </TouchableOpacity>
                         </View>
                     ))
                 )}
@@ -49,9 +124,15 @@ export default function UserNotes() {
                         <Text style={styles.modalTitle}>Add New Note</Text>
                         <TextInput
                             style={styles.input}
-                            placeholder="Enter your note here"
-                            value={newNote}
-                            onChangeText={setNewNote}
+                            placeholder="Enter note title"
+                            value={newNoteTitle}
+                            onChangeText={setNewNoteTitle}
+                        />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Enter note description"
+                            value={newNoteDescription}
+                            onChangeText={setNewNoteDescription}
                         />
                         <View style={styles.modalButtons}>
                             <TouchableOpacity style={styles.saveButton} onPress={addNote}>
@@ -89,7 +170,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
         flex: 1,
-        marginLeft: width * -0,
+        marginLeft: width * -0.05,
         color: "white"
     },
     scrollContainer: {
@@ -107,8 +188,18 @@ const styles = StyleSheet.create({
         padding: 15,
         borderRadius: 10,
         marginBottom: 10,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
     },
-    noteText: {
+    noteTextContainer: {
+        flex: 1,
+    },
+    noteTitle: {
+        fontSize: width * 0.045,
+        fontWeight: 'bold',
+    },
+    noteDescription: {
         fontSize: width * 0.04,
     },
     addButton: {

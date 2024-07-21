@@ -58,11 +58,7 @@ export default function ViewPracticeQs() {
 
     const fetchQuestions = async () => {
         try {
-            const response = await axios.get(`${config.urls.PRACTICE_QUESTIONS_API}/fetchPracticeQs`, {
-                headers: {
-                    "token": adminToken
-                }
-            });
+            const response = await axios.get(`${config.urls.PRACTICE_QUESTIONS_API}/fetchPracticeQs`);
             if (response.data.success) {
                 setQuestionsData(response.data.practiceQuestions);
             } else {

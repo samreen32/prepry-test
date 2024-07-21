@@ -41,7 +41,7 @@ router.post(
 );
 
 // Get All Practice Questions Route
-router.get("/fetchPracticeQs", admin_middleware, async (req, res) => {
+router.get("/fetchPracticeQs", async (req, res) => {
     try {
         const practiceQuestions = await PracticeQuestion.find();
         res.status(200).json({ success: true, practiceQuestions });
@@ -50,7 +50,6 @@ router.get("/fetchPracticeQs", admin_middleware, async (req, res) => {
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 });
-
 
 // Delete Practice Question Route
 router.delete("/deletePracticeQs/:id", admin_middleware, async (req, res) => {

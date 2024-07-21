@@ -1,39 +1,13 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, ActivityIndicator } from 'react-native';
 import { AntDesign, FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import LottieView from 'lottie-react-native';
+import config from '../../frontend/config';
 
 const { width, height } = Dimensions.get('window');
 
-const questionsData = [
-    {
-        id: 1,
-        question: 'What is React Native?',
-        options: ['A framework for building native apps using React', 'A library for backend development', 'A CSS framework', 'A database management tool'],
-        correctOption: 'A framework for building native apps using React',
-    },
-    {
-        id: 2,
-        question: 'How does React Native work?',
-        options: ['Uses JavaScript to compile to native components', 'Uses Python for native components', 'Uses Swift for Android', 'Uses Kotlin for iOS'],
-        correctOption: 'Uses JavaScript to compile to native components',
-    },
-    {
-        id: 3,
-        question: 'What is React Native?',
-        options: ['A framework for building native apps using React', 'A library for backend development', 'A CSS framework', 'A database management tool'],
-        correctOption: 'A framework for building native apps using React',
-    },
-    {
-        id: 4,
-        question: 'How does React Native work?',
-        options: ['Uses JavaScript to compile to native components', 'Uses Python for native components', 'Uses Swift for Android', 'Uses Kotlin for iOS'],
-        correctOption: 'Uses JavaScript to compile to native components',
-    },
-];
-
-const QuestionItem = ({ question, options, correctOption, selectedOption, setSelectedOption, index }) => {
+const QuestionItem = ({ question, options, correctOptionIndex, selectedOption, setSelectedOption, index }) => {
     return (
         <View style={[styles.questionItem, index === 0 && styles.firstQuestionItem]}>
             <Text style={styles.questionText}>{question}</Text>
@@ -52,13 +26,13 @@ const QuestionItem = ({ question, options, correctOption, selectedOption, setSel
                 </TouchableOpacity>
             ))}
             {selectedOption && (
-                <Text style={[styles.feedbackText, { color: selectedOption === correctOption ? 'green' : 'red' }]}>
-                    {selectedOption === correctOption
+                <Text style={[styles.feedbackText, { color: options[correctOptionIndex] === selectedOption ? 'green' : 'red' }]}>
+                    {options[correctOptionIndex] === selectedOption
                         ? 'Hurray! You got it right.'
-                        : `The correct option was: ${correctOption}`}
+                        : `The correct option was: ${options[correctOptionIndex]}`}
                 </Text>
             )}
-            {selectedOption === correctOption && (
+            {options[correctOptionIndex] === selectedOption && (
                 <LottieView
                     source={require('../../assets/animation/party.json')}
                     autoPlay
@@ -73,6 +47,34 @@ const QuestionItem = ({ question, options, correctOption, selectedOption, setSel
 export default function PracticeQuickQs() {
     const navigation = useNavigation();
     const [selectedOptions, setSelectedOptions] = useState({});
+    const [questionsData, setQuestionsData] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchPracticeQuestions = async () => {
+            try {
+                const response = await fetch(`${config.urls.PRACTICE_QUESTIONS_API}/fetchPracticeQs`); 
+                const data = await response.json();
+                if (data.success) {
+                    setQuestionsData(data.practiceQuestions);
+                }
+            } catch (error) {
+                console.error('Error fetching practice questions:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchPracticeQuestions();
+    }, []);
+
+    if (loading) {
+        return (
+            <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color="#0000ff" />
+            </View>
+        );
+    }
 
     return (
         <View style={styles.container}>
@@ -89,13 +91,13 @@ export default function PracticeQuickQs() {
             <ScrollView contentContainerStyle={styles.scrollContainer}>
                 {questionsData.map((item, index) => (
                     <QuestionItem
-                        key={item.id}
+                        key={item._id}
                         index={index}
-                        question={item.question}
-                        options={item.options}
-                        correctOption={item.correctOption}
-                        selectedOption={selectedOptions[item.id]}
-                        setSelectedOption={(option) => setSelectedOptions({ ...selectedOptions, [item.id]: option })}
+                        question={item.practiceTitle}
+                        options={item.practiceOptions}
+                        correctOptionIndex={item.correctPracticeAnswerIndex}
+                        selectedOption={selectedOptions[item._id]}
+                        setSelectedOption={(option) => setSelectedOptions({ ...selectedOptions, [item._id]: option })}
                     />
                 ))}
             </ScrollView>
@@ -176,5 +178,10 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 0,
         right: 0,
+    },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 });

@@ -62,11 +62,7 @@ export default function ViewQuestions() {
 
     const fetchQuestions = async () => {
         try {
-            const response = await axios.get(`${config.urls.QUESTIONS_API}/fetchQs`, {
-                headers: {
-                    "token": adminToken
-                }
-            });
+            const response = await axios.get(`${config.urls.QUESTIONS_API}/fetchQs`);
             if (response.data.success) {
                 setQuestionsData(response.data.questions);
             } else {

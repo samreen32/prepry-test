@@ -41,7 +41,7 @@ router.post(
 );
 
 // Get All Questions Route
-router.get("/fetchQs", admin_middleware, async (req, res) => {
+router.get("/fetchQs", async (req, res) => {
     try {
         const questions = await Question.find().populate('test', 'title');
         res.status(200).json({ success: true, questions });
