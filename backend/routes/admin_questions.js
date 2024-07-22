@@ -51,6 +51,18 @@ router.get("/fetchQs", async (req, res) => {
     }
 });
 
+// Get Questions by Test ID
+router.get('/fetchQuestionsByTest/:testId', async (req, res) => {
+    try {
+        const { testId } = req.params;
+        const questions = await Question.find({ test: testId });
+        res.status(200).json({ success: true, questions });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+});
+
 // Delete Question Route
 router.delete("/deleteQs/:id", admin_middleware, async (req, res) => {
     try {

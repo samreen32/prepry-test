@@ -15,10 +15,10 @@ function Section5() {
             navigateTo: 'QuestionsList'
         },
         {
-            title: 'Quick 10',
+            title: 'Tests',
             icon: <AntDesign name="rocket1" size={24} color="white" />,
             color: '#3b5998',
-            navigateTo: 'PracticeQuickQs'
+            navigateTo: 'TestsList'
         },
         {
             title: 'Tests Reports',
@@ -27,7 +27,7 @@ function Section5() {
             navigateTo: 'TestReports'
         },
         {
-            title: 'Top Questions',
+            title: 'Quick 10',
             icon: <AntDesign name="staro" size={24} color="white" />,
             color: '#3b5998',
             navigateTo: 'PracticeQuickQs'

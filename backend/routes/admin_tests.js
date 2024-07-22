@@ -32,7 +32,7 @@ router.post(
 );
 
 // Get All Tests Route
-router.get("/fetchTests", admin_middleware, async (req, res) => {
+router.get("/fetchTests", async (req, res) => {
   try {
     const tests = await Tests.find();
     res.status(200).json({ success: true, tests });
@@ -41,6 +41,7 @@ router.get("/fetchTests", admin_middleware, async (req, res) => {
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 });
+
 
 // Update Test Route
 router.put(

@@ -174,6 +174,8 @@ const getRouteName = (route) => {
         routeName?.includes("UserSettings") ||
         routeName?.includes("UserHelp") ||
         routeName?.includes("ComingSoon") ||
+        routeName?.includes("TestsList") ||
+        routeName?.includes("TestQuestions") ||
         routeName?.includes("UserNotification")
     ) {
         return "none";

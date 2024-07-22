@@ -1,15 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, ActivityIndicator } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, ActivityIndicator, Animated } from 'react-native';
 import { AntDesign, FontAwesome } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
-import LottieView from 'lottie-react-native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import config from '../../frontend/config';
 
 const { width, height } = Dimensions.get('window');
 
-const QuestionItem = ({ question, options, correctOptionIndex, selectedOption, setSelectedOption, index }) => {
+const QuestionItem = ({ question, options, selectedOption, setSelectedOption, animatedValue }) => {
     return (
-        <View style={[styles.questionItem, index === 0 && styles.firstQuestionItem]}>
+        <Animated.View style={[styles.questionItem, { opacity: animatedValue }]}>
             <Text style={styles.questionText}>{question}</Text>
             {options.map((option, idx) => (
                 <TouchableOpacity
@@ -25,48 +24,70 @@ const QuestionItem = ({ question, options, correctOptionIndex, selectedOption, s
                     <Text style={styles.optionText}>{option}</Text>
                 </TouchableOpacity>
             ))}
-            {selectedOption && (
-                <Text style={[styles.feedbackText, { color: options[correctOptionIndex] === selectedOption ? 'green' : 'red' }]}>
-                    {options[correctOptionIndex] === selectedOption
-                        ? 'Hurray! You got it right.'
-                        : `The correct option was: ${options[correctOptionIndex]}`}
-                </Text>
-            )}
-            {options[correctOptionIndex] === selectedOption && (
-                <LottieView
-                    source={require('../../assets/animation/party.json')}
-                    autoPlay
-                    loop={false}
-                    style={styles.animation}
-                />
-            )}
-        </View>
+        </Animated.View>
     );
 };
 
-export default function PracticeQuickQs() {
+export default function TestQuestions() {
     const navigation = useNavigation();
+    const route = useRoute();
+    const { testId } = route.params;
     const [selectedOptions, setSelectedOptions] = useState({});
     const [questionsData, setQuestionsData] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+    const animatedValue = useRef(new Animated.Value(0)).current;
 
     useEffect(() => {
-        const fetchPracticeQuestions = async () => {
+        const fetchQuestions = async () => {
             try {
-                const response = await fetch(`${config.urls.PRACTICE_QUESTIONS_API}/fetchPracticeQs`); 
+                const response = await fetch(`${config.urls.QUESTIONS_API}/fetchQuestionsByTest/${testId}`);
                 const data = await response.json();
                 if (data.success) {
-                    setQuestionsData(data.practiceQuestions);
+                    setQuestionsData(data.questions);
                 }
             } catch (error) {
-                console.error('Error fetching practice questions:', error);
+                console.error('Error fetching questions:', error);
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchPracticeQuestions();
-    }, []);
+        fetchQuestions();
+    }, [testId]);
+
+    useEffect(() => {
+        Animated.timing(animatedValue, {
+            toValue: 1,
+            duration: 300,
+            useNativeDriver: true,
+        }).start();
+    }, [currentQuestionIndex]);
+
+    const handleOptionSelect = (option) => {
+        setSelectedOptions({ ...selectedOptions, [questionsData[currentQuestionIndex]._id]: option });
+        if (currentQuestionIndex < questionsData.length - 1) {
+            Animated.timing(animatedValue, {
+                toValue: 0,
+                duration: 300,
+                useNativeDriver: true,
+            }).start(() => {
+                setCurrentQuestionIndex(currentQuestionIndex + 1);
+                animatedValue.setValue(0);
+                Animated.timing(animatedValue, {
+                    toValue: 1,
+                    duration: 300,
+                    useNativeDriver: true,
+                }).start();
+            });
+        } else {
+            console.log('Test completed');
+        }
+    };
+
+    const handleSubmit = () => {
+        console.log('Submitting test with selected options:', selectedOptions);
+    };
 
     if (loading) {
         return (
@@ -79,27 +100,31 @@ export default function PracticeQuickQs() {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.navigate("HomeScreen")}>
+                <TouchableOpacity onPress={() => navigation.navigate("TestsList")}>
                     <AntDesign name="arrowleft" size={30} color="black" style={{ marginLeft: 10 }} />
                 </TouchableOpacity>
                 <View style={styles.headerTextContainer}>
-                    <Text style={styles.headerText}>Practice Questions</Text>
-                    {/* <Text style={styles.headerDesc}>Your report will be generated based on answers. Good Luck!</Text> */}
+                    <Text style={styles.headerText}>Test Questions</Text>
+                    <Text style={styles.headerDesc}>Your report will be generated based on answers. Good Luck!</Text>
                 </View>
                 <View style={{ width: 24 }} />
             </View>
             <ScrollView contentContainerStyle={styles.scrollContainer}>
-                {questionsData.map((item, index) => (
+                {questionsData.length > 0 && (
                     <QuestionItem
-                        key={item._id}
-                        index={index}
-                        question={item.practiceTitle}
-                        options={item.practiceOptions}
-                        correctOptionIndex={item.correctPracticeAnswerIndex}
-                        selectedOption={selectedOptions[item._id]}
-                        setSelectedOption={(option) => setSelectedOptions({ ...selectedOptions, [item._id]: option })}
+                        key={questionsData[currentQuestionIndex]._id}
+                        question={questionsData[currentQuestionIndex].title}
+                        options={questionsData[currentQuestionIndex].options}
+                        selectedOption={selectedOptions[questionsData[currentQuestionIndex]._id]}
+                        setSelectedOption={handleOptionSelect}
+                        animatedValue={animatedValue}
                     />
-                ))}
+                )}
+                {currentQuestionIndex === questionsData.length - 1 && (
+                    <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+                        <Text style={styles.submitButtonText}>Submit</Text>
+                    </TouchableOpacity>
+                )}
             </ScrollView>
         </View>
     );
@@ -140,7 +165,7 @@ const styles = StyleSheet.create({
         fontStyle: "italic"
     },
     scrollContainer: {
-        paddingTop: height * 0.15,
+        paddingTop: height * 0.27,
         paddingHorizontal: width * 0.03,
     },
     questionItem: {
@@ -151,9 +176,6 @@ const styles = StyleSheet.create({
         borderColor: '#ddd',
         marginBottom: 15,
         position: 'relative',
-    },
-    firstQuestionItem: {
-        marginTop: 90,
     },
     questionText: {
         fontSize: width * 0.045,
@@ -168,20 +190,21 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         fontSize: width * 0.04,
     },
-    feedbackText: {
-        marginTop: 10,
-        fontSize: width * 0.035,
-    },
-    animation: {
-        width: 250,
-        height: 250,
-        position: 'absolute',
-        top: 0,
-        right: 0,
-    },
     loadingContainer: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    submitButton: {
+        marginTop: 20,
+        backgroundColor: '#D8BFD8',
+        padding: 15,
+        borderRadius: 12,
+        alignItems: 'center',
+    },
+    submitButtonText: {
+        color: 'black',
+        fontSize: width * 0.045,
+        fontWeight: 'bold',
     },
 });

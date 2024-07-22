@@ -15,6 +15,8 @@ import UserStatistics from '../components/UserStatistics/UserStatistics';
 import UserSettings from '../components/Settings/UserSettings';
 import ComingSoon from '../components/ComingSoon/ComingSoon';
 import UserHelp from '../components/Help/UserHelp';
+import TestsList from '../components/Tests/TestsList';
+import TestQuestions from '../components/Tests/TestQuestions';
 
 const Stack = createNativeStackNavigator();
 
@@ -42,6 +44,8 @@ function UserStack() {
                 <Stack.Screen name="UserSettings" component={UserSettings} />
                 <Stack.Screen name="UserHelp" component={UserHelp} />
                 <Stack.Screen name="ComingSoon" component={ComingSoon} />
+                <Stack.Screen name="TestsList" component={TestsList} />
+                <Stack.Screen name="TestQuestions" component={TestQuestions} />
             </Stack.Navigator>
         </>
     )

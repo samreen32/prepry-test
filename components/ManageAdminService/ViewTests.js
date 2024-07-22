@@ -26,11 +26,7 @@ const ViewTests = () => {
 
     const fetchTests = async () => {
         try {
-            const response = await axios.get(`${config.urls.TESTS_API}/fetchTests`, {
-                headers: {
-                    "token": adminToken
-                }
-            });
+            const response = await axios.get(`${config.urls.TESTS_API}/fetchTests`);
             if (response.data.success) {
                 setTestsData(response.data.tests);
             } else {
