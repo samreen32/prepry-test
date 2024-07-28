@@ -1,27 +1,64 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Dimensions } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import {
+    View, Text, StyleSheet,
+    ScrollView, TouchableOpacity,
+    TextInput, Dimensions
+} from 'react-native';
 import { AntDesign, FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { useAuth } from '../../frontend/context/AuthContext';
+import config from '../../frontend/config';
 
 const { width, height } = Dimensions.get('window');
 
-const testData = [
-    { id: 1, name: 'React Native Basics', date: '2024-06-18' },
-    { id: 2, name: 'Advanced JavaScript', date: '2024-06-17' },
-    { id: 3, name: 'CSS Fundamentals', date: '2024-06-16' },
-    { id: 4, name: 'HTML Introduction', date: '2024-06-15' },
-    { id: 5, name: 'Node.js Overview', date: '2024-06-14' },
-    { id: 6, name: 'Express.js Essentials', date: '2024-06-13' },
-    { id: 7, name: 'MongoDB Basics', date: '2024-06-12' },
-    { id: 8, name: 'Database Design', date: '2024-06-11' },
-];
+const backgroundColors = ['#FFEBEE', '#E3F2FD', '#E8F5E9', '#FFFDE7', '#F3E5F5'];
+
+const getGradeColor = (grade) => {
+    switch (grade) {
+        case 'A':
+            return '#4CAF50'; // Green
+        case 'B':
+            return '#8BC34A'; // Light Green
+        case 'C':
+            return '#FFC107'; // Amber
+        case 'D':
+            return '#FF9800'; // Orange
+        case 'F':
+            return '#F44336'; // Red
+        default:
+            return '#607D8B'; // Blue Grey for unknown grades
+    }
+};
 
 export default function TestReports() {
+    const { user, token } = useAuth();
     const navigation = useNavigation();
     const [searchQuery, setSearchQuery] = useState("");
+    const [reports, setReports] = useState([]);
 
-    const filteredData = testData.filter(test =>
-        test.name.toLowerCase().includes(searchQuery.toLowerCase())
+    useEffect(() => {
+        const fetchReports = async () => {
+            try {
+                const userId = user.id;
+                const response = await fetch(`${config.urls.REPORTS_API}/getUserReports/${userId}`, {
+                    headers: {
+                        "token": token
+                    }
+                });
+                const data = await response.json();
+                console.log(data, "data")
+                setReports(data);
+
+            } catch (error) {
+                console.error('Error fetching reports:', error);
+            }
+        };
+
+        fetchReports();
+    }, [user, token]);
+
+    const filteredData = reports.filter(report =>
+        report?.test?.title?.toLowerCase().includes(searchQuery?.toLowerCase())
     );
 
     return (
@@ -30,7 +67,7 @@ export default function TestReports() {
                 <TouchableOpacity onPress={() => navigation.navigate("HomeScreen")}>
                     <AntDesign name="arrowleft" size={30} color="black" style={{ marginLeft: 10 }} />
                 </TouchableOpacity>
-                <Text style={styles.headerText}>Test Lists</Text>
+                <Text style={styles.headerText}>Test Reports</Text>
                 <View style={{ width: 30 }} />
             </View>
             <View style={styles.searchContainer}>
@@ -42,15 +79,19 @@ export default function TestReports() {
                 />
             </View>
             <ScrollView contentContainerStyle={styles.scrollContainer}>
-                {filteredData.map((item) => (
-                    <View key={item.id} style={styles.testItem}>
+                {filteredData.map((item, index) => (
+                    <View key={item._id} style={[styles.testItem, { backgroundColor: backgroundColors[index % backgroundColors.length] }]}>
                         <View style={styles.testInfo}>
-                            <Text style={styles.testName}>{item.name}</Text>
-                            <Text style={styles.testDate}>{item.date}</Text>
+                            <Text style={styles.testName}>{item.test.title}</Text>
+                            <View style={[styles.gradeContainer, { backgroundColor: getGradeColor(item.grade) }]}>
+                                <Text style={styles.testGrade}>Grade: {item.grade}</Text>
+                            </View>
+                            <Text style={styles.testDate}>Attempt Date: {new Date(item.attemptDate).toLocaleDateString()}</Text>
+                            <Text style={styles.testScore}>Score: {item.score}</Text>
                         </View>
                         <FontAwesome name="chevron-right" size={20} color="black"
                             onPress={() => {
-                                navigation.navigate("SpecificReportMain")
+                                navigation.navigate("SpecificReportMain", { reportId: item._id })
                             }}
                         />
                     </View>
@@ -84,6 +125,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
         flex: 1,
+        color: 'black',
         marginLeft: -width * 0.1,
     },
     searchContainer: {
@@ -108,7 +150,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingVertical: height * 0.02,
         paddingHorizontal: width * 0.04,
-        backgroundColor: '#FFFFFF',
         borderRadius: 12,
         borderWidth: 1,
         borderColor: '#ddd',
@@ -120,8 +161,26 @@ const styles = StyleSheet.create({
     testName: {
         fontSize: width * 0.045,
         fontWeight: 'bold',
+        textTransform: "capitalize"
     },
     testDate: {
+        fontSize: width * 0.035,
+        color: '#555',
+        marginTop: height * 0.005,
+    },
+    gradeContainer: {
+        borderRadius: 5,
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+        alignSelf: 'flex-start',
+        marginTop: height * 0.005,
+    },
+    testGrade: {
+        fontSize: width * 0.035,
+        color: 'white',
+        fontWeight: 'bold',
+    },
+    testScore: {
         fontSize: width * 0.035,
         color: '#555',
         marginTop: height * 0.005,

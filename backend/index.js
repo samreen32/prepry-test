@@ -16,6 +16,7 @@ app.use("/api/tests", require("./routes/admin_tests"));
 app.use("/api/questions", require("./routes/admin_questions"));
 app.use("/api/practiceQs", require("./routes/admin_practice_qs"));
 app.use("/api/notes", require("./routes/notes"));
+app.use("/api/reports", require("./routes/reports"));
 
 app.listen(port, () => {
   console.log(`React Project backend listening on port ${port}`);

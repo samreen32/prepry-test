@@ -1,8 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, ActivityIndicator, Animated } from 'react-native';
+import {
+    View, Text, StyleSheet, ScrollView,
+    TouchableOpacity, Dimensions,
+    ActivityIndicator, Animated
+} from 'react-native';
 import { AntDesign, FontAwesome } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import config from '../../frontend/config';
+import { useAuth } from '../../frontend/context/AuthContext';
 
 const { width, height } = Dimensions.get('window');
 
@@ -29,9 +34,10 @@ const QuestionItem = ({ question, options, selectedOption, setSelectedOption, an
 };
 
 export default function TestQuestions() {
-    const navigation = useNavigation();
     const route = useRoute();
     const { testId } = route.params;
+    const navigation = useNavigation();
+    const { token, user, showToast } = useAuth();
     const [selectedOptions, setSelectedOptions] = useState({});
     const [questionsData, setQuestionsData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -85,8 +91,36 @@ export default function TestQuestions() {
         }
     };
 
-    const handleSubmit = () => {
-        console.log('Submitting test with selected options:', selectedOptions);
+    const handleSubmit = async () => {
+        try {
+            const answers = Object.keys(selectedOptions).map(questionId => ({
+                questionId,
+                answer: selectedOptions[questionId]
+            }));
+            const payload = {
+                testId,
+                userId: user.id,
+                answers
+            };
+            const response = await fetch(`${config.urls.REPORTS_API}/createReport`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'token': token
+                },
+                body: JSON.stringify(payload),
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                showToast("Test has been submitted. You can check your Report!!");
+                navigation.navigate('HomeScreen');
+            } else {
+                console.error('Error creating report:', data);
+            }
+        } catch (error) {
+            console.error('Error submitting the report:', error);
+        }
     };
 
     if (loading) {

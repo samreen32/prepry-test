@@ -1,18 +1,56 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
+// Report Schema
 const reportSchema = new Schema({
   test: {
     type: Schema.Types.ObjectId,
     ref: 'Tests',
-    required: true,
+
   },
-  question: {
+  user: {
     type: Schema.Types.ObjectId,
-    ref: 'Questions',
-    required: true,
+    ref: 'Users',
+
   },
-  
+  answers: [{
+    question: {
+      type: Schema.Types.ObjectId,
+      ref: 'Questions',
+
+    },
+    answer: {
+      type: String,
+
+    }
+  }],
+  grade: {
+    type: String,
+
+  },
+  score: {
+    type: Number,
+
+  },
+  feedback: {
+    type: String,
+  },
+  attemptDate: {
+    type: Date,
+
+  },
+  totalQuestions: {
+    type: Number,
+
+  },
+  correctAnswers: {
+    type: Number,
+
+  },
+  percentage: {
+    type: Number,
+
+  },
   createdAt: {
     type: Date,
     default: Date.now,
