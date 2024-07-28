@@ -1,19 +1,53 @@
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Alert } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
-import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { PieChart } from 'react-native-chart-kit';
+import config from '../../frontend/config';
+import { useAuth } from '../../frontend/context/AuthContext';
 
 const { width, height } = Dimensions.get('window');
 
 const UserStatistics = () => {
+    const { token, user } = useAuth();
     const navigation = useNavigation();
-    const data = [
-        { name: 'Correct', population: 45, color: 'green', legendFontColor: '#7F7F7F', legendFontSize: 15 },
-        { name: 'Incorrect', population: 30, color: 'red', legendFontColor: '#7F7F7F', legendFontSize: 15 },
-        { name: 'Skipped', population: 25, color: 'gray', legendFontColor: '#7F7F7F', legendFontSize: 15 },
-    ];
+    const [statistics, setStatistics] = useState(null);
 
+    useEffect(() => {
+        const fetchStatistics = async () => {
+            try {
+                const response = await fetch(`${config.urls.REPORTS_API}/userReportStatistics/${user.id}`, {
+                    headers: {
+                        "token": token
+                    }
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    setStatistics(data);
+                } else {
+                    Alert.alert('Error', data.message);
+                }
+            } catch (error) {
+                console.error('Error fetching statistics:', error);
+                Alert.alert('Error', 'Failed to fetch statistics');
+            }
+        };
+
+        fetchStatistics();
+    }, [user.id, token]);
+
+    if (!statistics) {
+        return (
+            <View style={styles.container}>
+                <Text>Loading...</Text>
+            </View>
+        );
+    }
+
+    const data = [
+        { name: 'Correct', population: statistics.totalCorrectAnswers, color: 'green', legendFontColor: '#7F7F7F', legendFontSize: 15 },
+        { name: 'Incorrect', population: statistics.totalIncorrectAnswers, color: 'red', legendFontColor: '#7F7F7F', legendFontSize: 15 },
+    ];
     const screenWidth = Dimensions.get('window').width;
 
     return (
@@ -23,13 +57,13 @@ const UserStatistics = () => {
                     <AntDesign name="arrowleft" size={30} color="black" style={{ marginLeft: 10 }} />
                 </TouchableOpacity>
                 <Text style={styles.headerText}>Your Statistics</Text>
-                <View style={{ width: 30 }} />
+                <View style={{ width: 0 }} />
             </View>
             <View style={styles.contentContainer}>
                 <PieChart
                     data={data}
                     width={screenWidth - 40}
-                    height={220}
+                    height={240}
                     chartConfig={{
                         backgroundColor: '#1cc910',
                         backgroundGradientFrom: '#eff3ff',
@@ -46,10 +80,10 @@ const UserStatistics = () => {
                     absolute
                 />
                 <View style={styles.statsContainer}>
-                    <Text style={styles.statsText}>Average Score: 75%</Text>
-                    <Text style={styles.statsText}>Total Quizzes: 10</Text>
-                    <Text style={styles.statsText}>Quizzes Passed: 7</Text>
-                    <Text style={styles.statsText}>Quizzes Failed: 3</Text>
+                    <Text style={styles.statsText}>Average Score: {statistics.avgScore.toFixed(2)}%</Text>
+                    <Text style={styles.statsText}>Total Quizzes: {statistics.totalTestsTaken}</Text>
+                    <Text style={styles.statsText}>Quizzes Passed: {statistics.totalTestsPassed}</Text>
+                    <Text style={styles.statsText}>Quizzes Failed: {statistics.totalTestsFailed}</Text>
                 </View>
             </View>
         </View>

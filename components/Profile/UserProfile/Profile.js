@@ -43,7 +43,9 @@ export default function Profile() {
                 <MenuItem icon={help} title="Questions List" onPress={() => {
                     navigation.navigate("QuestionsList")
                 }} />
-                <MenuItem icon={statistics} title="My Analytics" />
+                <MenuItem icon={statistics} title="My Analytics" onPress={() => {
+                    navigation.navigate("UserStatistics")
+                }} />
                 <MenuItem icon={rocket} title="Upgrade" onPress={() => {
                     navigation.navigate("UserSubscription")
                 }}

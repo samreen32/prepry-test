@@ -123,4 +123,50 @@ router.get('/getUserReports/:userId', user_middleware, async (req, res) => {
     }
 });
 
+// New endpoint to get aggregated report statistics for a specific user
+router.get('/userReportStatistics/:userId', user_middleware, async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const reports = await Report.find({ user: userId });
+
+        if (!reports || reports.length === 0) {
+            return res.status(404).json({ message: 'No reports found for this user' });
+        }
+
+        const totalTestsTaken = reports.length;
+        let totalCorrectAnswers = 0;
+        let totalIncorrectAnswers = 0;
+        let totalScore = 0;
+        let totalTestsPassed = 0;
+        let totalTestsFailed = 0;
+
+        reports.forEach(report => {
+            totalCorrectAnswers += report.correctAnswers;
+            totalIncorrectAnswers += (report.totalQuestions - report.correctAnswers);
+            totalScore += report.score;
+            if (report.grade !== 'F') {
+                totalTestsPassed++;
+            } else {
+                totalTestsFailed++;
+            }
+        });
+
+        const avgScore = totalScore / totalTestsTaken;
+
+        const statistics = {
+            totalCorrectAnswers,
+            totalIncorrectAnswers,
+            avgScore,
+            totalTestsTaken,
+            totalTestsPassed,
+            totalTestsFailed
+        };
+
+        res.status(200).json(statistics);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+});
+
 module.exports = router;

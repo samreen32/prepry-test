@@ -5,6 +5,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import config from '../../../frontend/config';
 import { useAuth } from '../../../frontend/context/AuthContext';
+import { Button } from 'react-native-paper';
 
 const { width, height } = Dimensions.get('window');
 
@@ -27,14 +28,14 @@ const getGradeColor = (grade) => {
     case 'D':
       return '#FF9800'; // Orange
     case 'F':
-      return '#f28080'; // Red
+      return '#f78f8f'; // Red
     default:
       return '#607D8B'; // Blue Grey for unknown grades
   }
 };
 
 export default function SpecificReportMain() {
-  const { user, token } = useAuth();
+  const { token } = useAuth();
   const navigation = useNavigation();
   const route = useRoute();
   const [report, setReport] = useState(null);
@@ -62,6 +63,31 @@ export default function SpecificReportMain() {
 
     fetchReport();
   }, [reportId, token]);
+
+  const handleDeleteReport = async () => {
+    try {
+      const response = await fetch(`${config.urls.REPORTS_API}/deleteReport/${reportId}`, {
+        method: 'DELETE',
+        headers: {
+          "token": token
+        }
+      });
+      const data = await response.json();
+      if (response.ok) {
+        Alert.alert('Success', 'Report deleted successfully', [
+          {
+            text: 'OK',
+            onPress: () => navigation.navigate('HomeScreen')
+          }
+        ]);
+      } else {
+        Alert.alert('Error', data.message);
+      }
+    } catch (error) {
+      console.error('Error deleting report:', error);
+      Alert.alert('Error', 'Failed to delete the report');
+    }
+  };
 
   if (!report) {
     return (
@@ -91,12 +117,25 @@ export default function SpecificReportMain() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.headerContainer}>
-        <TouchableOpacity onPress={() => navigation.navigate("HomeScreen")}>
+        <TouchableOpacity onPress={() => navigation.navigate("TestReports")}>
           <AntDesign name="arrowleft" size={30} color="black" style={{ marginLeft: 10 }} />
         </TouchableOpacity>
         <Text style={styles.headerText}>Report Statistics</Text>
-        <View style={{ width: 30 }} />
       </View>
+      <Button
+        mode="contained"
+        style={styles.voidButton}
+        onPress={() => Alert.alert(
+          'Confirm Delete',
+          'Are you sure you want to void this report?',
+          [
+            { text: 'Cancel', style: 'cancel' },
+            { text: 'Void', style: 'destructive', onPress: handleDeleteReport }
+          ]
+        )}
+      >
+        Void Report
+      </Button>
       <View style={[styles.gradeContainer, { backgroundColor: getGradeColor(report.grade) }]}>
         <Text style={styles.gradeText}>Grade: {report.grade}</Text>
         <Text style={styles.gradeDesc}>Score: {report.score}</Text>
@@ -169,6 +208,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     flex: 1,
+  },
+  voidButton: {
+    backgroundColor: '#FF5722',
+    marginTop: 10,
+    marginBottom: -10,
+    alignSelf: 'flex-end',
+    marginRight: 15
   },
   gradeContainer: {
     borderRadius: 10,
