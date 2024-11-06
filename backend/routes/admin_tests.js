@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { body, validationResult } = require("express-validator");
 const Tests = require("../models/Tests");
+const Notification = require("../models/Notification");
 const admin_middleware = require("../middleware/admin_middleware");
 
 // Create Test Route
@@ -23,7 +24,26 @@ router.post(
     try {
       const test = new Tests({ title, description });
       await test.save();
-      res.status(201).json({ success: true, message: "Test created successfully", test });
+
+      // Create notification
+      const notificationTitle = 'Test Created';
+      const notificationDescription = `A new test titled "${title}" has been created.`;
+
+      const newNotification = new Notification({
+        admin: req.admin.id,
+        notifiTitle: notificationTitle,
+        notifiDescription: notificationDescription,
+        type: 'admin'
+      });
+
+      await newNotification.save();
+
+      res.status(201).json({
+        success: true,
+        message: "Test created successfully",
+        test,
+        notification: newNotification,
+      });
     } catch (error) {
       console.error(error.message);
       res.status(500).json({ success: false, message: "Internal Server Error" });
@@ -41,7 +61,6 @@ router.get("/fetchTests", async (req, res) => {
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 });
-
 
 // Update Test Route
 router.put(
@@ -85,7 +104,25 @@ router.delete("/deleteTest/:id", admin_middleware, async (req, res) => {
     if (!test) {
       return res.status(404).json({ success: false, message: "Test not found" });
     }
-    res.status(200).json({ success: true, message: "Test deleted successfully" });
+
+    // Create notification
+    const notificationTitle = 'Test Deleted';
+    const notificationDescription = `The test titled "${test.title}" has been deleted.`;
+
+    const newNotification = new Notification({
+      admin: req.user.id,
+      notifiTitle: notificationTitle,
+      notifiDescription: notificationDescription,
+      type: 'admin'
+    });
+
+    await newNotification.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Test deleted successfully",
+      notification: newNotification
+    });
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ success: false, message: "Internal Server Error" });

@@ -4,6 +4,7 @@ const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Users = require("../models/UserAuth");
+const Notification = require("../models/Notification");
 const JWT_SECRET = "Samreenisagoodgir@l";
 
 // Register User Route
@@ -73,30 +74,33 @@ router.post(
   async (req, res) => {
     try {
       const errors = validationResult(req);
-
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
       }
-
       const { email, password } = req.body;
       let user = await Users.findOne({ email });
       if (!user) {
         return res.status(400).json({ success: false, message: "Invalid Credentials" });
       }
-
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) {
         return res.status(400).json({ success: false, message: "Invalid Credentials" });
       }
-
       const payload = {
         user: {
           id: user.id,
         },
       };
-
       const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "6h" });
-
+      const notificationTitle = 'Logged In';
+      const notificationDescription = 'You have been logged in';
+      const newNotification = new Notification({
+        user: user._id,
+        notifiTitle: notificationTitle,
+        notifiDescription: notificationDescription,
+        type: 'user'
+      });
+      await newNotification.save();
       res.status(200).json({
         success: true,
         message: "Logged in successfully",
@@ -108,6 +112,7 @@ router.post(
           role: user.role,
           profileImage: user.profileImage,
         },
+        notification: newNotification,
       });
     } catch (error) {
       console.error(error.message);

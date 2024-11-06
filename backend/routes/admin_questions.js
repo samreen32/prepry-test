@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { body, validationResult } = require("express-validator");
 const Question = require("../models/Questions");
+const Notification = require("../models/Notification");
 const admin_middleware = require("../middleware/admin_middleware");
 
 // Create Question Route
@@ -22,9 +23,7 @@ router.post(
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
-
         const { title, options, correctAnswerIndex, test } = req.body;
-
         if (correctAnswerIndex >= options.length) {
             return res.status(400).json({ success: false, message: "Correct answer index is out of bounds" });
         }
@@ -32,7 +31,25 @@ router.post(
         try {
             const question = new Question({ title, options, correctAnswerIndex, test });
             await question.save();
-            res.status(201).json({ success: true, message: "Question created successfully", question });
+
+            // Create notification
+            const notificationTitle = 'Question Created';
+            const notificationDescription = `A new question titled "${title}" has been created.`;
+
+            const newNotification = new Notification({
+                admin: req.admin.id,
+                notifiTitle: notificationTitle,
+                notifiDescription: notificationDescription,
+                type: 'admin'
+            });
+
+            await newNotification.save();
+            res.status(201).json({
+                success: true,
+                message: "Question created successfully",
+                question,
+                notification: newNotification
+            });
         } catch (error) {
             console.error(error.message);
             res.status(500).json({ success: false, message: "Internal Server Error" });
@@ -70,7 +87,24 @@ router.delete("/deleteQs/:id", admin_middleware, async (req, res) => {
         if (!question) {
             return res.status(404).json({ success: false, message: "Question not found" });
         }
-        res.status(200).json({ success: true, message: "Question deleted successfully" });
+
+        // Create notification
+        const notificationTitle = 'Question Deleted';
+        const notificationDescription = `The question titled "${question.title}" has been deleted.`;
+
+        const newNotification = new Notification({
+            admin: req.admin.id,
+            notifiTitle: notificationTitle,
+            notifiDescription: notificationDescription,
+            type: 'admin'
+        });
+
+        await newNotification.save();
+        res.status(200).json({
+            success: true,
+            message: "Question deleted successfully",
+            notification: newNotification
+        });
     } catch (error) {
         console.error(error.message);
         res.status(500).json({ success: false, message: "Internal Server Error" });

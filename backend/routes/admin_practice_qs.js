@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { body, validationResult } = require("express-validator");
 const PracticeQuestion = require("../models/PracticeQs");
+const Notification = require("../models/Notification");
 const admin_middleware = require("../middleware/admin_middleware");
 
 // Create Practice Question Route
@@ -32,13 +33,33 @@ router.post(
         try {
             const practiceQuestion = new PracticeQuestion({ practiceTitle, practiceOptions, correctPracticeAnswerIndex });
             await practiceQuestion.save();
-            res.status(201).json({ success: true, message: "Practice question created successfully", practiceQuestion });
+
+            // Create notification
+            const notificationTitle = 'Practice Question Created';
+            const notificationDescription = `A new practice question titled "${practiceTitle}" has been created.`;
+
+            const newNotification = new Notification({
+                admin: req.admin.id,
+                notifiTitle: notificationTitle,
+                notifiDescription: notificationDescription,
+                type: 'admin'
+            });
+
+            await newNotification.save();
+
+            res.status(201).json({
+                success: true,
+                message: "Practice question created successfully",
+                practiceQuestion,
+                notification: newNotification
+            });
         } catch (error) {
             console.error(error.message);
             res.status(500).json({ success: false, message: "Internal Server Error" });
         }
     }
 );
+
 
 // Get All Practice Questions Route
 router.get("/fetchPracticeQs", async (req, res) => {

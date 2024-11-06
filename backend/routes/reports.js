@@ -4,6 +4,7 @@ const User = require('../models/UserAuth');
 const Test = require('../models/Tests');
 const Question = require('../models/Questions');
 const Report = require('../models/Report');
+const Notification = require('../models/Notification');
 const user_middleware = require("../middleware/user_middleware");
 
 router.post('/createReport', user_middleware, async (req, res) => {
@@ -24,7 +25,6 @@ router.post('/createReport', user_middleware, async (req, res) => {
 
         let correctAnswers = 0;
         const totalQuestions = questions.length;
-
         const answersWithQuestionIds = answers.map(({ questionId, answer }) => {
             const question = questions.find(q => q._id.toString() === questionId);
             if (!question) {
@@ -46,6 +46,7 @@ router.post('/createReport', user_middleware, async (req, res) => {
         else if (score >= 70) grade = 'C';
         else if (score >= 60) grade = 'D';
         else grade = 'F';
+
         const newReport = new Report({
             test: testId,
             user: userId,
@@ -60,9 +61,26 @@ router.post('/createReport', user_middleware, async (req, res) => {
             createdAt: new Date(),
         });
         await newReport.save();
-        res.status(201).json(newReport);
+
+        // Create notification
+        const notificationTitle = 'Report Created';
+        const notificationDescription = `You have submitted a test. Your grade is ${grade}.`;
+
+        const newNotification = new Notification({
+            user: user._id,
+            notifiTitle: notificationTitle,
+            notifiDescription: notificationDescription,
+             type: 'user'
+        });
+
+        const savedNotification = await newNotification.save();
+        res.status(201).json({
+            report: newReport,
+            notification: savedNotification,
+            message: 'Report created successfully, and notification sent.'
+        });
     } catch (error) {
-        console.error(error);
+        console.error('Error creating report:', error);
         res.status(500).json({ message: 'Server error', error: error.message });
     }
 });
@@ -93,13 +111,15 @@ router.get('/specificReport/:id', async (req, res) => {
 });
 
 // New endpoint to delete a report by ID
-router.delete('/deleteReport/:id', user_middleware, async (req, res) => {
+router.delete('/deleteReport/:id', async (req, res) => {
     try {
         const report = await Report.findByIdAndDelete(req.params.id);
         if (!report) {
             return res.status(404).json({ message: 'Report not found' });
         }
-        res.status(200).json({ message: 'Report deleted successfully' });
+        res.status(200).json({
+            message: 'Report deleted successfully',
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error', error: error.message });

@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const mongoURI =
-  "mongodb+srv://iamsamreenk:eUbUGm8Lr7TqlPfd@cluster0.7n8gkag.mongodb.net/";
+  "mongodb+srv://iamsamreenk:eUbUGm8Lr7TqlPfd@cluster0.7n8gkag.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+// "mongodb+srv://iamsamreenk:eUbUGm8Lr7TqlPfd@cluster0.7n8gkag.mongodb.net/";
 
 const connectToMongo = async () => {
   try {
