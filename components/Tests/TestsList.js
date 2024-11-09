@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import {
     View, Text, StyleSheet,
     ScrollView, TouchableOpacity,
-    Dimensions, ActivityIndicator
+    Dimensions,
 } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import config from '../../frontend/config';
+import { ActivityIndicator } from 'react-native-paper';
 
 const { width, height } = Dimensions.get('window');
 

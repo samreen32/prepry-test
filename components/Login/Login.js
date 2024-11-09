@@ -7,9 +7,10 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import axios from 'axios';
 import config from '../../frontend/config';
 import { useAuth } from '../../frontend/context/AuthContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Login() {
-  const { showToast, login } = useAuth();
+  const { showToast, login, setIsAuthenticated, setUser } = useAuth();
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -20,12 +21,13 @@ export default function Login() {
     setLoading(true);
     try {
       const response = await axios.post(`${config.urls.AUTH_API}/login`, { email, password });
-      const { success, message, token, user } = response.data;
-
+      const { success, message, token: userToken, user } = response.data;
       if (success) {
-        await login(token, user);
-        showToast('You have been loggedin.');
-        navigation.replace('UserDrawer'); 
+        await login(userToken, user);
+        fetchData(userToken);
+        setIsAuthenticated(true);
+        showToast('You have been logged in.');
+        navigation.replace('UserDrawer');
       } else {
         showToast('Login Failed: ' + message);
       }
@@ -34,6 +36,20 @@ export default function Login() {
       showToast('Login Failed: An error occurred. Please try again.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Fetch user info once and save it to AsyncStorage
+  const fetchData = async (userToken) => {
+    try {
+      const response = await axios.get(`${config.urls.AUTH_API}/getUser`, {
+        headers: { 'token': userToken },
+      });
+      const userData = response.data.user;
+      setUser(userData);
+      await AsyncStorage.setItem("user", JSON.stringify(userData));
+    } catch (error) {
+      console.error("Error fetching user data:", error);
     }
   };
 

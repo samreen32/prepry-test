@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
 import { AntDesign, FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import LottieView from 'lottie-react-native';
 import config from '../../frontend/config';
+import { ActivityIndicator } from 'react-native-paper';
 
 const { width, height } = Dimensions.get('window');
 
@@ -53,7 +54,7 @@ export default function PracticeQuickQs() {
     useEffect(() => {
         const fetchPracticeQuestions = async () => {
             try {
-                const response = await fetch(`${config.urls.PRACTICE_QUESTIONS_API}/fetchPracticeQs`); 
+                const response = await fetch(`${config.urls.PRACTICE_QUESTIONS_API}/fetchPracticeQs`);
                 const data = await response.json();
                 if (data.success) {
                     setQuestionsData(data.practiceQuestions);
@@ -84,7 +85,6 @@ export default function PracticeQuickQs() {
                 </TouchableOpacity>
                 <View style={styles.headerTextContainer}>
                     <Text style={styles.headerText}>Practice Questions</Text>
-                    {/* <Text style={styles.headerDesc}>Your report will be generated based on answers. Good Luck!</Text> */}
                 </View>
                 <View style={{ width: 24 }} />
             </View>
@@ -108,6 +108,7 @@ export default function PracticeQuickQs() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: 'white',
     },
     header: {
         flexDirection: 'row',
@@ -132,12 +133,6 @@ const styles = StyleSheet.create({
         fontSize: width * 0.05,
         fontWeight: 'bold',
         textAlign: 'center',
-    },
-    headerDesc: {
-        fontSize: width * 0.035,
-        textAlign: "center",
-        marginTop: 5,
-        fontStyle: "italic"
     },
     scrollContainer: {
         paddingTop: height * 0.15,
@@ -183,5 +178,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: 'white',
     },
 });

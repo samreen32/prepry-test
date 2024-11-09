@@ -3,12 +3,12 @@ import {
   View, Text,
   StyleSheet, ScrollView,
   Dimensions, TouchableOpacity,
-  ActivityIndicator
 } from 'react-native';
 import { LineChart, PieChart } from 'react-native-chart-kit';
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import config from '../../frontend/config';
+import { ActivityIndicator } from 'react-native-paper';
 
 const { width, height } = Dimensions.get('window');
 

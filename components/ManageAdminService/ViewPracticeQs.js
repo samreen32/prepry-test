@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import config from '../../frontend/config';
 import { useAuth } from '../../frontend/context/AuthContext';
+import { ActivityIndicator } from 'react-native-paper';
 
 const { width, height } = Dimensions.get('window');
 
@@ -47,6 +48,7 @@ export default function ViewPracticeQs() {
     const [expandedQuestion, setExpandedQuestion] = useState(null);
     const [editQuestionId, setEditQuestionId] = useState(null);
     const [questionsData, setQuestionsData] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [questionText, setQuestionText] = useState('');
     const [options, setOptions] = useState(['', '', '', '']);
@@ -57,6 +59,7 @@ export default function ViewPracticeQs() {
     }, []);
 
     const fetchQuestions = async () => {
+        setLoading(true); // Start loading
         try {
             const response = await axios.get(`${config.urls.PRACTICE_QUESTIONS_API}/fetchPracticeQs`);
             if (response.data.success) {
@@ -66,6 +69,8 @@ export default function ViewPracticeQs() {
             }
         } catch (error) {
             console.error('Error fetching questions:', error);
+        } finally {
+            setLoading(false); // End loading
         }
     };
 
@@ -150,23 +155,29 @@ export default function ViewPracticeQs() {
                 </TouchableOpacity>
             </View>
 
-            <ScrollView contentContainerStyle={styles.scrollContainer}>
-                {questionsData.map((item) => (
-                    <QuestionItem
-                        key={item._id}
-                        id={item._id}
-                        testName={item?.test?.title}
-                        question={item.practiceTitle}
-                        options={item.practiceOptions}
-                        correctAnswerIndex={item.correctPracticeAnswerIndex}
-                        date={item.createdAt}
-                        user={item.user}
-                        isExpanded={expandedQuestion === item._id}
-                        onPressEdit={handlePressEdit}
-                        onPressDelete={handlePressDelete}
-                    />
-                ))}
-            </ScrollView>
+            {loading ? (
+                <View style={styles.loadingContainer}>
+                    <ActivityIndicator size="large" color="#0000ff" />
+                </View>
+            ) : (
+                <ScrollView contentContainerStyle={styles.scrollContainer}>
+                    {questionsData.map((item) => (
+                        <QuestionItem
+                            key={item._id}
+                            id={item._id}
+                            testName={item?.test?.title}
+                            question={item.practiceTitle}
+                            options={item.practiceOptions}
+                            correctAnswerIndex={item.correctPracticeAnswerIndex}
+                            date={item.createdAt}
+                            user={item.user}
+                            isExpanded={expandedQuestion === item._id}
+                            onPressEdit={handlePressEdit}
+                            onPressDelete={handlePressDelete}
+                        />
+                    ))}
+                </ScrollView>
+            )}
 
             <Modal
                 animationType="slide"
@@ -209,7 +220,6 @@ export default function ViewPracticeQs() {
                     </View>
                 </View>
             </Modal>
-
         </View>
     );
 }

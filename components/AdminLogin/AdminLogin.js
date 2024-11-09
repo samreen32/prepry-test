@@ -6,9 +6,10 @@ import { Button, TextInput } from 'react-native-paper';
 import axios from 'axios';
 import config from '../../frontend/config';
 import { useAuth } from '../../frontend/context/AuthContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function AdminLogin() {
-    const { adminLogin, showToast } = useAuth();
+    const { adminLogin, showToast, setIsAuthenticated, setAdminInfo } = useAuth();
     const navigation = useNavigation();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -19,20 +20,35 @@ export default function AdminLogin() {
         setLoading(true);
         try {
             const response = await axios.post(`${config.urls.AUTH_API}/adminLogin`, { email, password });
-            const { success, message, token, admin } = response.data;
-
+            const { success, message, token: adminToken, admin } = response.data;
             if (success) {
-                await adminLogin(token, admin);
+                await adminLogin(adminToken, admin);
+                fetchData(adminToken);
+                setIsAuthenticated(true);
                 showToast('Admin logged in.');
                 navigation.replace('AdminDrawer');
             } else {
-                showToast('Login Failed', message);
+                showToast('Login Failed: ' + message);
             }
         } catch (error) {
             console.error(error);
-            showToast('Login Failed', 'An error occurred. Please try again.');
+            showToast('Login Failed: An error occurred. Please try again.');
         } finally {
             setLoading(false);
+        }
+    };
+
+    // Fetch user info once and save it to AsyncStorage
+    const fetchData = async (adminToken) => {
+        try {
+            const response = await axios.get(`${config.urls.AUTH_API}/getAdmin`, {
+                headers: { 'token': adminToken },
+            });
+            const userData = response.data.admin;
+            setAdminInfo(userData);
+            await AsyncStorage.setItem("admin", JSON.stringify(userData));
+        } catch (error) {
+            console.error("Error fetching user data:", error);
         }
     };
 

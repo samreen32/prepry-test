@@ -4,6 +4,7 @@ const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Admins = require("../models/Admin");
+const admin_middleware = require("../middleware/admin_middleware");
 const JWT_SECRET = "Samreenisagoodgir@l";
 
 // Register Admin Route
@@ -118,6 +119,19 @@ router.get("/fetchAdmins", async (req, res) => {
   try {
     const admins = await Admins.find();
     res.status(200).json(admins);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+});
+
+router.get("/getAdmin", admin_middleware, async (req, res) => {
+  try {
+    const admin = await Admins.findById(req.admin.id).select("-password"); 
+    if (!admin) {
+      return res.status(404).json({ success: false, message: "Admin not found" });
+    }
+    res.status(200).json({ success: true, admin });
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ success: false, message: "Internal Server Error" });

@@ -8,12 +8,21 @@ import ChooseView from "../components/ChooseView/ChooseView";
 import AdminLogin from "../components/AdminLogin/AdminLogin";
 import AdminDrawer from "../routes/AdminDrawer";
 import { useAuth } from "../frontend/context/AuthContext";
+import { ActivityIndicator } from "react-native-paper";
+import { View } from "react-native";
 
 const Stack = createNativeStackNavigator();
 
-export default function AppStack() {
-    const { token, adminToken } = useAuth();
-    console.log(token, "token")
+const AppStack = () => {
+    const { token, adminToken, isAuthenticated, authLoading } = useAuth();
+
+    if (authLoading) {
+        return (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <ActivityIndicator size="large" color="#0000ff" />
+            </View>
+        );
+    }
 
     return (
         <Stack.Navigator
@@ -22,7 +31,7 @@ export default function AppStack() {
                 headerShown: false,
             }}
         >
-            {!token && !adminToken ? (
+            {!isAuthenticated ? (
                 <>
                     <Stack.Screen name="Welcome" component={Welcome} />
                     <Stack.Screen name="ChooseView" component={ChooseView} />
@@ -30,11 +39,14 @@ export default function AppStack() {
                     <Stack.Screen name="Signup" component={Signup} />
                     <Stack.Screen name="AdminLogin" component={AdminLogin} />
                 </>
-            ) : token ? (
-                <Stack.Screen name="UserDrawer" component={UserDrawer} />
-            ) : adminToken ? (
-                <Stack.Screen name="AdminDrawer" component={AdminDrawer} />
-            ) : null}
+            ) : (
+                <>
+                    {token && <Stack.Screen name="UserDrawer" component={UserDrawer} />}
+                    {adminToken && <Stack.Screen name="AdminDrawer" component={AdminDrawer} />}
+                </>
+            )}
         </Stack.Navigator>
     );
-}
+};
+
+export default AppStack;

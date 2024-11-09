@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, Modal, TextInput } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, 
+    TouchableOpacity, Dimensions, Modal, 
+    TextInput } from 'react-native';
 import { AntDesign, FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import config from '../../frontend/config';
 import { useAuth } from '../../frontend/context/AuthContext';
 import { Picker } from '@react-native-picker/picker';
+import { ActivityIndicator } from 'react-native-paper';
 
 const { width, height } = Dimensions.get('window');
 
@@ -45,6 +48,7 @@ const QuestionItem = ({ id, testName, question, options, correctAnswerIndex, dat
 export default function ViewQuestions() {
     const { adminToken } = useAuth();
     const navigation = useNavigation();
+    const [loading, setLoading] = useState(true);
     const [expandedQuestion, setExpandedQuestion] = useState(null);
     const [editQuestionId, setEditQuestionId] = useState(null);
     const [questionsData, setQuestionsData] = useState([]);
@@ -61,19 +65,24 @@ export default function ViewQuestions() {
     }, []);
 
     const fetchQuestions = async () => {
+        setLoading(true);
         try {
             const response = await axios.get(`${config.urls.QUESTIONS_API}/fetchQs`);
             if (response.data.success) {
                 setQuestionsData(response.data.questions);
+                setLoading(false);
             } else {
                 console.error('Failed to fetch questions:', response.data.message);
             }
         } catch (error) {
             console.error('Error fetching questions:', error);
+        } finally {
+            setLoading(false);
         }
     };
 
     const fetchTests = async () => {
+        setLoading(true);
         try {
             const response = await axios.get(`${config.urls.TESTS_API}/fetchTests`, {
                 headers: {
@@ -82,11 +91,14 @@ export default function ViewQuestions() {
             });
             if (response.data.success) {
                 setTestsData(response.data.tests);
+                setLoading(false);
             } else {
                 console.error('Failed to fetch tests:', response.data.message);
+                setLoading(false);
             }
         } catch (error) {
             console.error('Error fetching tests:', error);
+            setLoading(false);
         }
     };
 
@@ -176,23 +188,27 @@ export default function ViewQuestions() {
                 </TouchableOpacity>
             </View>
 
-            <ScrollView contentContainerStyle={styles.scrollContainer}>
-                {questionsData.map((item) => (
-                    <QuestionItem
-                        key={item._id}
-                        id={item._id}
-                        testName={item?.test?.title}
-                        question={item.title}
-                        options={item.options}
-                        correctAnswerIndex={item.correctAnswerIndex}
-                        date={item.date}
-                        user={item.user}
-                        isExpanded={expandedQuestion === item._id}
-                        onPressEdit={handlePressEdit}
-                        onPressDelete={handlePressDelete}
-                    />
-                ))}
-            </ScrollView>
+            {loading ? (
+                <ActivityIndicator size="large" color="#3b5998" style={styles.loadingIndicator} />
+            ) : (
+                <ScrollView contentContainerStyle={styles.scrollContainer}>
+                    {questionsData.map((item) => (
+                        <QuestionItem
+                            key={item._id}
+                            id={item._id}
+                            testName={item?.test?.title}
+                            question={item.title}
+                            options={item.options}
+                            correctAnswerIndex={item.correctAnswerIndex}
+                            date={item.date}
+                            user={item.user}
+                            isExpanded={expandedQuestion === item._id}
+                            onPressEdit={handlePressEdit}
+                            onPressDelete={handlePressDelete}
+                        />
+                    ))}
+                </ScrollView>
+            )}
 
             <Modal
                 animationType="slide"
@@ -246,7 +262,6 @@ export default function ViewQuestions() {
                     </View>
                 </View>
             </Modal>
-
         </View>
     );
 }

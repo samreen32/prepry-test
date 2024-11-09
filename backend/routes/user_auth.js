@@ -5,6 +5,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Users = require("../models/UserAuth");
 const Notification = require("../models/Notification");
+const user_middleware = require("../middleware/user_middleware");
 const JWT_SECRET = "Samreenisagoodgir@l";
 
 // Register User Route
@@ -126,6 +127,20 @@ router.get("/fetchUsers", async (req, res) => {
   try {
     const users = await Users.find();
     res.status(200).json(users);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+});
+
+// Get Specific User by Token
+router.get("/getUser", user_middleware, async (req, res) => {
+  try {
+    const user = await Users.findById(req.user.id).select("-password"); 
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+    res.status(200).json({ success: true, user });
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ success: false, message: "Internal Server Error" });

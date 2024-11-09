@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import {
     View, Text, StyleSheet, ScrollView,
     TouchableOpacity, Dimensions,
-    ActivityIndicator, Alert
+     Alert
 } from 'react-native';
 import { AntDesign, FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import config from '../../frontend/config';
+import { ActivityIndicator } from 'react-native-paper';
 
 const { width, height } = Dimensions.get('window');
 
@@ -105,23 +106,26 @@ export default function ViewReports() {
                 </TouchableOpacity>
                 <Text style={styles.headerText}>Manage Reports</Text>
             </View>
-
             <ScrollView contentContainerStyle={styles.scrollContainer}>
-                {reports.map((report) => (
-                    <QuestionItem
-                        key={report._id}
-                        id={report._id}
-                        testName={report.test.title}
-                        question={report.answers.map(answer => answer.question.title).join(', ')}
-                        options={report.answers.map(answer => answer.question.options)}
-                        correctAnswerIndex={report.answers.map(answer => answer.question.correctAnswerIndex)}
-                        date={new Date(report.attemptDate).toLocaleDateString()}
-                        user={report.user.fullName}
-                        grade={report.grade}
-                        navigation={navigation}
-                        onPressDelete={handleDeleteReport}
-                    />
-                ))}
+                {reports.length > 0 ? (
+                    reports.map((report) => (
+                        <QuestionItem
+                            key={report._id}
+                            id={report._id}
+                            testName={report.test?.title || "Untitled Test"} // Use default text if title is missing
+                            question={report.answers?.map(answer => answer?.question?.title).join(', ') || "No question available"} // Default text for missing questions
+                            options={report.answers?.map(answer => answer?.question?.options) || []} // Default to empty array if options are missing
+                            correctAnswerIndex={report.answers?.map(answer => answer?.question?.correctAnswerIndex) || []}
+                            date={report.attemptDate ? new Date(report.attemptDate).toLocaleDateString() : "Unknown date"} // Handle missing date
+                            user={report.user?.fullName || "Anonymous"} // Default text for missing user
+                            grade={report.grade || "N/A"} // Default text if grade is missing
+                            navigation={navigation}
+                            onPressDelete={handleDeleteReport}
+                        />
+                    ))
+                ) : (
+                    <Text style={styles.noReportText}>No report yet</Text>
+                )}
             </ScrollView>
         </View>
     );
@@ -163,6 +167,12 @@ const styles = StyleSheet.create({
         borderRadius: 12,
         borderWidth: 1,
         borderColor: '#ddd',
+    },
+    noReportText: {
+        textAlign: 'center',
+        fontSize: width * 0.05,
+        color: '#888',
+        marginTop: height * 0.1,
     },
     questionHeader: {
         flexDirection: 'row',
