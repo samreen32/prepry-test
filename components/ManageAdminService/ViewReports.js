@@ -1,20 +1,16 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, Modal, TextInput } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import {
+    View, Text, StyleSheet, ScrollView,
+    TouchableOpacity, Dimensions,
+    ActivityIndicator, Alert
+} from 'react-native';
 import { AntDesign, FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import config from '../../frontend/config';
 
 const { width, height } = Dimensions.get('window');
 
-const questionsData = [
-    { id: 1, testName: 'Sample Test 1', question: 'What is React Native?', options: ['Option 1', 'Option 2', 'Option 3', 'Option 4'], correctAnswerIndex: 0, date: '2023-05-12', user: 'John Doe', grade: 'A' },
-    { id: 2, testName: 'Sample Test 2', question: 'How does React Native work?', options: ['Option A', 'Option B', 'Option C', 'Option D'], correctAnswerIndex: 1, date: '2023-05-13', user: 'Jane Smith', grade: 'B' },
-    { id: 3, testName: 'Sample Test 1', question: 'What is React Native?', options: ['Answer A', 'Answer B', 'Answer C', 'Answer D'], correctAnswerIndex: 2, date: '2023-05-12', user: 'John Doe', grade: 'C' },
-    { id: 4, testName: 'Sample Test 2', question: 'How does React Native work?', options: ['Choice 1', 'Choice 2', 'Choice 3', 'Choice 4'], correctAnswerIndex: 3, date: '2023-05-13', user: 'Jane Smith', grade: 'A' },
-    { id: 5, testName: 'Sample Test 1', question: 'What is React Native?', options: ['Option X', 'Option Y', 'Option Z', 'Option W'], correctAnswerIndex: 0, date: '2023-05-12', user: 'John Doe', grade: 'B' },
-    { id: 6, testName: 'Sample Test 2', question: 'How does React Native work?', options: ['Option Alpha', 'Option Beta', 'Option Gamma', 'Option Delta'], correctAnswerIndex: 1, date: '2023-05-13', user: 'Jane Smith', grade: 'A' },
-];
-
-const QuestionItem = ({ id, testName, question, options, correctAnswerIndex, date, user, grade, isExpanded, onPressEdit, onPressDelete, navigation }) => (
+const QuestionItem = ({ id, testName, question, options, correctAnswerIndex, date, user, grade, isExpanded, onPressDelete, navigation }) => (
     <View style={styles.questionItem}>
         <View style={styles.questionHeader}>
             <View style={styles.testNameContainer}>
@@ -47,18 +43,59 @@ const QuestionItem = ({ id, testName, question, options, correctAnswerIndex, dat
                 )}
             </View>
         </TouchableOpacity>
-        {isExpanded && (
-            <View style={styles.answerContainer}>
-                <Text style={styles.metaText}>{`Date: ${date}`}</Text>
-                <Text style={styles.metaText}>{`User: ${user}`}</Text>
-            </View>
-        )}
+        <View style={styles.answerContainer}>
+            <Text style={styles.metaText}>{`Date: ${date}`}</Text>
+            <Text style={styles.metaText}>{`User: ${user}`}</Text>
+        </View>
     </View>
 );
 
-
 export default function ViewReports() {
+    const [reports, setReports] = useState([]);
+    const [loading, setLoading] = useState(true);
     const navigation = useNavigation();
+
+    useEffect(() => {
+        fetchReports();
+    }, []);
+
+    const fetchReports = async () => {
+        try {
+            const response = await fetch(`${config.urls.REPORTS_API}/getReports`);
+            const data = await response.json();
+            setReports(data);
+            setLoading(false);
+        } catch (error) {
+            console.error(error);
+            setLoading(false);
+        }
+    };
+
+    const handleDeleteReport = async (id) => {
+        try {
+            const response = await fetch(`${config.urls.REPORTS_API}/deleteReport/${id}`, {
+                method: 'DELETE'
+            });
+            if (response.ok) {
+                setReports(reports.filter(report => report._id !== id));
+                Alert.alert('Success', 'Report deleted successfully');
+            } else {
+                const data = await response.json();
+                Alert.alert('Error', data.message);
+            }
+        } catch (error) {
+            console.error(error);
+            Alert.alert('Error', 'An error occurred while deleting the report');
+        }
+    };
+
+    if (loading) {
+        return (
+            <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color="#0000ff" />
+            </View>
+        );
+    }
 
     return (
         <View style={styles.container}>
@@ -70,25 +107,25 @@ export default function ViewReports() {
             </View>
 
             <ScrollView contentContainerStyle={styles.scrollContainer}>
-                {questionsData.map((item) => (
+                {reports.map((report) => (
                     <QuestionItem
-                        key={item.id}
-                        id={item.id}
-                        testName={item.testName}
-                        question={item.question}
-                        options={item.options}
-                        correctAnswerIndex={item.correctAnswerIndex}
-                        date={item.date}
-                        user={item.user}
-                        grade={item.grade}  
-                        navigation={navigation} 
+                        key={report._id}
+                        id={report._id}
+                        testName={report.test.title}
+                        question={report.answers.map(answer => answer.question.title).join(', ')}
+                        options={report.answers.map(answer => answer.question.options)}
+                        correctAnswerIndex={report.answers.map(answer => answer.question.correctAnswerIndex)}
+                        date={new Date(report.attemptDate).toLocaleDateString()}
+                        user={report.user.fullName}
+                        grade={report.grade}
+                        navigation={navigation}
+                        onPressDelete={handleDeleteReport}
                     />
                 ))}
             </ScrollView>
         </View>
     );
 }
-
 
 const styles = StyleSheet.create({
     container: {
@@ -134,7 +171,7 @@ const styles = StyleSheet.create({
         marginBottom: height * 0.01,
     },
     testNameContainer: {
-        flexDirection: 'row', 
+        flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: '#3b5998',
         paddingHorizontal: 10,
@@ -142,7 +179,7 @@ const styles = StyleSheet.create({
         borderRadius: 8,
     },
     gradeContainer: {
-        flexDirection: 'row', 
+        flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: 'green',
         paddingHorizontal: 10,
@@ -153,6 +190,7 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: width * 0.035,
         marginRight: 5,
+        textTransform: "capitalize"
     },
     gradeText: {
         color: 'white',
@@ -184,9 +222,9 @@ const styles = StyleSheet.create({
         color: 'green',
     },
     answerContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 10,
+        flexDirection: 'column',
+        alignItems: 'left',
+        marginBottom: 2,
     },
     metaText: {
         fontSize: width * 0.035,
@@ -201,59 +239,9 @@ const styles = StyleSheet.create({
         marginLeft: width * 0.03,
         color: '#555',
     },
-    modalContainer: {
+    loadingContainer: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    },
-    modalContent: {
-        backgroundColor: 'white',
-        paddingHorizontal: 20,
-        paddingVertical: 30,
-        borderRadius: 10,
-        width: '80%',
-    },
-    modalTitle: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginBottom: 20,
-        textAlign: 'center',
-    },
-    input: {
-        borderWidth: 1,
-        borderColor: '#ccc',
-        paddingVertical: 10,
-        paddingHorizontal: 15,
-        marginBottom: 15,
-        borderRadius: 5,
-        fontSize: 16,
-    },
-    radioButton: {
-        borderWidth: 1,
-        borderColor: '#ccc',
-        borderRadius: 5,
-        padding: 10,
-        marginLeft: 10,
-    },
-    radioButtonSelected: {
-        backgroundColor: '#3b5998',
-    },
-    radioButtonText: {
-        color: '#333',
-    },
-    radioButtonTextSelected: {
-        color: 'white',
-    },
-    saveButton: {
-        backgroundColor: '#3b5998',
-        paddingVertical: 12,
-        borderRadius: 8,
-        marginTop: 20,
-    },
-    saveButtonText: {
-        color: 'white',
-        fontSize: 16,
-        textAlign: 'center',
     },
 });

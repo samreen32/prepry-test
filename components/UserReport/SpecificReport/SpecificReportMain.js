@@ -67,10 +67,7 @@ export default function SpecificReportMain() {
   const handleDeleteReport = async () => {
     try {
       const response = await fetch(`${config.urls.REPORTS_API}/deleteReport/${reportId}`, {
-        method: 'DELETE',
-        headers: {
-          "token": token
-        }
+        method: 'DELETE'
       });
       const data = await response.json();
       if (response.ok) {

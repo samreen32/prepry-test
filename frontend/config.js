@@ -1,11 +1,11 @@
 const config = {
     urls: {
-        AUTH_API: "http://192.168.0.104:5000/api/auth",
-        TESTS_API: "http://192.168.0.104:5000/api/tests",
-        QUESTIONS_API: "http://192.168.0.104:5000/api/questions",
-        PRACTICE_QUESTIONS_API: "http://192.168.0.104:5000/api/practiceQs",
-        NOTES_API: "http://192.168.0.104:5000/api/notes",
-        REPORTS_API: "http://192.168.0.104:5000/api/reports"
+        AUTH_API: "https://prepryappbe-eg2b8loj.b4a.run/api/auth",
+        TESTS_API: "https://prepryappbe-eg2b8loj.b4a.run/api/tests",
+        QUESTIONS_API: "https://prepryappbe-eg2b8loj.b4a.run/api/questions",
+        PRACTICE_QUESTIONS_API: "https://prepryappbe-eg2b8loj.b4a.run/api/practiceQs",
+        NOTES_API: "https://prepryappbe-eg2b8loj.b4a.run/api/notes",
+        REPORTS_API: "https://prepryappbe-eg2b8loj.b4a.run/api/reports"
     }
 };
 

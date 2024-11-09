@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, ActivityIndicator } from 'react-native';
+import {
+    View, Text, StyleSheet, ScrollView,
+    TouchableOpacity, Dimensions, ActivityIndicator
+} from 'react-native';
 import { AntDesign, FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import config from '../../frontend/config';
@@ -39,7 +42,7 @@ export default function QuestionsList() {
     useEffect(() => {
         const fetchQuestions = async () => {
             try {
-                const response = await fetch(`${config.urls.QUESTIONS_API}/fetchQs`); 
+                const response = await fetch(`${config.urls.QUESTIONS_API}/fetchQs`);
                 const data = await response.json();
                 if (data.success) {
                     setQuestionsData(data.questions);
@@ -75,18 +78,20 @@ export default function QuestionsList() {
                 <Text style={styles.headerText}>Questions</Text>
                 <View style={{ width: 24 }} />
             </View>
-            <ScrollView contentContainerStyle={styles.scrollContainer}>
-                {questionsData.map((item) => (
-                    <QuestionItem
-                        key={item._id}
-                        question={item.title}
-                        options={item.options}
-                        correctAnswerIndex={item.correctAnswerIndex}
-                        isExpanded={expandedQuestion === item._id}
-                        onPress={() => handlePress(item._id)}
-                    />
-                ))}
-            </ScrollView>
+            <View style={{ marginTop: 70 }}>
+                <ScrollView contentContainerStyle={styles.scrollContainer}>
+                    {questionsData.map((item) => (
+                        <QuestionItem
+                            key={item._id}
+                            question={item.title}
+                            options={item.options}
+                            correctAnswerIndex={item.correctAnswerIndex}
+                            isExpanded={expandedQuestion === item._id}
+                            onPress={() => handlePress(item._id)}
+                        />
+                    ))}
+                </ScrollView>
+            </View>
         </View>
     );
 }

@@ -6,7 +6,7 @@ connectToMongo();
 
 const app = express();
 const port = process.env.PORT || 5000;
-app.use(cors());
+app.use(cors()); 
 app.use(express.json());
 
 // Available Routes
@@ -20,5 +20,5 @@ app.use("/api/reports", require("./routes/reports"));
 app.use("/api/notifications", require("./routes/notifications"));
 
 app.listen(port, () => {
-  console.log(`React Project backend listening on port ${port}`);
+  console.log(`Prepry backend listening on port ${port}`);
 });

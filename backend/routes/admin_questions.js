@@ -57,6 +57,26 @@ router.post(
     }
 );
 
+// Endpoint to create multiple questions
+router.post("/createManyQs", async (req, res) => {
+    const questionsData = req.body.questions; 
+    if (!Array.isArray(questionsData) || questionsData.length === 0) {
+        return res.status(400).json({ message: "Please provide an array of questions." });
+    }
+    try {
+        const createdQuestions = await Question.insertMany(questionsData);
+        res.status(201).json({
+            message: "Questions created successfully",
+            data: createdQuestions
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: "Error creating questions",
+            error: error.message
+        });
+    }
+});
+
 // Get All Questions Route
 router.get("/fetchQs", async (req, res) => {
     try {

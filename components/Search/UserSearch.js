@@ -5,22 +5,45 @@ import { AntDesign } from '@expo/vector-icons';
 
 const { width, height } = Dimensions.get('window');
 
-export default function UserSearch() {
+const UserSearch = () => {
     const navigation = useNavigation();
     const [searchQuery, setSearchQuery] = useState("");
-    const [searchResults, setSearchResults] = useState([
-        "Result 1",
-        "Result 2",
-        "Result 3",
-        "Result 4",
-        "Result 5",
-        "Result 6",
-        "Result 7"
-    ]);
+    const [filteredComponents, setFilteredComponents] = useState(components);
 
     const handleSearch = (text) => {
         setSearchQuery(text);
-        // Implement search logic here to filter searchResults based on text
+        const filtered = components.filter(component => component.name.toLowerCase().includes(text.toLowerCase()));
+        setFilteredComponents(filtered);
+    };
+
+    const handleComponentPress = (componentName) => {
+        if (componentName === 'Profile') {
+            navigation.navigate('UserProfile');
+        }
+        if (componentName === 'Notifications') {
+            navigation.navigate('UserNotification');
+        }
+        if (componentName === 'Notes') {
+            navigation.navigate('UserNotes');
+        }
+        if (componentName === 'Test Reports') {
+            navigation.navigate('TestReports');
+        }
+        if (componentName === 'Practice Questions') {
+            navigation.navigate('PracticeQuickQs');
+        }
+        if (componentName === 'Tests') {
+            navigation.navigate('TestsList');
+        }
+        if (componentName === 'Settings') {
+            navigation.navigate('UserSettings');
+        }
+        if (componentName === 'Statistics') {
+            navigation.navigate('UserStatistics');
+        }
+        if (componentName === 'Subscription') {
+            navigation.navigate('UserSubscription');
+        }
     };
 
     return (
@@ -42,16 +65,19 @@ export default function UserSearch() {
                     />
                 </View>
                 <View style={styles.notificationsContainer}>
-                    {searchResults.map((result, index) => (
-                        <View key={index} style={styles.notificationBox}>
-                            <Text>{result}</Text>
-                        </View>
+                    {filteredComponents.map((component) => (
+                        <TouchableOpacity key={component.id} onPress={() => handleComponentPress(component.name)}>
+                            <View style={styles.notificationBox}>
+                                <Text style={styles.componentName}>{component.name}</Text>
+                                {component.content}
+                            </View>
+                        </TouchableOpacity>
                     ))}
                 </View>
             </View>
         </ScrollView>
     );
-}
+};
 
 const styles = StyleSheet.create({
     scrollContainer: {
@@ -104,5 +130,22 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         marginTop: height * 0.01,
     },
+    componentName: {
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
 });
 
+export default UserSearch;
+
+const components = [
+    { id: 1, name: 'Profile', content: <Text>Profile</Text> },
+    { id: 2, name: 'Notifications', content: <Text>Notifications</Text> },
+    { id: 3, name: 'Notes', content: <Text>My Notes</Text> },
+    { id: 4, name: 'Test Reports', content: <Text>Test Reports</Text> },
+    { id: 5, name: 'Practice Questions', content: <Text>Practice Questions</Text> },
+    { id: 6, name: 'Tests', content: <Text>Tests</Text> },
+    { id: 7, name: 'Settings', content: <Text>Settings</Text> },
+    { id: 8, name: 'Statistics', content: <Text>Statistics</Text> },
+    { id: 9, name: 'Subscription', content: <Text>Subscription</Text> },
+];

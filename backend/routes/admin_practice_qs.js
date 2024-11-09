@@ -60,6 +60,25 @@ router.post(
     }
 );
 
+// Endpoint to create multiple practice questions
+router.post("/practiceManyQuestions", async (req, res) => {
+    const questionsData = req.body.questions; 
+    if (!Array.isArray(questionsData) || questionsData.length === 0) {
+        return res.status(400).json({ message: "Please provide an array of practice questions." });
+    }
+    try {
+        const createdQuestions = await PracticeQuestion.insertMany(questionsData);
+        res.status(201).json({
+            message: "Practice questions created successfully",
+            data: createdQuestions
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: "Error creating practice questions",
+            error: error.message
+        });
+    }
+});
 
 // Get All Practice Questions Route
 router.get("/fetchPracticeQs", async (req, res) => {

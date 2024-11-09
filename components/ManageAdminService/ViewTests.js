@@ -48,6 +48,7 @@ const ViewTests = () => {
     };
 
     const handlePressDelete = async (id) => {
+        console.log(id, adminToken, "dhh")
         try {
             await axios.delete(`${config.urls.TESTS_API}/deleteTest/${id}`, {
                 headers: {

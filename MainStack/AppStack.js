@@ -13,13 +13,15 @@ const Stack = createNativeStackNavigator();
 
 export default function AppStack() {
     const { token, adminToken } = useAuth();
+    console.log(token, "token")
 
     return (
         <Stack.Navigator
             initialRouteName="Welcome"
             screenOptions={{
                 headerShown: false,
-            }}>
+            }}
+        >
             {!token && !adminToken ? (
                 <>
                     <Stack.Screen name="Welcome" component={Welcome} />
