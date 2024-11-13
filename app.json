@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "prepry",
-    "slug": "prepry-container",
+    "slug": "prepry",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -27,7 +27,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "bc656141-028e-4df9-8e3b-173728d3addb"
+        "projectId": "6b082d49-5d8a-4498-bd3b-749c05a0c5b3"
       }
     },
     "runtimeVersion": {
@@ -36,6 +36,6 @@
     "updates": {
       "url": "https://u.expo.dev/e7cda6dc-4b2b-4332-bb91-b9467215b4a4"
     },
-    "owner": "samreen131"
+    "owner": "simranleo"
   }
 }
