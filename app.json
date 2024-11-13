@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "prepry",
-    "slug": "prepry",
+    "slug": "prepry-container",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -12,7 +12,8 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.samreen131.prepry"
     },
     "android": {
       "adaptiveIcon": {
@@ -26,7 +27,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "e7cda6dc-4b2b-4332-bb91-b9467215b4a4"
+        "projectId": "bc656141-028e-4df9-8e3b-173728d3addb"
       }
     },
     "runtimeVersion": {
@@ -34,6 +35,7 @@
     },
     "updates": {
       "url": "https://u.expo.dev/e7cda6dc-4b2b-4332-bb91-b9467215b4a4"
-    }
+    },
+    "owner": "samreen131"
   }
 }
